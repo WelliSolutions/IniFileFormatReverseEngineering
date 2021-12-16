@@ -1,15 +1,15 @@
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("IniFileFormatTests")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Tests for INI file-format reverse engineering")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("IniFileFormatTests")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Copyright ©  2021 Thomas Weller; Published under MIT license")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: AssemblyInformationalVersion("https://github.com/WelliSolutions/IniFileFormatReverseEngineering")]
 
 [assembly: ComVisible(false)]
 
