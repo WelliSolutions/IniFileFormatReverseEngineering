@@ -73,7 +73,15 @@ And we potentially have other problems:
 * Handling of duplicate keys
 * Handling of spaces
 * Handling of keys outside a section
+
+## Documentation
+
+Analysis of [GetPrivateProfileString()](documentation/GetPrivateProfileString.md)
+
+
+
 ## References
+
 * [English Wikipedia about the INI-file](https://en.wikipedia.org/wiki/INI_file)
 * [Question "Did INI files work in a different way on Windows 3.x than today?" on Retrocomputing](https://retrocomputing.stackexchange.com/questions/23503/did-ini-files-work-in-a-different-way-on-windows-3-x-than-today)
 
