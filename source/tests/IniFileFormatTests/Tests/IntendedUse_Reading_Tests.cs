@@ -97,7 +97,23 @@ namespace IniFileFormatTests
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
-        // TODO: Review
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
+        [TestMethod]
+        public void Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var sb = DefaultStringBuilder();
+
+            // Insight: reading a non-existing key gives the default value
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()
         {
@@ -110,7 +126,8 @@ namespace IniFileFormatTests
             AssertSbEqual(defaultvalue, sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
         {
@@ -123,16 +140,32 @@ namespace IniFileFormatTests
             AssertSbEqual(defaultvalue, sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
         [TestMethod]
-        public void Given_NoIniFile_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()
+        public void Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()
         {
-            EnsureDeleted();
+            EnsureDefaultContent_UsingAPI();
             var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname.ToLower(), keyname, null, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", null, sb, (uint)sb.Capacity, FileName);
             AssertZero(bytes);
-            // According the documentation, NULL should lead to an empty string
-            AssertSbEqual(string.Empty, sb);
+            // Insight: According the documentation, NULL should lead to an empty string
+            AssertSbEqual("", sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
+        [TestMethod]
+        public void Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var sb = DefaultStringBuilder();
+            var defaultValue = "   default    ";
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultValue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultValue.TrimEnd(), bytes);
+            // Insight: According the documentation, trailing blanks are stripped
+            // Insight: Leading blanks are not stripped
+            AssertSbEqual(defaultValue.TrimEnd(), sb);
         }
     }
 }

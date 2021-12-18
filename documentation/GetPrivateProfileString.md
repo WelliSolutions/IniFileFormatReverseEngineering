@@ -73,3 +73,41 @@ Insights:
 * The key names are copied as zero-terminated strings. As such, you can't simply use the buffer as a string, but you need to consider the number of returned bytes and interpret the result.
 * Duplicate keys are reported multiple times
 
+```
+[in] lpDefault
+```
+
+> A default string. If the *lpKeyName* key cannot be found in the initialization file, **GetPrivateProfileString** copies the default string to the *lpReturnedString* buffer.
+
+Test coverage:
+
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue`
+* `IntendedUse_Reading_Tests.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
+
+Insights:
+
+* Basically, this functionality works as described
+* This does not only work when the "key cannot be found", it also works if the section cannot be found
+* This does not only work when the "key cannot be found", it also works if the file cannot be found
+
+> If this parameter is **NULL**, the default is an empty string, "".
+
+Test Coverage:
+
+`IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString`
+
+Insights:
+
+* Basically, this functionality works as described
+
+> Avoid specifying a default string with trailing blank characters. The function inserts a **null** character in the *lpReturnedString* buffer to strip any trailing blanks.
+
+Test Coverage:
+
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped` 
+
+Insights:
+
+* Basically, this functionality works as described.
+* Leading spaces are not stipped.
