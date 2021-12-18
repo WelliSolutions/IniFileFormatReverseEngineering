@@ -55,9 +55,45 @@ namespace IniFileFormatTests
             var bytes = GetIniString_SB_Unicode(null, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
 
 
-            // Insight: the section names are (probably) delimited by \0. At least the length matches.
+            // Insight: the length matches if we consider one section twice
             var length = (uint)Encoding.ASCII.GetBytes(sectionname + '\0').Length;
             var length2 = (uint)Encoding.ASCII.GetBytes(sectionname2 + '\0').Length;
+            Assert.AreEqual(length * 2 + length2, bytes);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpKeyName", null)]
+        [TestMethod]
+        public void Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=value\r\n{keyname2}=value2");
+            var sb = DefaultStringBuilder();
+
+            var bytes = GetIniString_SB_Unicode(sectionname, null, defaultvalue, sb, (uint)sb.Capacity, FileName);
+
+            // Insight: when using the StringBuilder, we get only 1 key name,
+            // although there are 2 keys inside.
+            // This is probably more a problem of the C# method signature
+            AssertSbEqual(keyname, sb);
+
+            // Insight: the key names are (probably) delimited by \0. At least the length matches.
+            var length = (uint)Encoding.ASCII.GetBytes(keyname + '\0').Length;
+            var length2 = (uint)Encoding.ASCII.GetBytes(keyname2 + '\0').Length;
+            Assert.AreEqual(length + length2, bytes);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpKeyName", null)]
+        [TestMethod]
+        public void Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=value\r\n{keyname2}=value2\r\n{keyname}=value3");
+            var sb = DefaultStringBuilder();
+
+            // Insight: the length matches if we consider one key twice.
+            var bytes = GetIniString_SB_Unicode(sectionname, null, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            var length = (uint)Encoding.ASCII.GetBytes(keyname + '\0').Length;
+            var length2 = (uint)Encoding.ASCII.GetBytes(keyname2 + '\0').Length;
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 

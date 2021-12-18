@@ -42,6 +42,34 @@ Test Coverage:
 
 Insights:
 
+* Basically, this functionality works as described
 * The section names are copied without square brackets (as expected) 
 * The section names are copied as zero-terminated strings. As such, you can't simply use the buffer as a string, but you need to consider the number of returned bytes and interpret the result.
-* Duplicate sections are reported twice
+* Duplicate sections are reported multiple times
+
+```
+[in] lpKeyName
+```
+
+> The name of the key whose associated string is to be retrieved.
+
+Test Coverage: 
+
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
+
+Insights:
+
+* Basically, this functionality works as expected.
+> If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
+
+Test Coverage:
+
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell`
+
+Insights:
+
+* Basically, this functionality works as described
+* The key names are copied as zero-terminated strings. As such, you can't simply use the buffer as a string, but you need to consider the number of returned bytes and interpret the result.
+* Duplicate keys are reported multiple times
+
