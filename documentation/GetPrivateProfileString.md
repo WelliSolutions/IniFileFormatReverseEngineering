@@ -81,8 +81,8 @@ Insights:
 
 Test coverage:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()`
 * `IntendedUse_Reading_Tests.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
 
 Insights:
@@ -95,7 +95,7 @@ Insights:
 
 Test Coverage:
 
-`IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString`
+`IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()`
 
 Insights:
 
@@ -103,11 +103,50 @@ Insights:
 
 > Avoid specifying a default string with trailing blank characters. The function inserts a **null** character in the *lpReturnedString* buffer to strip any trailing blanks.
 
+This stripping of "blanks" requires us to conduct a set of additional whitespace tests.
+
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped` 
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
+* `WhiteSpace_Tests.Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()`
 
 Insights:
 
 * Basically, this functionality works as described.
-* Leading spaces are not stipped.
+* Leading spaces are not stripped for the default value.
+* "Blank" refers to the space character only, not tab, vertical tab, carriage return and newline.
+
+```
+[out] lpReturnedString
+```
+For all the C# programmers out there: `[out]` is not identical to `out` parameters as in C#. Obviously this pointer must be valid and point to a buffer where the function writes the data to. I'm not sure whether these API calls are defined in MIDL, but at least the [MIDL definition of [out] [MSDN]](https://docs.microsoft.com/en-us/windows/win32/midl/out-idl#remarks) would match.
+
+> A pointer to the buffer that receives the retrieved string.
+
+Test Coverage:
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_TrailingSpacesAreStripped`
+* `WhiteSpace_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped`
+
+Insights:
+
+* From a developer's point of view, I'd say that this functionality does not work as expected. Yes, it reads a value from the file and the buffer is filled, but ...
+* It does not *retrieve the received string*. Depending on the the special parameters, the buffer contains many *string**s***, which may be keys or sections. And there's no explanation what the string delimiter is.
+* Leading blanks (space, tab and vertical tab) that exist in the file are stripped
+* Trailing blanks (space, tab and vertical tab) that exist in the file are stripped
+
+Why could whitespace stripping be done? Probably because some people formatted their INI files in columns for "readability" like so:
+* ```ini
+  [section]
+  key=       value
+  key2=      anothervalue
+  longerkey= differentvalue
+  ```
+
+```
+[in] nSize
+```
+
+
+## Return Value
+
+## Remarks

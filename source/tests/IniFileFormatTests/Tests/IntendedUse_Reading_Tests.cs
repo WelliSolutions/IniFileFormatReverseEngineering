@@ -12,6 +12,7 @@ namespace IniFileFormatTests
         [TestsApiParameter("lpAppName")]
         [TestsApiParameter("lpKeyName")]
         [TestsApiParameter("lpFileName")]
+        [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()
         {
