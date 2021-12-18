@@ -12,6 +12,7 @@ namespace IniFileFormatTests
         [TestsApiParameter("lpAppName")]
         [TestsApiParameter("lpKeyName")]
         [TestsApiParameter("lpFileName")]
+        [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()
         {
@@ -55,13 +56,65 @@ namespace IniFileFormatTests
             var bytes = GetIniString_SB_Unicode(null, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
 
 
-            // Insight: the section names are (probably) delimited by \0. At least the length matches.
+            // Insight: the length matches if we consider one section twice
             var length = (uint)Encoding.ASCII.GetBytes(sectionname + '\0').Length;
             var length2 = (uint)Encoding.ASCII.GetBytes(sectionname2 + '\0').Length;
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpKeyName", null)]
+        [TestMethod]
+        public void Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=value\r\n{keyname2}=value2");
+            var sb = DefaultStringBuilder();
+
+            var bytes = GetIniString_SB_Unicode(sectionname, null, defaultvalue, sb, (uint)sb.Capacity, FileName);
+
+            // Insight: when using the StringBuilder, we get only 1 key name,
+            // although there are 2 keys inside.
+            // This is probably more a problem of the C# method signature
+            AssertSbEqual(keyname, sb);
+
+            // Insight: the key names are (probably) delimited by \0. At least the length matches.
+            var length = (uint)Encoding.ASCII.GetBytes(keyname + '\0').Length;
+            var length2 = (uint)Encoding.ASCII.GetBytes(keyname2 + '\0').Length;
+            Assert.AreEqual(length + length2, bytes);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpKeyName", null)]
+        [TestMethod]
+        public void Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=value\r\n{keyname2}=value2\r\n{keyname}=value3");
+            var sb = DefaultStringBuilder();
+
+            // Insight: the length matches if we consider one key twice.
+            var bytes = GetIniString_SB_Unicode(sectionname, null, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            var length = (uint)Encoding.ASCII.GetBytes(keyname + '\0').Length;
+            var length2 = (uint)Encoding.ASCII.GetBytes(keyname2 + '\0').Length;
+            Assert.AreEqual(length * 2 + length2, bytes);
+        }
+
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
+        [TestMethod]
+        public void Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var sb = DefaultStringBuilder();
+
+            // Insight: reading a non-existing key gives the default value
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()
         {
@@ -74,7 +127,8 @@ namespace IniFileFormatTests
             AssertSbEqual(defaultvalue, sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
         {
@@ -87,16 +141,32 @@ namespace IniFileFormatTests
             AssertSbEqual(defaultvalue, sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
         [TestMethod]
-        public void Given_NoIniFile_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()
+        public void Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()
         {
-            EnsureDeleted();
+            EnsureDefaultContent_UsingAPI();
             var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname.ToLower(), keyname, null, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", null, sb, (uint)sb.Capacity, FileName);
             AssertZero(bytes);
-            // According the documentation, NULL should lead to an empty string
-            AssertSbEqual(string.Empty, sb);
+            // Insight: According the documentation, NULL should lead to an empty string
+            AssertSbEqual("", sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpDefault")]
+        [TestMethod]
+        public void Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var sb = DefaultStringBuilder();
+            var defaultValue = "   default    ";
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultValue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultValue.TrimEnd(), bytes);
+            // Insight: According the documentation, trailing blanks are stripped
+            // Insight: Leading blanks are not stripped
+            AssertSbEqual(defaultValue.TrimEnd(), sb);
         }
     }
 }
