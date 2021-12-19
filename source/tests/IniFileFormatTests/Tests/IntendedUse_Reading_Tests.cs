@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
@@ -167,6 +168,40 @@ namespace IniFileFormatTests
             // Insight: According the documentation, trailing blanks are stripped
             // Insight: Leading blanks are not stripped
             AssertSbEqual(defaultValue.TrimEnd(), sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("nSize")]
+        [TestMethod]
+        public void Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var buffer = new char[5]; // StringBuilder does not support lengths < 16
+            var bytes = GetIniString_ChArr_Unicode(sectionname, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+
+            // Insight: is works as documented
+            // In C#, strings are not zero-terminated. Using the whole buffer will include that character.
+            Assert.AreEqual((uint)(buffer.Length - 1), bytes);
+            Assert.AreEqual(inivalue.Substring(0, 4) + '\0', new string(buffer));
+            // Insight: the last error gives an indication that more data is available
+            var error = Marshal.GetLastWin32Error();
+            Assert.AreEqual(234, error);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("nSize")]
+        [TestMethod]
+        public void Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var buffer = new char[0]; // StringBuilder does not support lengths < 16
+
+            // Insight: a zero length buffer will not fit anything (as expected)
+            var bytes = GetIniString_ChArr_Unicode(sectionname, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            AssertZero(bytes);
+            // Insight: the last error gives an indication that more data is available
+            var error = Marshal.GetLastWin32Error();
+            Assert.AreEqual(234, error);
         }
     }
 }
