@@ -124,8 +124,8 @@ For all the C# programmers out there: `[out]` is not identical to `out` paramete
 > A pointer to the buffer that receives the retrieved string.
 
 Test Coverage:
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_TrailingSpacesAreStripped`
-* `WhiteSpace_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_TrailingSpacesAreStripped()`
+* `WhiteSpace_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped()`
 
 Insights:
 
@@ -145,8 +145,35 @@ Why could whitespace stripping be done? Probably because some people formatted t
 ```
 [in] nSize
 ```
+> The size of the buffer pointed to by the *lpReturnedString* parameter, in characters.
 
+This is a very interesting parameter, because it's potentially security relevant. If you manage to pass in a value larger than the buffer size, you'll get a buffer overflow with the typical consequences of undefined behavior.
+
+My guess is that a lot of implementations will not consider the case when the buffer size is *nSize* and the return value is *nSize-1*. In that case you would need to increase the buffer size to get the full value - or you might decide that such a value is impossible and just go on with what you got. A human modifying the file manually might wonder why his value is cut off.
+
+*nSize* is defined as a *DWORD*, which is *typedef*'d as an *unsigned long* (32 bit). So in theory, we could have a 4 GB buffer. But it turns out that it's limited to 65536 (16 bit) - well, this function is a relict of 16 bit Windows.
+
+Test Coverage:
+
+* `IntendedUse_Reading_Tests.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
+* `IntendedUse_Reading_Tests.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
+* `Limits_Tests.Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()`
+* `Limits_Tests.Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()`
+* `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndAnError()`
+
+Insights:
+
+* Values are truncated as described, resulting in a return value of *nSize-1*.
+* A zero size buffer returns a zero bytes result (as expected).
+* If the buffer is small and the value is truncated, `GetLastError()` returns `ERROR_MORE_DATA` (234) most of the times (exception see below). See the [list of error messages [MSDN]](https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-).
+* The maximum length of a value that can be read without an error is 65534 bytes.
+* The maximum length of a value that can be read is 65535 bytes in which case `GetLastError()` returns `ERROR_MORE_DATA` (234) .
+* Values longer than 65535 bytes cannot be read at all and there's no error from `GetLastError()`.
 
 ## Return Value
+
+In C#, always use `Marshal.GetLastWin32Error()` and do not try to declare a P/Invoke method for `GetLastError()` instead. [Details on Stack Overflow](https://stackoverflow.com/questions/17918266/winapi-getlasterror-vs-marshal-getlastwin32error).
+
+
 
 ## Remarks

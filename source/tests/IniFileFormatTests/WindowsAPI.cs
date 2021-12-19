@@ -22,7 +22,7 @@ namespace IniFileFormatTests
         /// If neither lpAppName nor lpKeyName is NULL and the supplied destination buffer is too small to hold the requested string, the string is truncated and followed by a null character, and the return value is equal to nSize minus one.
         /// If either lpAppName or lpKeyName is NULL and the supplied destination buffer is too small to hold all the strings, the last string is truncated and followed by two null characters. In this case, the return value is equal to nSize minus two.
         /// In the event the initialization file specified by lpFileName is not found, or contains invalid values, calling GetLastError will return '0x2' (File Not Found). To retrieve extended error information, call GetLastError.</returns>
-        [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Unicode)]
+        [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint GetIniString_SB_Unicode(
             string lpAppName,
             string lpKeyName,
@@ -31,8 +31,8 @@ namespace IniFileFormatTests
             uint nSize,
             string lpFileName);
 
-        [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Unicode)]
-        static extern uint GetIniString_ChArr_Unicode(
+        [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern uint GetIniString_ChArr_Unicode(
             string lpAppName,
             string lpKeyName,
             string lpDefault,
@@ -40,7 +40,7 @@ namespace IniFileFormatTests
             uint nSize,
             string lpFileName);
 
-        [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Ansi)]
+        [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Ansi, SetLastError = true)]
         public static extern uint GetIniString_ByteArr_Ansi(
             string lpAppName,
             string lpKeyName,
@@ -49,21 +49,21 @@ namespace IniFileFormatTests
             uint nSize,
             string lpFileName);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", SetLastError = true)]
         static extern uint GetPrivateProfileInt(
             string lpAppName,
             string lpKeyName,
             int nDefault,
             string lpFileName);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", SetLastError = true)]
         static extern uint GetPrivateProfileSection(
             string lpAppName,
             IntPtr lpszReturnBuffer,
             uint nSize,
             string lpFileName);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", SetLastError = true)]
         static extern uint GetPrivateProfileSectionNames(
             IntPtr lpszReturnBuffer,
             uint nSize,
