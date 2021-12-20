@@ -1,5 +1,7 @@
 # GetPrivateProfileString()
 
+Navigate to [lpAppName](#lpAppName), [lpKeyName](#lpKeyName), [lpDefault](#lpDefault), [lpReturnedString](#lpReturnedString), [nSize](#nSize), [lpFileName](#lpFileName), [return value](#returnValue), [remarks](#remarks)
+
 ## Differences
 
 The documentation of [GetPrivateProfileString() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestring) does not mention it, but the documentation of the [GetPrivateProfileStringA() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestringa) and [GetPrivateProfileStringW() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestringw) versions do:
@@ -17,6 +19,8 @@ Other than that, the specification is identical, which is great.
 
 ## Parameters
 
+<a name="lpAppName"></a>
+
     [in] lpAppName
 
 > The name of the section containing the key name.
@@ -26,10 +30,12 @@ Note that this parameter is called "AppName" and not "Section". It seems like th
 Test Coverage: 
 
 * `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
+* `Casing_Tests.Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 
 Insights:
 
 * Basically, this functionality works as expected
+* The section can be accessed case-insensitive
 
 > If this parameter is **NULL**, the **GetPrivateProfileString** function copies all section names in the file to the supplied buffer.
 
@@ -47,6 +53,7 @@ Insights:
 * The section names are copied as zero-terminated strings. As such, you can't simply use the buffer as a string, but you need to consider the number of returned bytes and interpret the result.
 * Duplicate sections are reported multiple times
 
+<a name="lpKeyName"></a>
 ```
 [in] lpKeyName
 ```
@@ -56,10 +63,12 @@ Insights:
 Test Coverage: 
 
 * `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
+* `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 
 Insights:
 
 * Basically, this functionality works as expected.
+* The key can be accessed case-insensitive
 > If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
 
 Test Coverage:
@@ -72,6 +81,7 @@ Insights:
 * Basically, this functionality works as described
 * The key names are copied as zero-terminated strings. As such, you can't simply use the buffer as a string, but you need to consider the number of returned bytes and interpret the result.
 * Duplicate keys are reported multiple times
+<a name="lpDefault"></a>
 
 ```
 [in] lpDefault
@@ -95,7 +105,7 @@ Insights:
 
 Test Coverage:
 
-`IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()`
 
 Insights:
 
@@ -115,7 +125,7 @@ Insights:
 * Basically, this functionality works as described.
 * Leading spaces are not stripped for the default value.
 * "Blank" refers to the space character only, not tab, vertical tab, carriage return and newline.
-
+<a name="lpReturnedString"></a>
 ```
 [out] lpReturnedString
 ```
@@ -141,7 +151,7 @@ Why could whitespace stripping be done? Probably because some people formatted t
   key2=      anothervalue
   longerkey= differentvalue
   ```
-
+  <a name="nSize"></a>
 ```
 [in] nSize
 ```
@@ -170,6 +180,7 @@ Insights:
 * The maximum length of a value that can be read without an error is 65534 bytes.
 * The maximum length of a value that can be read is 65535 bytes in which case `GetLastError()` returns `ERROR_MORE_DATA` (234)  (although there is no more data)
 * Values of *nSize*>=65535 will overflow modulo 65536 and there's no error from `GetLastError()`.
+<a name="lpFileName"></a>
 ```
 [in] lpFileName
 ```
@@ -201,7 +212,7 @@ Insights:
 
 * Basically the functionality works as described.
 * The limitation for the full file name is `MAX_PATH` (260) and results in a `GetLastError()` of `ERROR_PATH_NOT_FOUND`.
-
+<a name="returnValue"></a>
 ## Return Value
 
 > The return value is the number of characters copied to the buffer, not including the terminating **null** character.
@@ -257,5 +268,121 @@ Test Coverage:
 Insights:
 
 * The "FileNotFound" case works as expected.
+<a name="remarks"></a>
 
 ## Remarks
+
+My feeling is that the remarks on this function do not give us additional information. It's mostly a repetition of what has been said before when describing the parameters.
+
+> The **GetPrivateProfileString** function searches the specified initialization file for a key that matches the name specified by the *lpKeyName* parameter under the section heading specified by the *lpAppName* parameter.
+
+Test Coverage:
+
+* `Casing_Tests.Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
+* `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
+
+Insights:
+
+* The section and the key can be accessed case independent
+
+> If it finds the key, the function copies the corresponding  string to the buffer. 
+
+Test Coverage:
+
+* `IntendedUse_Reading_Tests.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
+* `IntendedUse_Reading_Tests.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
+* `Limits_Tests.Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()`
+* `Limits_Tests.Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()`
+* `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()`
+* `Limits_Tests.Given_AValueOfLength65537_When_AccessingIt_Then_WeGetModuloBehavior()`
+
+Insights:
+
+* Basically the statement is correct if we consider the limitations of the buffer size and modulo behavior. See [nSize](#nSize) for details.
+
+> If the key does not exist, the function copies the default character string specified by the *lpDefault* parameter. 
+
+Test Cases:
+
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()`
+* `IntendedUse_Reading_Tests.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
+* `WhiteSpace_Tests.Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()`
+
+Insights:
+
+* The default value is used when the key is missing, section is missing or file is missing.
+* The default value is copied without trailing spaces.
+* The default value is also limited by the size of the buffer.
+
+> A section in the initialization file must have the following form:
+>
+> ​    [section]
+> ​    key=string
+
+Test Cases:
+
+* Probably all tests
+
+Insights:
+
+* Yes, that's how an INI file looks like if we don't consider any of the special cases.
+
+> If *lpAppName* is **NULL**, **GetPrivateProfileString** copies all section names in the specified file to the supplied buffer. If *lpKeyName* is **NULL**, the function copies all key names in the specified section to the supplied buffer. An application can use  this method to enumerate all of the sections and keys in a file.
+
+Test Cases:
+
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()`
+* `IntendedUse_Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell`
+
+Insights:
+
+* We can enumerate sections and keys that way
+* An INI file which contains the same section multiple times or the same key multiple times will result in duplicate entries in the return value.
+
+> In either case, each string is followed by a **null** character and the final string is followed by a second **null** character.
+
+Test Coverage:
+
+* `IntendedUse_Reading_Tests.Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()`
+* `IntendedUse_Reading_Tests.Given_AKnownIniFile_When_NullIsUsedForKeyName_Then_SeparatorCharacterIsNul()`
+
+Insights:
+
+* The separator is the NUL character `\0`.
+
+> If the string associated with *lpKeyName* is enclosed in single or double quotation marks, the marks are discarded when the **GetPrivateProfileString** function retrieves the string.
+
+Test Coverage:
+
+* `IntendedUse_Reading_Tests.Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()`
+* `IntendedUse_Reading_Tests.Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()`
+* `IntendedUse_Reading_Tests.Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()`
+* `IntendedUse_Reading_Tests.Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()`
+* `IntendedUse_Reading_Tests.Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()`
+
+Insights:
+
+* Spaces outside the quotes are stripped
+* Double quotes are stripped
+* Single quotes are stripped
+* Spaces inside quotes are not stripped
+* Only the outermost quotes are stripped
+* If the quotes do not match, they will not be stripped
+
+Now, this is very interesting for a test that writes to an INI file. If the quotes are stripped when reading, they must be escaped when writing.
+
+> The **GetPrivateProfileString** function is not case-sensitive; the strings can be a combination of uppercase and lowercase letters.
+
+Test Coverage:
+
+* `Casing_Tests.Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
+* `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
+
+Insights:
+
+* This statement is a bit misleading. The section name and the key name are not case sensitive. But the value is returned with the same casing as in the INI file.
+

@@ -79,6 +79,34 @@ namespace IniFileFormatTests
         }
 
         [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName", null)]
+        [TestMethod]
+        public void Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var buffer = new char[40];
+            var bytes = GetIniString_ChArr_Unicode(null, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+
+            // Insight: The separator character is NUL \0
+            Assert.AreEqual('\0', buffer[sectionname.Length]);
+            Assert.AreEqual('\0', buffer[sectionname.Length + 1 + sectionname2.Length]);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpKeyName", null)]
+        [TestMethod]
+        public void Given_AKnownIniFile_When_NullIsUsedForKeyName_Then_SeparatorCharacterIsNul()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var buffer = new char[40];
+            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length, FileName);
+
+            // Insight: The separator character is NUL \0
+            Assert.AreEqual('\0', buffer[keyname.Length]);
+            Assert.AreEqual('\0', buffer[keyname.Length + 1 + keyname2.Length]);
+        }
+
+        [DoNotRename("Used in documentation")]
         [TestsApiParameter("lpKeyName", null)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()
@@ -287,6 +315,87 @@ namespace IniFileFormatTests
                 AssertZero(bytes);
                 Assert.AreEqual((int)invalid.Value, Marshal.GetLastWin32Error());
             }
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpReturnedString")]
+        [TestMethod]
+        public void Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \"   {inivalue}   \"  \r\n");
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+
+            // Insight: the quotes are stripped
+            // Insight: the spaces inside the quotes are not stripped
+            // Insight: the spaces outside the quotes are stripped
+            AssertASCIILength("   " + inivalue + "   ", bytes);
+            Assert.AreEqual(0, Marshal.GetLastWin32Error());
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpReturnedString")]
+        [TestMethod]
+        public void Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \'   {inivalue}   \'  \r\n");
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+
+            // Insight: the quotes are stripped
+            // Insight: the spaces inside the quotes are not stripped
+            // Insight: the spaces outside the quotes are stripped
+            AssertASCIILength("   " + inivalue + "   ", bytes);
+            Assert.AreEqual(0, Marshal.GetLastWin32Error());
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpReturnedString")]
+        [TestMethod]
+        public void Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()
+        {
+            foreach (var outerquote in new[] { '\'', '\"' })
+            {
+                foreach (var innerquote in new[] { '\'', '\"' })
+                {
+                    EnsureASCII($"[{sectionname}]\r\n{keyname}=  " + outerquote + innerquote + $"   {inivalue}   " + innerquote + outerquote + "  \r\n");
+                    var sb = DefaultStringBuilder();
+                    var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+
+                    // Insight: only the outermost quotes are stripped
+                    AssertASCIILength(innerquote + "   " + inivalue + "   " + innerquote, bytes);
+                    Assert.AreEqual(0, Marshal.GetLastWin32Error());
+
+                }
+            }
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpReturnedString")]
+        [TestMethod]
+        public void Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \"   {inivalue}   \'  \r\n");
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+
+            // Insight: no quotes are stripped
+            AssertASCIILength("\"   " + inivalue + "   \'", bytes);
+            Assert.AreEqual(0, Marshal.GetLastWin32Error());
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpReturnedString")]
+        [TestMethod]
+        public void Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \'\"   {inivalue}   \'\"  \r\n");
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+
+            // Insight: no quotes are stripped
+            AssertASCIILength("\'\"   " + inivalue + "   \'\"", bytes);
+            Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
     }
 }
