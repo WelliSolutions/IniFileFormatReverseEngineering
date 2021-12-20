@@ -112,6 +112,22 @@ namespace IniFileFormatTests
             Assert.AreEqual((int)GetLastError.ERROR_PATH_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName", null)]
+        [TestMethod]
+        public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()
+        {
+            EnsureDefaultContent_UsingAPI();
+            foreach (var smallSize in new[] { 2, 1 })
+            {
+                var buffer = new char[0]; // StringBuilder can't be smaller than 16
+                var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
+                    FileName);
+
+                // Insight: The result will  not be negative (nSize-2)
+                AssertZero(bytes);
+            }
+        }
 
     }
 }
