@@ -6,6 +6,14 @@ namespace IniFileFormatTests
 {
     static class WindowsAPI
     {
+        internal enum GetLastError
+        {
+            ERROR_FILE_NOT_FOUND = 2,
+            ERROR_PATH_NOT_FOUND = 3,
+            ERROR_ACCESS_DENIED = 5,
+            ERROR_INVALID_NAME = 123,
+        }
+
         // TODO: Copy documentation from MSDN
         /// <summary>
         /// 
