@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -64,6 +66,19 @@ namespace IniFileFormatTests
         }
 
         [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName", null)]
+        [TestMethod]
+        public void Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var buffer = new char[10]; // StringBuilder can't be smaller than 16
+            var bytes = GetIniString_ChArr_Unicode(null, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+
+            // Insight: The result is nSize -2
+            Assert.AreEqual((uint)buffer.Length - 2, bytes);
+        }
+
+        [DoNotRename("Used in documentation")]
         [TestsApiParameter("lpKeyName", null)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()
@@ -99,6 +114,18 @@ namespace IniFileFormatTests
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName", null)]
+        [TestMethod]
+        public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var buffer = new char[10]; // StringBuilder can't be smaller than 16
+            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length, FileName);
+
+            // Insight: The result is nSize -2
+            Assert.AreEqual((uint)buffer.Length - 2, bytes);
+        }
 
         [DoNotRename("Used in documentation")]
         [TestsApiParameter("lpDefault")]
@@ -140,6 +167,9 @@ namespace IniFileFormatTests
             var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
             Assert.AreEqual((uint)Encoding.ASCII.GetBytes(defaultvalue).Length, bytes);
             AssertSbEqual(defaultvalue, sb);
+
+            // Insight: we get the FileNotFound error as described for the return value
+            Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
         [DoNotRename("Used in documentation")]
@@ -172,6 +202,7 @@ namespace IniFileFormatTests
 
         [DoNotRename("Used in documentation")]
         [TestsApiParameter("nSize")]
+        [TestsApiParameter("Return value")]
         [TestMethod]
         public void Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()
         {
@@ -190,6 +221,7 @@ namespace IniFileFormatTests
 
         [DoNotRename("Used in documentation")]
         [TestsApiParameter("nSize")]
+        [TestsApiParameter("Return value")]
         [TestMethod]
         public void Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()
         {
@@ -202,6 +234,59 @@ namespace IniFileFormatTests
             // Insight: the last error gives an indication that more data is available
             var error = Marshal.GetLastWin32Error();
             Assert.AreEqual(234, error);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpFileName")]
+        [TestMethod]
+        public void Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
+        {
+            FileName = Path.Combine(Path.GetTempPath(), "FileWithExtension.ext");
+            EnsureDefaultContent_UsingAPI();
+
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            Assert.AreEqual(0, Marshal.GetLastWin32Error());
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpFileName")]
+        [TestMethod]
+        public void Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
+        {
+            FileName = Path.Combine(Path.GetTempPath(), "FileWithoutExtension");
+            EnsureDefaultContent_UsingAPI();
+
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            Assert.AreEqual(0, Marshal.GetLastWin32Error());
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpFileName")]
+        [TestMethod]
+        public void Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()
+        {
+            var sb = DefaultStringBuilder();
+            var invalids = new Dictionary<string, GetLastError>();
+            invalids.Add("PRN", GetLastError.ERROR_FILE_NOT_FOUND);
+            invalids.Add("COM9", GetLastError.ERROR_FILE_NOT_FOUND);
+            invalids.Add("LPT", GetLastError.ERROR_FILE_NOT_FOUND);
+            invalids.Add(@"C:\C:\", GetLastError.ERROR_INVALID_NAME);
+            invalids.Add(@"*", GetLastError.ERROR_INVALID_NAME);
+            invalids.Add(@"?", GetLastError.ERROR_INVALID_NAME);
+            invalids.Add(@"", GetLastError.ERROR_ACCESS_DENIED);
+            invalids.Add(@".", GetLastError.ERROR_ACCESS_DENIED);
+            invalids.Add(@"..", GetLastError.ERROR_ACCESS_DENIED);
+            invalids.Add(Path.GetTempPath(), GetLastError.ERROR_ACCESS_DENIED);
+            foreach (var invalid in invalids)
+            {
+                var bytes = GetIniString_SB_Unicode(null, null, null, sb, (uint)sb.Capacity, invalid.Key);
+                AssertZero(bytes);
+                Assert.AreEqual((int)invalid.Value, Marshal.GetLastWin32Error());
+            }
         }
     }
 }

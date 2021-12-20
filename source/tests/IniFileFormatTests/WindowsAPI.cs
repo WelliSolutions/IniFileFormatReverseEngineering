@@ -6,6 +6,26 @@ namespace IniFileFormatTests
 {
     static class WindowsAPI
     {
+        internal enum GetLastError
+        {
+            /// <summary>
+            /// The system cannot find the file specified.
+            /// </summary>
+            ERROR_FILE_NOT_FOUND = 2,
+            /// <summary>
+            /// The system cannot find the path specified.
+            /// </summary>
+            ERROR_PATH_NOT_FOUND = 3,
+            /// <summary>
+            /// Access is denied.
+            /// </summary>
+            ERROR_ACCESS_DENIED = 5,
+            /// <summary>
+            /// The filename, directory name, or volume label syntax is incorrect.
+            /// </summary>
+            ERROR_INVALID_NAME = 123,
+        }
+
         // TODO: Copy documentation from MSDN
         /// <summary>
         /// 

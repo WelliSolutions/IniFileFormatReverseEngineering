@@ -17,7 +17,7 @@ namespace IniFileFormatTests
             EnsureDeleted();
         }
 
-        protected readonly string FileName;
+        protected string FileName;
 
         protected void EnsureASCII(string contents)
         {

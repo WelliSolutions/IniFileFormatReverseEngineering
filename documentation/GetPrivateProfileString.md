@@ -170,11 +170,92 @@ Insights:
 * The maximum length of a value that can be read without an error is 65534 bytes.
 * The maximum length of a value that can be read is 65535 bytes in which case `GetLastError()` returns `ERROR_MORE_DATA` (234)  (although there is no more data)
 * Values of *nSize*>=65535 will overflow modulo 65536 and there's no error from `GetLastError()`.
+```
+[in] lpFileName
+```
+> The name of the initialization file.
+
+Test Coverage:
+
+* `IntendedUse_Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
+* `IntendedUse_Reading.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `IntendedUse_Reading.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+
+Insights:
+
+* Basically, the functionality works as described.
+* Files do not need to have an extension.
+* Devices such as `PRN`, `COM1` and `LPT` result in a `GetLastError()` of `ERROR_FILE_NOT_FOUND`.
+* Invalid file names such as `*`, `?` and `C:\C:\` result in a `GetLastError()` of `ERROR_INVALID_NAME`.
+* Special names such as an empty file name, `.` and `..` which effectively point to a directory result in a `GetLastError()` of `ERROR_ACCESS_DENIED`.
+
+> If this parameter does not contain a full path to the file, the system searches for the file in the Windows  directory.
+
+There are not many INI files in the Windows directory any more. There is still `system.ini` and `win.ini`, but they both have almost no content. Reading from those files is no issue. However, writing a file to the Windows directory requires elevated permissions.
+
+Test Coverage:
+
+* `Limits_Test.Given_ALongFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()`
+
+Insights:
+
+* Basically the functionality works as described.
+* The limitation for the full file name is `MAX_PATH` (260) and results in a `GetLastError()` of `ERROR_PATH_NOT_FOUND`.
 
 ## Return Value
 
-In C#, always use `Marshal.GetLastWin32Error()` and do not try to declare a P/Invoke method for `GetLastError()` instead. [Details on Stack Overflow](https://stackoverflow.com/questions/17918266/winapi-getlasterror-vs-marshal-getlastwin32error).
+> The return value is the number of characters copied to the buffer, not including the terminating **null** character.
 
+TestCoverage:
 
+* probably all test in `IntendedUse_Reading`
+* `Limits_Tests.Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()`
+* `Limits_Tests.Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()`
+* `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()`
+* `Limits_Tests.Given_AValueOfLength65537_When_AccessingIt_Then_WeGetModuloBehavior()`
+
+Insights:
+
+* Basically the functionality works as described, but ...
+* The number of characters copied to the buffer is not always the number you'd expect due to the 16 bit overflow.
+
+> If neither *lpAppName* nor *lpKeyName* is **NULL** and the supplied destination buffer is too small to hold the requested string, the string is truncated and followed by a **null** character, and the return value is equal to *nSize* minus one.
+
+Test Cases:
+
+* `IntendedUse_Reading.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
+* `IntendedUse_Reading.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
+
+Insights:
+
+* Basically works as expected
+
+> If either *lpAppName* or *lpKeyName* is **NULL** and the supplied destination buffer is too small to hold all the strings, the last string is truncated and followed by two **null** characters. In this case, the return value is equal to *nSize* minus two.
+
+Test Coverage:
+
+* `IntendedUse_Reading.Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()`
+* `IntendedUse_Reading.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()`
+* `Limits_Test.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()` 
+
+Insights:
+
+* Basically it works as expected.
+* If *nSize* is smaller than 2, the function returns 0
+
+> In the event the initialization file specified by *lpFileName* is not found, or contains invalid values, calling **GetLastError** will return '0x2' (File Not Found). To retrieve extended error information, call [GetLastError](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror).
+
+In C#, always use `Marshal.GetLastWin32Error()` and do not try to declare a P/Invoke method for `GetLastError()`. The .NET framework may have made WinAPI calls internally and you would get the result of such a last call. [Details on Stack Overflow](https://stackoverflow.com/questions/17918266/winapi-getlasterror-vs-marshal-getlastwin32error).
+
+The interesting thing here is the statement "contains invalid values". That's not described in detail.
+
+Test Coverage:
+
+* `IntendedUse_Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
+* `IntendedUse_Reading.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
+
+Insights:
+
+* The "FileNotFound" case works as expected.
 
 ## Remarks
