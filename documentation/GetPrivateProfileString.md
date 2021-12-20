@@ -159,7 +159,8 @@ Test Coverage:
 * `IntendedUse_Reading_Tests.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
 * `Limits_Tests.Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()`
 * `Limits_Tests.Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()`
-* `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndAnError()`
+* `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()`
+* `Limits_Tests.Given_AValueOfLength65537_When_AccessingIt_Then_WeGetModuloBehavior()`
 
 Insights:
 
@@ -167,8 +168,8 @@ Insights:
 * A zero size buffer returns a zero bytes result (as expected).
 * If the buffer is small and the value is truncated, `GetLastError()` returns `ERROR_MORE_DATA` (234) most of the times (exception see below). See the [list of error messages [MSDN]](https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-).
 * The maximum length of a value that can be read without an error is 65534 bytes.
-* The maximum length of a value that can be read is 65535 bytes in which case `GetLastError()` returns `ERROR_MORE_DATA` (234) .
-* Values longer than 65535 bytes cannot be read at all and there's no error from `GetLastError()`.
+* The maximum length of a value that can be read is 65535 bytes in which case `GetLastError()` returns `ERROR_MORE_DATA` (234)  (although there is no more data)
+* Values of *nSize*>=65535 will overflow modulo 65536 and there's no error from `GetLastError()`.
 
 ## Return Value
 
