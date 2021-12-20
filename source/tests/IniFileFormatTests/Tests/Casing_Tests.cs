@@ -11,9 +11,10 @@ namespace IniFileFormatTests
     [TestClass]
     public class Casing_Tests : IniFileTestBase
     {
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName")]
         [TestMethod]
-        public void Given_AnIniFileWithKnownContent_When_TheContentIsAccessedWithDifferentSectionCasing_Then_WeGetTheExpectedValue()
+        public void Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()
         {
             EnsureDefaultContent_UsingFile();
             var sb = DefaultStringBuilder();
@@ -22,17 +23,27 @@ namespace IniFileFormatTests
             var bytes = GetIniString_SB_Unicode(sectionname.ToLower(), keyname, null, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength(inivalue, bytes);
             AssertSbEqual(inivalue, sb);
+
+            bytes = GetIniString_SB_Unicode(sectionname.ToUpper(), keyname, null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
+
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpKeyName")]
         [TestMethod]
-        public void Given_AnIniFileWithKnownContent_When_TheContentIsAccessedWithDifferentKeyCasing_Then_WeGetTheExpectedValue()
+        public void Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()
         {
             EnsureDefaultContent_UsingFile();
             var sb = DefaultStringBuilder();
 
             // Insight: key reading is case insensitive
             var bytes = GetIniString_SB_Unicode(sectionname, keyname.ToLower(), null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
+
+            bytes = GetIniString_SB_Unicode(sectionname, keyname.ToUpper(), null, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength(inivalue, bytes);
             AssertSbEqual(inivalue, sb);
         }
