@@ -9,6 +9,10 @@ namespace IniFileFormatTests
         internal enum GetLastError
         {
             /// <summary>
+            /// The operation completed successfully.
+            /// </summary>
+            SUCCESS = 0,
+            /// <summary>
             /// The system cannot find the file specified.
             /// </summary>
             ERROR_FILE_NOT_FOUND = 2,
@@ -24,6 +28,11 @@ namespace IniFileFormatTests
             /// The filename, directory name, or volume label syntax is incorrect.
             /// </summary>
             ERROR_INVALID_NAME = 123,
+            /// <summary>
+            /// More data is available.
+            /// </summary>
+            ERROR_MORE_DATA = 234,
+
         }
 
         // TODO: Copy documentation from MSDN

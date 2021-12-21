@@ -92,6 +92,43 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        // TODO: tests for dangling square brackets
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
+        public void Given_AnEmptySectionName_When_WeAccessAKey_Then_WeGetTheValue()
+        {
+            EnsureASCII($"[]\r\n{keyname}={inivalue}\r\n");
+            var sb = DefaultStringBuilder();
+
+            // Insight: section names can be an empty string
+            var bytes = GetIniString_SB_Unicode("", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
+        public void Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()
+        {
+            EnsureASCII($"[{sectionname}   \r\n{keyname}={inivalue}\r\n");
+            var sb = DefaultStringBuilder();
+
+            // Insight: the closing square bracket is not needed
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
+        public void Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()
+        {
+            EnsureASCII($"{sectionname}]\r\n{keyname}={inivalue}\r\n");
+            var sb = DefaultStringBuilder();
+
+            // Insight: the opening square bracket is needed
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+        }
     }
 }

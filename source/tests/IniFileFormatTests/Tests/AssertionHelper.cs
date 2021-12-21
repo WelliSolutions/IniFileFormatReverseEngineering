@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IniFileFormatTests
@@ -18,6 +19,12 @@ namespace IniFileFormatTests
         public static void AssertSbEqual(string expected, StringBuilder sb)
         {
             Assert.AreEqual(expected, sb.ToString());
+        }
+
+        public static void AssertFileEqualASCII(string expected, string fileName)
+        {
+            var asciiContent = File.ReadAllText(fileName, Encoding.ASCII);
+            Assert.AreEqual(expected, asciiContent);
         }
     }
 }

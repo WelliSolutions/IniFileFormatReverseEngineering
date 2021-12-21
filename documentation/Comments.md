@@ -34,13 +34,14 @@ Test Cases:
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 * `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
 * `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
-* `Semicolon_Tests.Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment`
+* `Semicolon_Tests.Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()`
 * `SquareBracket_Tests.Given_KeyValueBehindClosingSquareBracket_When_WeTryToAccessTheValue_Then_WeDontGetTheValue()`
 * `SquareBracket_Tests.Given_AValueWithoutAnySection_When_WeTryToAccessIt_Then_WeDontGetTheValue()`
+* `Semicolon_Tests.Given_AnIniFileWithSpacesBeforeTheSemicolon_When_TheContentIsAccessed_Then_ItsStillAComment()`
 
 Insights:
 
-* A semicolon in front of the key will make it a comment.
+* A semicolon in front of the key will make it a comment. It can be preceded by space, tab or vertical tab.
 * Comment can even be written to the INI file using the API, prepending the semicolon to the key.
 * A semicolon as part of the section will make it part of the section
 * A semicolon in the middle of the key will make it part of the key.
@@ -48,6 +49,8 @@ Insights:
 * Hashtags cannot be used for comments
 * The way sections are parsed makes text after the closing square bracket also a comment, even without a semicolon
 * Values without any section are ignored by the parser, effectively making text before the first section a comment
+
+Due to the overflow at 65536 characters, everything beyond that will not be part of the value either. I'd not call that a comment, though. Microsoft could change the implementation at any time in order to allow longer values.
 
 Examples:
 
@@ -57,6 +60,7 @@ Examples:
 this is=a comment
 [;this is a section]
 ;this is=a comment
+      ;this is=also a comment
 this;is=not a comment
 this is=not a ;comment
 #this is=not a comment

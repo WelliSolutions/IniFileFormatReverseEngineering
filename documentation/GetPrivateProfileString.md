@@ -50,13 +50,20 @@ Test Coverage:
 * `Casing_Tests.Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()`
+* `SquareBracket_Tests.Given_AnEmptySectionName_When_WeAccessAKey_Then_WeGetTheValue()` 
+* `SquareBracket_Tests.Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()`
+* `SquareBracket_Tests.Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()`
+* `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
 
 Insights:
 
 * Basically, this functionality works as expected
 * The section can be accessed case-insensitive
-* The section name can contain an opening square bracket
-* The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket
+* The section name can be an empty string
+* The section name can contain an opening square bracket. It will be part of the section name.
+* The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket.
+* The section in the file needn't have a closing square bracket. Parsing of the section name will also end at the linebreak.
+* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section.
 
 > If this parameter is **NULL**, the **GetPrivateProfileString** function copies all section names in the file to the supplied buffer.
 
@@ -85,11 +92,15 @@ Test Coverage:
 
 * `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
 * `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
+* `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
+* `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
 
 Insights:
 
 * Basically, this functionality works as expected.
 * The key can be accessed case-insensitive
+* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the key.
+* The parameter may start with a semicolon, but no value will be found, since it will be considered as a comment. The default value will be returned.
 > If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
 
 Test Coverage:

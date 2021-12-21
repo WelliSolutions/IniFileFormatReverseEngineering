@@ -244,7 +244,7 @@ namespace IniFileFormatTests
             Assert.AreEqual(inivalue.Substring(0, 4) + '\0', new string(buffer));
             // Insight: the last error gives an indication that more data is available
             var error = Marshal.GetLastWin32Error();
-            Assert.AreEqual(234, error);
+            Assert.AreEqual((int)GetLastError.ERROR_MORE_DATA, error);
         }
 
         [DoNotRename("Used in documentation")]
@@ -261,7 +261,7 @@ namespace IniFileFormatTests
             AssertZero(bytes);
             // Insight: the last error gives an indication that more data is available
             var error = Marshal.GetLastWin32Error();
-            Assert.AreEqual(234, error);
+            Assert.AreEqual((int)GetLastError.ERROR_MORE_DATA, error);
         }
 
         [DoNotRename("Used in documentation")]

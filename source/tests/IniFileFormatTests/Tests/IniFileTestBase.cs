@@ -62,6 +62,11 @@ namespace IniFileFormatTests
             }
         }
 
+        protected void EnsureEmpty()
+        {
+            EnsureASCII("");
+        }
+
         protected string sectionname = "SectionName";
         protected string keyname = "TestKey";
         protected string inivalue = "TestValue";
