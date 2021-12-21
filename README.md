@@ -62,6 +62,12 @@ Analysis of [GetPrivateProfileString()](documentation/GetPrivateProfileString.md
 * [Question "Did INI files work in a different way on Windows 3.x than today?" on Retrocomputing](https://retrocomputing.stackexchange.com/questions/23503/did-ini-files-work-in-a-different-way-on-windows-3-x-than-today)
 * [Raymond Chen in "The old new thing": Why are INI files deprecated in favor of the Registry?](https://devblogs.microsoft.com/oldnewthing/?p=24383)
 
+Top questions on Stack Overflow regarding INI files:
+
+* [Reading/writing an INI file](https://stackoverflow.com/questions/217902/reading-writing-an-ini-file)
+* [Do Standard INI files allow comments?](https://stackoverflow.com/questions/1378219/do-standard-windows-ini-files-allow-comments)
+* [What is the easiest way to parse an INI File in C++?](https://stackoverflow.com/questions/12633/what-is-the-easiest-way-to-parse-an-ini-file-in-c) (closed as off-topic, because "easiest" is opinion based, the Microsoft way might not be the easiest, but probably quite compatible)
+
 Methods for reading INI files, focusing on the "private" ones. The non-private ones will only read from `c:\windows\win.ini`:
 
 * Reading text
@@ -102,5 +108,9 @@ Of course, people have implemented INI parsers already. My implementations are n
 * [CodeProject: An INI file handling class using C#](https://www.codeproject.com/Articles/1966/An-INI-file-handling-class-using-C) License: unclear. Problems: has a limit of 254 characters for reading. 
 * [Bytes: Reading and parsing an INI file in C#](https://bytes.com/topic/net/insights/797169-reading-parsing-ini-file-c). License: unclear. Problems: does not strip spaces from the values
 * [Multipedros: Confing.dll](http://www.multipetros.gr/public-projects/libraries/confing-dll/) has a `SimpleIni` and a `Ini` class. License: FreeBSD
-* [Github: Madmilkman.ini](https://github.com/MarioZ/MadMilkman.Ini) License: MIT
-* [Maybe a dozen of implementations answering this Stack Overflow question](https://stackoverflow.com/questions/217902/reading-writing-an-ini-file)
+* [Github: Madmilkman.ini](https://github.com/MarioZ/MadMilkman.Ini) License: MIT.
+* [Github: simpleini](https://github.com/brofield/simpleini). License: MIT.
+* [SourceForge: libini](https://sourceforge.net/projects/libini/) License: unclear.
+* [Github: inih](https://github.com/benhoyt/inih) License: New BSD.
+* [Github: inipp](https://github.com/mcmtroffaes/inipp) License: MIT.
+* [Maybe a dozen implementations answering this Stack Overflow question](https://stackoverflow.com/questions/217902/reading-writing-an-ini-file)
