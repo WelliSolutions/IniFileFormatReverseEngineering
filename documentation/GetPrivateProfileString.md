@@ -51,14 +51,17 @@ Test Coverage:
 * `SquareBracket_Tests.Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()`
 * `SquareBracket_Tests.Given_AnEmptySectionName_When_WeAccessAKey_Then_WeGetTheValue()` 
+* `SquareBracket_Tests.Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()`
+* `SquareBracket_Tests.Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()`
 
 Insights:
 
 * Basically, this functionality works as expected
 * The section can be accessed case-insensitive
 * The section name can be an empty string
-* The section name can contain an opening square bracket
-* The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket
+* The section name can contain an opening square bracket. It will be part of the section name.
+* The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket.
+* The section in the file needn't have a closing square bracket. Parsing of the section name will also end at the linebreak.
 
 > If this parameter is **NULL**, the **GetPrivateProfileString** function copies all section names in the file to the supplied buffer.
 
