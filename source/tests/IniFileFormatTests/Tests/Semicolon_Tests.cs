@@ -35,6 +35,35 @@ namespace IniFileFormatTests.SpecialCharacters
 
         [DoNotRename("Used in documentation")]
         [TestMethod]
+        public void Given_AnIniFileWithSpacesBeforeTheSemicolon_When_TheContentIsAccessed_Then_ItsStillAComment()
+        {
+            foreach (var whitespace in new[] { ' ', '\t', '\v' })
+            {
+                EnsureASCII($"[{sectionname}]\r\n{whitespace};{keyname}={inivalue}\r\n");
+                var sb = DefaultStringBuilder();
+
+                // Insight: cannot be accessed by keyname
+                var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity,
+                    FileName);
+                AssertASCIILength(defaultvalue, bytes);
+                AssertSbEqual(defaultvalue, sb);
+
+                // Insight: cannot be accessed by semicolon + keyname
+                bytes = GetIniString_SB_Unicode(sectionname, ";" + keyname, defaultvalue, sb, (uint)sb.Capacity,
+                    FileName);
+                AssertASCIILength(defaultvalue, bytes);
+                AssertSbEqual(defaultvalue, sb);
+
+                // Insight: cannot be accessed as written in the file
+                bytes = GetIniString_SB_Unicode(sectionname, $"{whitespace};" + keyname, defaultvalue, sb, (uint)sb.Capacity,
+                    FileName);
+                AssertASCIILength(defaultvalue, bytes);
+                AssertSbEqual(defaultvalue, sb);
+            }
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
         public void Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()
         {
             EnsureDeleted();
