@@ -2,7 +2,7 @@
 
 Navigate to [lpAppName](#lpAppName), [lpKeyName](#lpKeyName), [lpDefault](#lpDefault), [lpReturnedString](#lpReturnedString), [nSize](#nSize), [lpFileName](#lpFileName), [return value](#returnValue), [remarks](#remarks)
 
-## Differences
+## Documentation at MSDN
 
 The documentation of [GetPrivateProfileString() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestring) does not mention it, but the documentation of the [GetPrivateProfileStringA() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestringa) and [GetPrivateProfileStringW() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestringw) versions do:
 
@@ -16,6 +16,23 @@ Just to make sure neither me nor Microsoft made a mistake, I compared the MSDN c
 | In the event the initialization file specified by lpFileName is not found, or contains invalid values, **calling GetLastError will return** '0x2' (File Not Found). | In the event the initialization file specified by lpFileName is not found, or contains invalid values, **this function will set errorno with a value of** '0x2' (File Not Found). | In the event the initialization file specified by lpFileName is not found, or contains invalid values, **this function will set errorno with a value of** '0x2' (File Not Found). |
 
 Other than that, the specification is identical, which is great.
+
+This page has the same layout as the MSDN documentation, because I'll go through each of the sentences, cite them and check whether that statement is true or not.
+
+<a name="syntax"></a>
+
+## Syntax
+
+```C++
+DWORD GetPrivateProfileString(
+  [in]  LPCTSTR lpAppName,
+  [in]  LPCTSTR lpKeyName,
+  [in]  LPCTSTR lpDefault,
+  [out] LPTSTR  lpReturnedString,
+  [in]  DWORD   nSize,
+  [in]  LPCTSTR lpFileName
+);
+```
 
 ## Parameters
 
