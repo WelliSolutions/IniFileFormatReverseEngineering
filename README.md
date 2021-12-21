@@ -78,7 +78,7 @@ And we potentially have other problems:
 
 Analysis of [GetPrivateProfileString()](documentation/GetPrivateProfileString.md)
 
-
+Tests regarding [Comments](documentation/Comments.md)
 
 ## References
 

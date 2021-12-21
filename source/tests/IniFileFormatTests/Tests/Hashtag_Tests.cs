@@ -1,4 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static IniFileFormatTests.AssertionHelper;
+using static IniFileFormatTests.WindowsAPI;
 
 namespace IniFileFormatTests.SpecialCharacters
 {
@@ -10,46 +12,32 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Hashtag_Tests : IniFileTestBase
     {
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithHashtagCommentInValueOnly_When_TheContentIsAccessed_Then_WeGetTheFullValue()
+        public void Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
             EnsureDeleted();
-            WindowsAPI.WritePrivateProfileString(sectionname, keyname, "value#nocomment", FileName);
+            WritePrivateProfileString(sectionname, keyname, "#nocomment", FileName);
 
             // Insight: Hashtag in value is not a comment
             var sb = DefaultStringBuilder();
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertASCIILength("value#nocomment", bytes);
-            AssertionHelper.AssertSbEqual("value#nocomment", sb);
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength("#nocomment", bytes);
+            AssertSbEqual("#nocomment", sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithHashtagCommentInKeyOnly_When_TheContentIsAccessed_Then_WeGetTheFullValue()
+        public void Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
             EnsureDeleted();
-            WindowsAPI.WritePrivateProfileString(sectionname, "key#comment", defaultvalue, FileName);
+            WritePrivateProfileString(sectionname, "#comment", defaultvalue, FileName);
 
             // Insight: Hashtag in key is not a comment
             var sb = DefaultStringBuilder();
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(sectionname, "key#comment", null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertASCIILength(defaultvalue, bytes);
-            AssertionHelper.AssertSbEqual(defaultvalue, sb);
-        }
-
-        // TODO: Review
-        [TestMethod]
-        public void Given_AnIniFileWrittenWithHashtagCommentAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheFullValue()
-        {
-            EnsureDeleted();
-            WindowsAPI.WritePrivateProfileString(sectionname, "#key", defaultvalue, FileName);
-
-            // Insight: Hashtag at the beginning of a key is not a comment
-            var sb = DefaultStringBuilder();
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(sectionname, "#key", null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertASCIILength(defaultvalue, bytes);
-            AssertionHelper.AssertSbEqual(defaultvalue, sb);
+            var bytes = GetIniString_SB_Unicode(sectionname, "#comment", null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
         }
     }
 }

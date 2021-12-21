@@ -1,4 +1,7 @@
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static IniFileFormatTests.AssertionHelper;
+using static IniFileFormatTests.WindowsAPI;
 
 namespace IniFileFormatTests.SpecialCharacters
 {
@@ -9,46 +12,67 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Semicolon_Tests : IniFileTestBase
     {
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithSemicolonCommentInValueOnly_When_TheContentIsAccessed_Then_WeGetTheFullValue()
+        public void Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
         {
             EnsureDeleted();
-            WindowsAPI.WritePrivateProfileString(sectionname, keyname, "value ;nocomment", FileName);
+            WritePrivateProfileString(sectionname, ";key", inivalue, FileName);
+
+            // Insight: the comment is written to the file
+            Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
+
+            // Insight: Semicolon at the beginning of the key is a comment
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, ";key", defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+
+            bytes = GetIniString_SB_Unicode(sectionname, "key", defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
+        public void Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
+        {
+            EnsureDeleted();
+            WritePrivateProfileString(sectionname, keyname, ";nocomment", FileName);
+
             // Insight: Semicolon in value is not a comment
-
             var sb = DefaultStringBuilder();
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertASCIILength("value ;nocomment", bytes);
-            AssertionHelper.AssertSbEqual("value ;nocomment", sb);
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(";nocomment", bytes);
+            AssertSbEqual(";nocomment", sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithSemicolonCommentInKeyOnly_When_TheContentIsAccessed_Then_WeGetTheFullValue()
+        public void Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
             EnsureDeleted();
-            WindowsAPI.WritePrivateProfileString(sectionname, "key ;comment", defaultvalue, FileName);
+            WritePrivateProfileString(sectionname, "key ;nocomment", inivalue, FileName);
+
             // Insight: Semicolon in key is not a comment
-
             var sb = DefaultStringBuilder();
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(sectionname, "key ;comment", null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertASCIILength(defaultvalue, bytes);
-            AssertionHelper.AssertSbEqual(defaultvalue, sb);
+            var bytes = GetIniString_SB_Unicode(sectionname, "key ;nocomment", null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithSemicolonCommentAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
+        public void Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
             EnsureDeleted();
-            WindowsAPI.WritePrivateProfileString(sectionname, ";key", defaultvalue, FileName);
-            // Insight: SemiColon at the beginning of the key is a comment
+            WritePrivateProfileString(";section", keyname, inivalue, FileName);
 
+            // Insight: Semicolon in key is not a comment
             var sb = DefaultStringBuilder();
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(sectionname, ";key", null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertZero(bytes);
-            AssertionHelper.AssertSbEqual(string.Empty, sb);
+            var bytes = GetIniString_SB_Unicode(";section", keyname, null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
         }
     }
 }
