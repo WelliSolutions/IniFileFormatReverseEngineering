@@ -35,6 +35,19 @@ namespace IniFileFormatTests.SpecialCharacters
 
         [DoNotRename("Used in documentation")]
         [TestMethod]
+        public void Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()
+        {
+            EnsureDeleted();
+            WritePrivateProfileString(sectionname, ";key", inivalue, FileName);
+            WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
+
+            var buffer = new char[1000];
+            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            AssertASCIILength(keyname + '\0', bytes);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
             EnsureDeleted();

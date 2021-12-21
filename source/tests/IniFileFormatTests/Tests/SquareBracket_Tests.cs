@@ -1,4 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static IniFileFormatTests.AssertionHelper;
+using static IniFileFormatTests.WindowsAPI;
 
 namespace IniFileFormatTests.SpecialCharacters
 {
@@ -9,46 +11,85 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class SquareBracket_Tests : IniFileTestBase
     {
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName")]
         [TestMethod]
-        public void Given_ASectionNameWithOpeningBracket_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()
+        public void Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()
         {
             EnsureDeleted();
             var square = "[sec";
-            WindowsAPI.WritePrivateProfileString(square, keyname, defaultvalue, FileName);
-            // Insight: the section name is written as given, so special handling for opening square bracket
-            Assert.AreEqual("[" + square + "]\r\n" + keyname + "=" + defaultvalue + "\r\n", ReadIniFile());
+            WritePrivateProfileString(square, keyname, inivalue, FileName);
+
+            // Insight: the section name is written as given, no special handling for opening square bracket
+            Assert.AreEqual("[" + square + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());
 
             var sb = DefaultStringBuilder();
 
             // Insight: the section name can be accessed again.
             // Parsing of the section name does not seem to restart at the [ opening square bracket.
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(square, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertASCIILength(defaultvalue, bytes);
-            AssertionHelper.AssertSbEqual(defaultvalue, sb);
+            var bytes = GetIniString_SB_Unicode(square, keyname, null, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName")]
         [TestMethod]
-        public void Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()
+        public void Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()
         {
             EnsureDeleted();
             var whoops = "sec]whoops";
-            WindowsAPI.WritePrivateProfileString(whoops, keyname, defaultvalue, FileName);
-            // Insight: the section name is written as given, so special handling for the ] closing square bracket
-            Assert.AreEqual("[" + whoops + "]\r\n" + keyname + "=" + defaultvalue + "\r\n", ReadIniFile());
+            WritePrivateProfileString(whoops, keyname, inivalue, FileName);
+
+            // Insight: the section name is written as given, no special handling for the ] closing square bracket
+            Assert.AreEqual("[" + whoops + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());
 
             var sb = DefaultStringBuilder();
 
-            // Insight: read parsing stops at first ]
-            var bytes = WindowsAPI.GetIniString_SB_Unicode("sec", keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertASCIILength(defaultvalue, bytes);
-            AssertionHelper.AssertSbEqual(defaultvalue, sb);
-
             // Insight: it's not possible to read the section by passing the original string
-            bytes = WindowsAPI.GetIniString_SB_Unicode(whoops, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertionHelper.AssertZero(bytes);
-            AssertionHelper.AssertSbEqual("", sb);
+            var bytes = GetIniString_SB_Unicode(whoops, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+
+            // Insight: read parsing stops at first ]
+            bytes = GetIniString_SB_Unicode("sec", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
+        public void Given_KeyValueBehindClosingSquareBracket_When_WeTryToAccessTheValue_Then_WeDontGetTheValue()
+        {
+            EnsureASCII($"[{sectionname}]{keyname}={inivalue}\r\n"); // Important: no newline after ]
+
+            var sb = DefaultStringBuilder();
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+
+            // Insight: text after the closing ] of the section is ignored
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestMethod]
+        public void Given_AValueWithoutAnySection_When_WeTryToAccessIt_Then_WeDontGetTheValue()
+        {
+            EnsureASCII($"{keyname}={inivalue}\r\n[{sectionname}]\r\n{keyname2}={inivalue2}\r\n");
+            var sb = DefaultStringBuilder();
+
+            // Insight: values outside a section cannot be accessed with an empty string
+            var bytes = GetIniString_SB_Unicode("", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+
+            foreach (var empty in new[] { ' ', '\0', '\r', '\n', '\v' })
+            {
+                // Insight: values outside a section cannot be accessed by any whitespace character
+                bytes = GetIniString_SB_Unicode(empty.ToString(), keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+                AssertASCIILength(defaultvalue, bytes);
+                AssertSbEqual(defaultvalue, sb);
+            }
         }
 
         // TODO: tests for dangling square brackets

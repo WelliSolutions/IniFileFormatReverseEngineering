@@ -34,6 +34,9 @@ Test Cases:
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 * `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
 * `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
+* `Semicolon_Tests.Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment`
+* `SquareBracket_Tests.Given_KeyValueBehindClosingSquareBracket_When_WeTryToAccessTheValue_Then_WeDontGetTheValue()`
+* `SquareBracket_Tests.Given_AValueWithoutAnySection_When_WeTryToAccessIt_Then_WeDontGetTheValue()`
 
 Insights:
 
@@ -43,17 +46,30 @@ Insights:
 * A semicolon in the middle of the key will make it part of the key.
 * A semicolon in the middle of a value will make it part of the value, i.e. you can't have comments at the end of a line.
 * Hashtags cannot be used for comments
+* The way sections are parsed makes text after the closing square bracket also a comment, even without a semicolon
+* Values without any section are ignored by the parser, effectively making text before the first section a comment
 
 Examples:
 
 (Note that the Markdown syntax highlighter might provide a wrong highlighting considering the Microsoft rules)
 
 ```ini
+this is=a comment
 [;this is a section]
-;this=is a comment
+;this is=a comment
 this;is=not a comment
 this is=not a ;comment
 #this is=not a comment
 this is=#not a comment
+[section]this is=a comment
 ```
 
+## Hashtags and other comment specifiers
+
+While hashtags are not a comment as per Microsoft, you'll still find that they serve as comments pretty well. Why is that?
+
+Most applications will probably access a configuration value using hardcoded values for the file name, section name and key name. In that case, the key will not be found, because the application is looking for a key without the hashtag.
+
+This applies for all other characters as well, so you could try C++ comments (`//`), Visual Basic comments (`'`) , Batch comments (`REM`) and in many cases you'll find that the application starts using the default value.
+
+If, however, the application queries all keys by [specifying `null` for `lpKeyName`](documentation/GetPrivateProfileString.md#lpKeyName), your value will be found unless it uses a semicolon (`;`).
