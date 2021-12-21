@@ -50,11 +50,13 @@ Test Coverage:
 * `Casing_Tests.Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()`
+* `SquareBracket_Tests.Given_AnEmptySectionName_When_WeAccessAKey_Then_WeGetTheValue()` 
 
 Insights:
 
 * Basically, this functionality works as expected
 * The section can be accessed case-insensitive
+* The section name can be an empty string
 * The section name can contain an opening square bracket
 * The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket
 
