@@ -26,7 +26,7 @@ namespace IniFileFormatTests
             AssertASCIILength(defaultvalue, bytes);
             AssertSbEqual(defaultvalue, sb);
 
-            // Insight: Accessing by the originally use section name is not possible
+            // Insight: Accessing by the originally written section name is not possible
             bytes = GetIniString_SB_Unicode(twosections, keyname, null, sb, (uint)sb.Capacity, FileName);
             AssertZero(bytes);
             AssertSbEqual("", sb);

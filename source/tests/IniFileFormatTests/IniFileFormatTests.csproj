@@ -53,6 +53,7 @@
     <Compile Include="Tests\Abuse_Tests.cs" />
     <Compile Include="Tests\AssertionHelper.cs" />
     <Compile Include="Tests\Casing_Tests.cs" />
+    <Compile Include="Tests\Concept_Transfer_Tests.cs" />
     <Compile Include="Tests\Encoding_Tests.cs" />
     <Compile Include="Tests\Hashtag_Tests.cs" />
     <Compile Include="Tests\IniFileTestBase.cs" />
