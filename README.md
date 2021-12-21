@@ -50,29 +50,7 @@ at which point I'd certainly appreciate someone of the RCE community. At least I
 
 ## What's the problem?
 
-The problem? Many problems ;-)
-
-Whenever you define a file format, you should think about the special characters you use. Remember the backslash `\` as the escape character in many programming languages?
-
-For the INI file, we have:
-
-* opening square bracket `[`
-* closing square bracket `]`
-* semicolon `;`
-* equal sign `=`
-* newlines, probably Windows-like `\r\n`
-
-I can already imagine all the possible abuses :-)
-
-And we potentially have other problems:
-
-* Encoding issues
-* Unicode issues
-* Handling of empty lines
-* Handling of duplicate sections
-* Handling of duplicate keys
-* Handling of spaces
-* Handling of keys outside a section
+The problem? [Many problems ;-)](documentation/Problems%20of%20INI%20files.md)
 
 ## Documentation
 
@@ -84,6 +62,7 @@ Tests regarding [Comments](documentation/Comments.md)
 
 * [English Wikipedia about the INI-file](https://en.wikipedia.org/wiki/INI_file)
 * [Question "Did INI files work in a different way on Windows 3.x than today?" on Retrocomputing](https://retrocomputing.stackexchange.com/questions/23503/did-ini-files-work-in-a-different-way-on-windows-3-x-than-today)
+* [Raymond Chen in "The old new thing": Why are INI files deprecated in favor of the Registry?](https://devblogs.microsoft.com/oldnewthing/?p=24383)
 
 Methods for reading INI files, focusing on the "private" ones. The non-private ones will only read from `c:\windows\win.ini`:
 
@@ -116,3 +95,14 @@ The Registry key that maps INI files is at
 
     HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\IniFileMapping
 
+## Implementations
+
+Of course, people have implemented INI parsers already. My implementations are not published, luckily :-)
+
+* [NuGet: INI-Parser](https://www.nuget.org/packages/ini-parser/) License: MIT
+* [NuGet: Peanut Butter.INI](https://www.nuget.org/packages/PeanutButter.INI/) License: BSD 3-clause
+* [CodeProject: An INI file handling class using C#](https://www.codeproject.com/Articles/1966/An-INI-file-handling-class-using-C) License: unclear. Problems: has a limit of 254 characters for reading. 
+* [Bytes: Reading and parsing an INI file in C#](https://bytes.com/topic/net/insights/797169-reading-parsing-ini-file-c). License: unclear. Problems: does not strip spaces from the values
+* [Multipedros: Confing.dll](http://www.multipetros.gr/public-projects/libraries/confing-dll/) has a `SimpleIni` and a `Ini` class. License: FreeBSD
+* [Github: Madmilkman.ini](https://github.com/MarioZ/MadMilkman.Ini) License: MIT
+* [Maybe a dozen of implementations answering this Stack Overflow question](https://stackoverflow.com/questions/217902/reading-writing-an-ini-file)
