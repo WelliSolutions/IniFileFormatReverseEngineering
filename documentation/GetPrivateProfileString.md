@@ -46,11 +46,11 @@ Note that this parameter is called "AppName" and not "Section". It seems like th
 
 Test Coverage: 
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
 * `Casing_Tests.Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()`
-* `SquareBracket_Tests.Given_AnEmptySectionName_When_WeAccessAKey_Then_WeGetTheValue()` 
+* `EdgeCases_Tests.Given_ASectionWithNoName_When_UsingEmptyString_Then_WeGetTheValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
@@ -71,8 +71,8 @@ With this special interpretation of the parameter, the function violates clean c
 
 Test Coverage: 
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()`
+* `Reading_Tests.Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()`
 
 Insights:
 
@@ -90,10 +90,11 @@ Insights:
 
 Test Coverage: 
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
 * `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
+* `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 
 Insights:
 
@@ -101,12 +102,13 @@ Insights:
 * The key can be accessed case-insensitive
 * The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the key.
 * The parameter may start with a semicolon, but no value will be found, since it will be considered as a comment. The default value will be returned.
+* Values starting with a semicolon are not comments. The value starting with the semicolon will be returned.
 > If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
 
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()`
+* `Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell`
 
 Insights:
 
@@ -123,9 +125,9 @@ Insights:
 
 Test coverage:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()`
-* `IntendedUse_Reading_Tests.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()`
+* `Reading_Tests.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
 
 Insights:
 
@@ -137,7 +139,7 @@ Insights:
 
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()`
 
 Insights:
 
@@ -149,7 +151,7 @@ This stripping of "blanks" requires us to conduct a set of additional whitespace
 
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
 * `WhiteSpace_Tests.Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()`
 
 Insights:
@@ -166,7 +168,7 @@ For all the C# programmers out there: `[out]` is not identical to `out` paramete
 > A pointer to the buffer that receives the retrieved string.
 
 Test Coverage:
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_TrailingSpacesAreStripped()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_TrailingSpacesAreStripped()`
 * `WhiteSpace_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped()`
 
 Insights:
@@ -197,8 +199,8 @@ My guess is that a lot of implementations will not consider the case when the bu
 
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
-* `IntendedUse_Reading_Tests.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
+* `Reading_Tests.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
+* `Reading_Tests.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
 * `Limits_Tests.Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()`
 * `Limits_Tests.Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()`
 * `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()`
@@ -220,9 +222,9 @@ Insights:
 
 Test Coverage:
 
-* `IntendedUse_Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
-* `IntendedUse_Reading.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
-* `IntendedUse_Reading.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
+* `Reading.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `Reading.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
 * `UTF16LE_Tests.Given_AFileWithUTF16BOM_When_ReadingTheContent_Then_WeHaveUnicodeSupport()`
 * `UTF8_Tests.Given_AFileWithUTF8BOM_When_ReadingTheContent_Then_TheFirstLineIsBroken()`
 * `UTF16BE_Tests.Given_UTF16BEBOM_When_ReadingTheContent_Then_WeGetTheDefaultValue()`
@@ -258,7 +260,7 @@ Insights:
 
 TestCoverage:
 
-* probably all test in `IntendedUse_Reading`
+* probably all test in `Reading`
 * `Limits_Tests.Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()`
 * `Limits_Tests.Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()`
 * `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()`
@@ -273,8 +275,8 @@ Insights:
 
 Test Cases:
 
-* `IntendedUse_Reading.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
-* `IntendedUse_Reading.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
+* `Reading.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
+* `Reading.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
 
 Insights:
 
@@ -284,8 +286,8 @@ Insights:
 
 Test Coverage:
 
-* `IntendedUse_Reading.Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()`
-* `IntendedUse_Reading.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()`
+* `Reading.Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()`
+* `Reading.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()`
 * `Limits_Test.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()` 
 
 Insights:
@@ -301,8 +303,8 @@ The interesting thing here is the statement "contains invalid values". That's no
 
 Test Coverage:
 
-* `IntendedUse_Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
-* `IntendedUse_Reading.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
+* `Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
+* `Reading.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
 
 Insights:
 
@@ -328,8 +330,8 @@ Insights:
 
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
-* `IntendedUse_Reading_Tests.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
+* `Reading_Tests.Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()`
+* `Reading_Tests.Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()`
 * `Limits_Tests.Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()`
 * `Limits_Tests.Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()`
 * `Limits_Tests.Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()`
@@ -343,10 +345,10 @@ Insights:
 
 Test Cases:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()`
-* `IntendedUse_Reading_Tests.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()`
+* `Reading_Tests.Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
 * `WhiteSpace_Tests.Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()`
 
 Insights:
@@ -372,10 +374,10 @@ Insights:
 
 Test Cases:
 
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()`
-* `IntendedUse_Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()`
+* `Reading_Tests.Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()`
+* `Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()`
+* `Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell`
 
 Insights:
 
@@ -386,8 +388,8 @@ Insights:
 
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()`
-* `IntendedUse_Reading_Tests.Given_AKnownIniFile_When_NullIsUsedForKeyName_Then_SeparatorCharacterIsNul()`
+* `Reading_Tests.Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()`
+* `Reading_Tests.Given_AKnownIniFile_When_NullIsUsedForKeyName_Then_SeparatorCharacterIsNul()`
 
 Insights:
 
@@ -397,11 +399,11 @@ Insights:
 
 Test Coverage:
 
-* `IntendedUse_Reading_Tests.Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()`
-* `IntendedUse_Reading_Tests.Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()`
-* `IntendedUse_Reading_Tests.Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()`
-* `IntendedUse_Reading_Tests.Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()`
-* `IntendedUse_Reading_Tests.Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()`
+* `Quotes_Tests.Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()`
+* `Quotes_Tests.Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()`
+* `Quotes_Tests.Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()`
+* `Quotes_Tests.Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()`
+* `Quotes_Tests.Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()`
 
 Insights:
 

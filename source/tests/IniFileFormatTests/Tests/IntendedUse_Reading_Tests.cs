@@ -6,10 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
 using static IniFileFormatTests.WindowsAPI;
 
-namespace IniFileFormatTests
+namespace IniFileFormatTests.IntendedUse
 {
     [TestClass]
-    public class IntendedUse_Reading_Tests : IniFileTestBase
+    public class Reading_Tests : IniFileTestBase
     {
         [DoNotRename("Used in documentation")]
         [TestsApiParameter("lpAppName")]
@@ -31,7 +31,8 @@ namespace IniFileFormatTests
         [DoNotRename("Used in documentation")]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
-        public void Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()
+        public void
+            Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()
         {
             EnsureDefaultContent_UsingAPI();
             var sb = DefaultStringBuilder();
@@ -52,7 +53,8 @@ namespace IniFileFormatTests
         [DoNotRename("Used in documentation")]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
-        public void Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()
+        public void
+            Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()
         {
             EnsureASCII($"[{sectionname}]\r\n[{sectionname2}]\r\n[{sectionname}]\r\n");
             var sb = DefaultStringBuilder();
@@ -99,7 +101,8 @@ namespace IniFileFormatTests
         {
             EnsureDefaultContent_UsingAPI();
             var buffer = new char[40];
-            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
+                FileName);
 
             // Insight: The separator character is NUL \0
             Assert.AreEqual('\0', buffer[keyname.Length]);
@@ -149,7 +152,8 @@ namespace IniFileFormatTests
         {
             EnsureDefaultContent_UsingAPI();
             var buffer = new char[10]; // StringBuilder can't be smaller than 16
-            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
+                FileName);
 
             // Insight: The result is nSize -2
             Assert.AreEqual((uint)buffer.Length - 2, bytes);
@@ -164,7 +168,8 @@ namespace IniFileFormatTests
             var sb = DefaultStringBuilder();
 
             // Insight: reading a non-existing key gives the default value
-            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultvalue, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultvalue, sb, (uint)sb.Capacity,
+                FileName);
             AssertASCIILength(defaultvalue, bytes);
             AssertSbEqual(defaultvalue, sb);
         }
@@ -178,7 +183,8 @@ namespace IniFileFormatTests
             var sb = DefaultStringBuilder();
 
             // Insight: reading from a non-existing section gives the default value
-            var bytes = GetIniString_SB_Unicode("NonExistingSection", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode("NonExistingSection", keyname, defaultvalue, sb, (uint)sb.Capacity,
+                FileName);
             AssertASCIILength(defaultvalue, bytes);
             AssertSbEqual(defaultvalue, sb);
         }
@@ -221,7 +227,8 @@ namespace IniFileFormatTests
             EnsureDefaultContent_UsingAPI();
             var sb = DefaultStringBuilder();
             var defaultValue = "   default    ";
-            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultValue, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultValue, sb, (uint)sb.Capacity,
+                FileName);
             AssertASCIILength(defaultValue.TrimEnd(), bytes);
             // Insight: According the documentation, trailing blanks are stripped
             // Insight: Leading blanks are not stripped
@@ -236,7 +243,8 @@ namespace IniFileFormatTests
         {
             EnsureDefaultContent_UsingAPI();
             var buffer = new char[5]; // StringBuilder does not support lengths < 16
-            var bytes = GetIniString_ChArr_Unicode(sectionname, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            var bytes = GetIniString_ChArr_Unicode(sectionname, keyname, defaultvalue, buffer, (uint)buffer.Length,
+                FileName);
 
             // Insight: is works as documented
             // In C#, strings are not zero-terminated. Using the whole buffer will include that character.
@@ -257,7 +265,8 @@ namespace IniFileFormatTests
             var buffer = new char[0]; // StringBuilder does not support lengths < 16
 
             // Insight: a zero length buffer will not fit anything (as expected)
-            var bytes = GetIniString_ChArr_Unicode(sectionname, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            var bytes = GetIniString_ChArr_Unicode(sectionname, keyname, defaultvalue, buffer, (uint)buffer.Length,
+                FileName);
             AssertZero(bytes);
             // Insight: the last error gives an indication that more data is available
             var error = Marshal.GetLastWin32Error();
@@ -317,85 +326,5 @@ namespace IniFileFormatTests
             }
         }
 
-        [DoNotRename("Used in documentation")]
-        [TestsApiParameter("lpReturnedString")]
-        [TestMethod]
-        public void Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
-        {
-            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \"   {inivalue}   \"  \r\n");
-            var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-
-            // Insight: the quotes are stripped
-            // Insight: the spaces inside the quotes are not stripped
-            // Insight: the spaces outside the quotes are stripped
-            AssertASCIILength("   " + inivalue + "   ", bytes);
-            Assert.AreEqual(0, Marshal.GetLastWin32Error());
-        }
-
-        [DoNotRename("Used in documentation")]
-        [TestsApiParameter("lpReturnedString")]
-        [TestMethod]
-        public void Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
-        {
-            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \'   {inivalue}   \'  \r\n");
-            var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-
-            // Insight: the quotes are stripped
-            // Insight: the spaces inside the quotes are not stripped
-            // Insight: the spaces outside the quotes are stripped
-            AssertASCIILength("   " + inivalue + "   ", bytes);
-            Assert.AreEqual(0, Marshal.GetLastWin32Error());
-        }
-
-        [DoNotRename("Used in documentation")]
-        [TestsApiParameter("lpReturnedString")]
-        [TestMethod]
-        public void Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()
-        {
-            foreach (var outerquote in new[] { '\'', '\"' })
-            {
-                foreach (var innerquote in new[] { '\'', '\"' })
-                {
-                    EnsureASCII($"[{sectionname}]\r\n{keyname}=  " + outerquote + innerquote + $"   {inivalue}   " + innerquote + outerquote + "  \r\n");
-                    var sb = DefaultStringBuilder();
-                    var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-
-                    // Insight: only the outermost quotes are stripped
-                    AssertASCIILength(innerquote + "   " + inivalue + "   " + innerquote, bytes);
-                    Assert.AreEqual(0, Marshal.GetLastWin32Error());
-
-                }
-            }
-        }
-
-        [DoNotRename("Used in documentation")]
-        [TestsApiParameter("lpReturnedString")]
-        [TestMethod]
-        public void Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
-        {
-            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \"   {inivalue}   \'  \r\n");
-            var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-
-            // Insight: no quotes are stripped
-            AssertASCIILength("\"   " + inivalue + "   \'", bytes);
-            Assert.AreEqual(0, Marshal.GetLastWin32Error());
-        }
-
-        [DoNotRename("Used in documentation")]
-        [TestsApiParameter("lpReturnedString")]
-        [TestMethod]
-        public void Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
-        {
-            EnsureASCII($"[{sectionname}]\r\n{keyname}=  \'\"   {inivalue}   \'\"  \r\n");
-            var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-
-            // Insight: no quotes are stripped
-            AssertASCIILength("\'\"   " + inivalue + "   \'\"", bytes);
-            Assert.AreEqual(0, Marshal.GetLastWin32Error());
-        }
     }
 }

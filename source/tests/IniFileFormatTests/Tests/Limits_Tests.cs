@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.WindowsAPI;
 using static IniFileFormatTests.AssertionHelper;
 
-namespace IniFileFormatTests
+namespace IniFileFormatTests.Limits
 {
     [TestClass]
     public class Limits_Tests : IniFileTestBase

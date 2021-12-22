@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
 using static IniFileFormatTests.WindowsAPI;
 
-namespace IniFileFormatTests
+namespace IniFileFormatTests.IntendedUse
 {
     /// <summary>
     /// Windows is not cases sensitive for its file names.

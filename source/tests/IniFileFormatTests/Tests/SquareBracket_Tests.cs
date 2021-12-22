@@ -94,19 +94,6 @@ namespace IniFileFormatTests.SpecialCharacters
 
         [DoNotRename("Used in documentation")]
         [TestMethod]
-        public void Given_AnEmptySectionName_When_WeAccessAKey_Then_WeGetTheValue()
-        {
-            EnsureASCII($"[]\r\n{keyname}={inivalue}\r\n");
-            var sb = DefaultStringBuilder();
-
-            // Insight: section names can be an empty string
-            var bytes = GetIniString_SB_Unicode("", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
-            AssertASCIILength(inivalue, bytes);
-            AssertSbEqual(inivalue, sb);
-        }
-
-        [DoNotRename("Used in documentation")]
-        [TestMethod]
         public void Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()
         {
             EnsureASCII($"[{sectionname}   \r\n{keyname}={inivalue}\r\n");
