@@ -54,12 +54,12 @@
     <Compile Include="Tests\AssertionHelper.cs" />
     <Compile Include="Tests\Casing_Tests.cs" />
     <Compile Include="Tests\EdgeCases_Tests.cs" />
-    <Compile Include="Tests\IntendedUse_Writing_Tests.cs" />
+    <Compile Include="Tests\Writing_Tests.cs" />
     <Compile Include="Tests\Concept_Transfer_Tests.cs" />
     <Compile Include="Tests\Encoding_Tests.cs" />
     <Compile Include="Tests\Hashtag_Tests.cs" />
     <Compile Include="Tests\IniFileTestBase.cs" />
-    <Compile Include="Tests\IntendedUse_Reading_Tests.cs" />
+    <Compile Include="Tests\Reading_Tests.cs" />
     <Compile Include="Tests\Limits_Tests.cs" />
     <Compile Include="Tests\Quotes_Tests.cs" />
     <Compile Include="Tests\Semicolon_Tests.cs" />
