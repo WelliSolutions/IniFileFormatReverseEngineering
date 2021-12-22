@@ -1,5 +1,5 @@
 # INI file-format reverse engineering
-This place is intended to provide details of the INI file format **as supported by Microsoft**.
+This place is intended to provide details of the INI file format and INI file APIs **as supported by Microsoft**.
 
 ## What is the INI file format?
 
@@ -24,7 +24,7 @@ File formats without a real specification seem to be popular again recently (lik
 
 At least to my experience (working full time for three companies), there are still a lot of applications out there that store configuration information in INI files.
 
-Parsing INI files seems trivial and I have written at least three INI file parsers in my life already - and probably none of them was 100% compatible to the INI file format of the Windows API - at least when it comes to humans editing the file in a text editor. They all "worked"
+Parsing INI files seems trivial and I have written at least three INI file parsers in my life already - and probably none of them was 100% compatible to the INI file format of the Windows API - at least when it comes to humans editing the file in a text editor. They all "worked", sort of.
 
 So, before I implement the next INI file parser, I want to make sure I understand what Microsoft does and provide a compatible implementation, and maybe a configurable one in order to be able to convert files from one INI dialect into another.
 
@@ -60,7 +60,8 @@ Analysis of [GetPrivateProfileString()](documentation/GetPrivateProfileString.md
 
 * [English Wikipedia about the INI-file](https://en.wikipedia.org/wiki/INI_file)
 * [Question "Did INI files work in a different way on Windows 3.x than today?" on Retrocomputing](https://retrocomputing.stackexchange.com/questions/23503/did-ini-files-work-in-a-different-way-on-windows-3-x-than-today)
-* [Raymond Chen in "The old new thing": Why are INI files deprecated in favor of the Registry?](https://devblogs.microsoft.com/oldnewthing/?p=24383)
+* [Raymond Chen in "The old new thing": Why are INI files deprecated in favor of the Registry?](https://devblogs.microsoft.com/oldnewthing/?p=24383) Raymond Chen is a Microsoft employee writing a lot of blog posts
+* [Michael S. Kaplan in "Unicode INI function; Unicode INI file?"](http://archives.miloush.net/michkap/archive/2006/09/15/754992.html) Michael S. Kaplan was a Microsoft employee writing blog posts until he died
 
 Top questions on Stack Overflow regarding INI files:
 
@@ -114,3 +115,11 @@ Of course, people have implemented INI parsers already. My implementations are n
 * [Github: inih](https://github.com/benhoyt/inih) License: New BSD.
 * [Github: inipp](https://github.com/mcmtroffaes/inipp) License: MIT.
 * [Maybe a dozen implementations answering this Stack Overflow question](https://stackoverflow.com/questions/217902/reading-writing-an-ini-file)
+
+## Giving back to the community
+
+As a result of my research I came across a few things and I can hopefully give back to the community, to whomever is interested. I left my traces here:
+
+* Stack Overflow: [Do Standard INI files allow comments?](https://stackoverflow.com/a/70432963/480982)
+* Stack Overflow: [How do WritePrivateProfileStringA() and Unicode go together?](https://stackoverflow.com/questions/70438143/how-do-writeprivateprofilestringa-and-unicode-go-together)
+* Stack Overflow: [Why does File.ReadAllText() also recognize UTF-16 encodings?](https://stackoverflow.com/questions/70445598/why-does-file-readalltext-also-recognize-utf-16-encodings)
