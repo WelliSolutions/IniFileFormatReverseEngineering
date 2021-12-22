@@ -1,15 +1,16 @@
-using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static IniFileFormatTests.WindowsAPI;
+using static IniFileFormatTests.AssertionHelper;
 
 namespace IniFileFormatTests
 {
     [TestClass]
     public class Limits_Tests : IniFileTestBase
     {
-        private static string LargeString
+        public static string LargeString
         {
             get
             {
@@ -40,7 +41,7 @@ namespace IniFileFormatTests
             File.AppendAllText(FileName, LargeString.Substring(0, valueLength));
             File.AppendAllText(FileName, "\r\n");
             var buffer2 = new StringBuilder(bufferSize);
-            var bytes = WindowsAPI.GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, buffer2,
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, buffer2,
                 (uint)buffer2.Capacity, FileName);
             var error = Marshal.GetLastWin32Error();
             return new Result(bytes, error, buffer2.ToString().Length);
@@ -96,5 +97,37 @@ namespace IniFileFormatTests
             // It's not that the buffer is filled and only the return value overflows.
             Assert.AreEqual(1, result.Length);
         }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpFileName")]
+        [TestMethod]
+        public void Given_ALongFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()
+        {
+            var sb = DefaultStringBuilder();
+            // 245 + 4 + C:\Windows\ = 260 = MAX_PATH
+            var longFileName = LargeString.Substring(0, 245) + ".ini";
+            var bytes = GetIniString_SB_Unicode(null, null, null, sb, (uint)sb.Capacity, longFileName);
+            AssertZero(bytes);
+            // Insight: for too long file names, we get a path error
+            Assert.AreEqual((int)GetLastError.ERROR_PATH_NOT_FOUND, Marshal.GetLastWin32Error());
+        }
+
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName", null)]
+        [TestMethod]
+        public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()
+        {
+            EnsureDefaultContent_UsingAPI();
+            foreach (var smallSize in new[] { 2, 1 })
+            {
+                var buffer = new char[0]; // StringBuilder can't be smaller than 16
+                var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
+                    FileName);
+
+                // Insight: The result will  not be negative (nSize-2)
+                AssertZero(bytes);
+            }
+        }
+
     }
 }

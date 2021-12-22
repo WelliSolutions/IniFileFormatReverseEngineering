@@ -56,6 +56,10 @@ The problem? [Many problems ;-)](documentation/Problems%20of%20INI%20files.md)
 
 Analysis of [GetPrivateProfileString()](documentation/GetPrivateProfileString.md)
 
+Analysis of [WritePrivateProfileString()](documentation/WritePrivateProfileString.md)
+
+Analysis of [Comments](documentation/Comments.md)
+
 ## References
 
 * [English Wikipedia about the INI-file](https://en.wikipedia.org/wiki/INI_file)

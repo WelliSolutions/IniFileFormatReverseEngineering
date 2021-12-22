@@ -6,6 +6,35 @@ namespace IniFileFormatTests
 {
     static class WindowsAPI
     {
+        internal enum GetLastError
+        {
+            /// <summary>
+            /// The operation completed successfully.
+            /// </summary>
+            SUCCESS = 0,
+            /// <summary>
+            /// The system cannot find the file specified.
+            /// </summary>
+            ERROR_FILE_NOT_FOUND = 2,
+            /// <summary>
+            /// The system cannot find the path specified.
+            /// </summary>
+            ERROR_PATH_NOT_FOUND = 3,
+            /// <summary>
+            /// Access is denied.
+            /// </summary>
+            ERROR_ACCESS_DENIED = 5,
+            /// <summary>
+            /// The filename, directory name, or volume label syntax is incorrect.
+            /// </summary>
+            ERROR_INVALID_NAME = 123,
+            /// <summary>
+            /// More data is available.
+            /// </summary>
+            ERROR_MORE_DATA = 234,
+
+        }
+
         // TODO: Copy documentation from MSDN
         /// <summary>
         /// 
@@ -24,6 +53,15 @@ namespace IniFileFormatTests
         /// In the event the initialization file specified by lpFileName is not found, or contains invalid values, calling GetLastError will return '0x2' (File Not Found). To retrieve extended error information, call GetLastError.</returns>
         [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern uint GetIniString_SB_Unicode(
+            string lpAppName,
+            string lpKeyName,
+            string lpDefault,
+            StringBuilder lpReturnedString,
+            uint nSize,
+            string lpFileName);
+
+        [DllImport("kernel32.dll", EntryPoint = "GetPrivateProfileString", CharSet = CharSet.Ansi, SetLastError = true)]
+        public static extern uint GetIniString_SB_Ansi(
             string lpAppName,
             string lpKeyName,
             string lpDefault,
@@ -82,6 +120,24 @@ namespace IniFileFormatTests
         [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileStringW", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool WritePrivateProfileString(
+            string lpAppName,
+            string lpKeyName,
+            string lpString,
+            string lpFileName);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lpAppName">The name of the section to which the string will be copied. If the section does not exist, it is created. The name of the section is case-independent; the string can be any combination of uppercase and lowercase letters.</param>
+        /// <param name="lpKeyName">The name of the key to be associated with a string. If the key does not exist in the specified section, it is created. If this parameter is NULL, the entire section, including all entries within the section, is deleted.</param>
+        /// <param name="lpString">A null-terminated string to be written to the file. If this parameter is NULL, the key pointed to by the lpKeyName parameter is deleted.</param>
+        /// <param name="lpFileName">The name of the initialization file.
+        /// If the file was created using Unicode characters, the function writes Unicode characters to the file. Otherwise, the function writes ANSI characters.</param>
+        /// <returns>If the function successfully copies the string to the initialization file, the return value is nonzero.
+        /// If the function fails, or if it flushes the cached version of the most recently accessed initialization file, the return value is zero.To get extended error information, call GetLastError.</returns>
+        [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileStringA", CharSet = CharSet.Ansi, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool WritePrivateProfileStringA(
             string lpAppName,
             string lpKeyName,
             string lpString,

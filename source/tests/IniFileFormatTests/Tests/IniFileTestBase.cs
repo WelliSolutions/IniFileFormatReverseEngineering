@@ -17,7 +17,7 @@ namespace IniFileFormatTests
             EnsureDeleted();
         }
 
-        protected readonly string FileName;
+        protected string FileName;
 
         protected void EnsureASCII(string contents)
         {
@@ -60,6 +60,21 @@ namespace IniFileFormatTests
             {
                 File.Delete(FileName);
             }
+        }
+
+        protected void EnsureEmptyASCII()
+        {
+            EnsureASCII("");
+        }
+
+        protected void EnsureEmptyUTF16()
+        {
+            EnsureUTF16("");
+        }
+
+        protected void EnsureUTF16(string content)
+        {
+            File.WriteAllText(FileName, content, Encoding.Unicode);
         }
 
         protected string sectionname = "SectionName";

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
 using static IniFileFormatTests.WindowsAPI;
@@ -21,7 +22,7 @@ namespace IniFileFormatTests.SpecialCharacters
             {
                 EnsureDefaultContent_UsingAPI();
                 var sb = DefaultStringBuilder();
-                var defaultValue = $"default{blank}";
+                var defaultValue = $" default{blank}";
                 var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultValue, sb, (uint)sb.Capacity,
                     FileName);
                 AssertASCIILength(defaultValue, bytes);
@@ -49,9 +50,11 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        // TODO: Review
+        [DoNotRename("Used in documentation")]
+        [TestsApiParameter("lpAppName")]
+        [TestsApiParameter("lpKeyName")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithSpaces_When_TheContentIsAccessed_Then_SpacesAreIgnored()
+        public void Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()
         {
             EnsureDeleted();
             var space_sec = "   sec   ";
