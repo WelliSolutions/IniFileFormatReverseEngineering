@@ -10,7 +10,7 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF8_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AFileWithUTF8BOM_When_WritingToTheFile_Then_WeGetReplacementCharacters()
@@ -36,7 +36,7 @@ namespace IniFileFormatTests.Encodings
             Assert.AreEqual((int)WindowsAPI.GetLastError.SUCCESS, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AFileWithUTF8BOM_When_ReadingTheContent_Then_TheFirstLineIsBroken()
         {

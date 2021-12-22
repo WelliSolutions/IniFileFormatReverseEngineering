@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
 using static IniFileFormatTests.WindowsAPI;
 
-namespace IniFileFormatTests
+namespace IniFileFormatTests.IntendedUse
 {
     /// <summary>
     /// Windows is not cases sensitive for its file names.
@@ -11,7 +11,7 @@ namespace IniFileFormatTests
     [TestClass]
     public class Casing_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()
@@ -30,7 +30,7 @@ namespace IniFileFormatTests
 
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName")]
         [TestMethod]
         public void Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()

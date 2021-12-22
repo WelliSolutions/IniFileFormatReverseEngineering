@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
 using static IniFileFormatTests.WindowsAPI;
 
-namespace IniFileFormatTests
+namespace IniFileFormatTests.Encodings
 {
     /// <summary>
     /// Here we have tests which deal with the fact that INI files were defined in a world

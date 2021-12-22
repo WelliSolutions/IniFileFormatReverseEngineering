@@ -16,7 +16,7 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF16BE_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_UTF16BEBOM_When_ReadingTheContent_Then_WeGetTheDefaultValue()
         {
@@ -32,7 +32,7 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_UTF16BEBOMAndLineBreak_When_ReadingTheContent_Then_WeGetTheDefaultValue()
         {
@@ -48,7 +48,7 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(defaultvalue, sb);
         }
 
-
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_UTF16BEBOM_When_WritingToTheFile_Then_ContentIsANSI()

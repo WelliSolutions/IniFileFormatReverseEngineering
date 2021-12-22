@@ -10,7 +10,7 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF16LE_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AFileWithUTF16BOM_When_ReadingTheContent_Then_WeHaveUnicodeSupport()
         {
@@ -26,7 +26,7 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(inivalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AFileWithUTF16Header_When_WritingToTheFile_Then_WeHaveUnicodeSupport()

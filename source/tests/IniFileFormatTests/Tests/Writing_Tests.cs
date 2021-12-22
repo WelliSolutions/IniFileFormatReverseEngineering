@@ -1,18 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
 using static IniFileFormatTests.WindowsAPI;
 
-namespace IniFileFormatTests
+namespace IniFileFormatTests.IntendedUse
 {
     [TestClass]
-    public class IntendedUse_Writing_Tests : IniFileTestBase
+    public class Writing_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
+        [TestsApiParameter("lpKeyName")]
+        [TestsApiParameter("lpString")]
+        [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()
         {
@@ -29,7 +31,7 @@ namespace IniFileFormatTests
             Assert.AreEqual((int)GetLastError.SUCCESS, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_ANonExistingFile_When_AValueIsWritten_Then_TheFileIsCreated()
@@ -43,7 +45,7 @@ namespace IniFileFormatTests
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_ANonExistingFileInWindowsDirectory_When_AValueIsWritten_Then_WeGetAFileNotFoundError()
@@ -63,7 +65,7 @@ namespace IniFileFormatTests
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AFileInANonExistingDirectory_When_AValueIsWritten_Then_WeGetAPathNotFoundError()
@@ -81,7 +83,7 @@ namespace IniFileFormatTests
             Assert.AreEqual((int)GetLastError.ERROR_PATH_NOT_FOUND, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
@@ -112,7 +114,7 @@ namespace IniFileFormatTests
             Assert.AreEqual((int)GetLastError.SUCCESS, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName")]
         [TestMethod]
         public void Given_AKeyNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
@@ -125,6 +127,32 @@ namespace IniFileFormatTests
             AssertFileEqualASCII($"[{sectionname}]\r\n{keyNameNonLetter}={inivalue}\r\n", FileName);
         }
 
+        [TestMethod]
+        public void Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()
+        {
+            EnsureEmptyASCII();
+            WritePrivateProfileString(sectionname, "z", "", FileName);
+            WritePrivateProfileString(sectionname, "a", "", FileName);
+            WritePrivateProfileString(sectionname, "y", "", FileName);
+            WritePrivateProfileString(sectionname, "b", "", FileName);
 
+            // Insight: values are written in chronological order
+            // This might depend on whether or not keys already exist, so we need more tests...
+            Assert.AreEqual($"[{sectionname}]\r\nz=\r\na=\r\ny=\r\nb=\r\n", File.ReadAllText(FileName));
+        }
+
+        [TestMethod]
+        public void Given_AnIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()
+        {
+            EnsureASCII($"[{sectionname}]\r\nb=value\r\na=value\r\n");
+            WritePrivateProfileString(sectionname, "z", "", FileName);
+            WritePrivateProfileString(sectionname, "b", "", FileName);
+            WritePrivateProfileString(sectionname, "y", "", FileName);
+            WritePrivateProfileString(sectionname, "a", "", FileName);
+
+            // Insight: values that already exist are kept in their order
+            // Insight: New values are written in chronological order after the existing values
+            Assert.AreEqual($"[{sectionname}]\r\nb=\r\na=\r\nz=\r\ny=\r\n", File.ReadAllText(FileName));
+        }
     }
 }

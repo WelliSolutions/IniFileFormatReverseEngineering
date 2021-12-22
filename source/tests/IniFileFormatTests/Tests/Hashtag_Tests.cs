@@ -12,7 +12,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Hashtag_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
@@ -26,7 +26,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual("#nocomment", sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
