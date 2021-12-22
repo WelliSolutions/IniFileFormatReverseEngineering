@@ -62,9 +62,19 @@ namespace IniFileFormatTests
             }
         }
 
-        protected void EnsureEmpty()
+        protected void EnsureEmptyASCII()
         {
             EnsureASCII("");
+        }
+
+        protected void EnsureEmptyUTF16()
+        {
+            EnsureUTF16("");
+        }
+
+        protected void EnsureUTF16(string content)
+        {
+            File.WriteAllText(FileName, content, Encoding.Unicode);
         }
 
         protected string sectionname = "SectionName";

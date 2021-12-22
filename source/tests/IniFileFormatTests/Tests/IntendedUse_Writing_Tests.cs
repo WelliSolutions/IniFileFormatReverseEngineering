@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
 using static IniFileFormatTests.WindowsAPI;
@@ -15,7 +16,7 @@ namespace IniFileFormatTests
         [TestMethod]
         public void Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()
         {
-            EnsureEmpty();
+            EnsureEmptyASCII();
             var result = WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
 
             // Insight: the section is enclosed in square brackets
@@ -85,7 +86,7 @@ namespace IniFileFormatTests
         [TestMethod]
         public void Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
         {
-            EnsureEmpty();
+            EnsureEmptyASCII();
             var sectionNameNonLetter = "1234567890!$%&/()=?*+#-_<>.,:;@~\"\'|`\\ \t\v";
             WritePrivateProfileString(sectionNameNonLetter, keyname, inivalue, FileName);
 
@@ -97,7 +98,7 @@ namespace IniFileFormatTests
         [TestMethod]
         public void Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()
         {
-            EnsureEmpty();
+            EnsureEmptyASCII();
             var result = WritePrivateProfileString("§€°´²³", keyname, inivalue, FileName);
 
             // Insight: a few characters are not accepted in the section name
@@ -116,12 +117,14 @@ namespace IniFileFormatTests
         [TestMethod]
         public void Given_AKeyNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
         {
-            EnsureEmpty();
+            EnsureEmptyASCII();
             var keyNameNonLetter = "1234567890!$%&/()=?*+#-_<>.,:;@~\"\'|`\\ \t\v";
             WritePrivateProfileString(sectionname, keyNameNonLetter, inivalue, FileName);
 
             // Insight: a lot of non-letters can be used for the section name as well
             AssertFileEqualASCII($"[{sectionname}]\r\n{keyNameNonLetter}={inivalue}\r\n", FileName);
         }
+
+
     }
 }

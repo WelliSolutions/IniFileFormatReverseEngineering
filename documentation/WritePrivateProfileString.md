@@ -163,15 +163,17 @@ Insights:
 
 > If the file was created using Unicode characters, the function writes Unicode characters to the file. Otherwise, the function writes ANSI characters.
 
-How does a file know whether is was created with Unicode characters or not?
-
 Test Coverage:
 
-* 
+* `UTF16LE_Tests.Given_AFileWithUTF16Header_When_WritingToTheFile_Then_WeHaveUnicodeSupport()`
+* `UTF8_Tests.Given_AFileWithUTF8BOM_When_WritingToTheFile_Then_WeGetReplacementCharacters()`
+* `UTF16BE_Tests.Given_UTF16BEBOM_When_WritingToTheFile_Then_ContentIsANSI()`
 
 Insights:
 
-* 
+* A UTF-8 BOM will break the first line of the file. If it e.g. contains a section, that section cannot be accessed. Other than that, the content will be treated as ANSI.
+* A UTF-16 Little Endian BOM will bring Unicode support to both writing methods, `WritePrivateProfileStringA()` and `WritePrivateProfileStringW()` as well as both reading methods `GetPrivateProfileStringA()` and `GetPrivateProfileStringW()`.
+* A UTF-16 Big Endian BOM will result in ANSI characters being written.
 
 <a name="returnValue"></a>
 

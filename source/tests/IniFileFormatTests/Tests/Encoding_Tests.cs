@@ -1,4 +1,5 @@
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
@@ -15,37 +16,16 @@ namespace IniFileFormatTests
     {
         // TODO: Review
         [TestMethod]
-        public void Given_AFileWithBOM_When_TheContentIsAccessed_Then_TheFirstLineIsBroken()
-        {
-            EnsureDeleted();
-            EnsureDefaultContent_UsingFile(Encoding.UTF8); // With BOM
-
-            var sb = DefaultStringBuilder();
-
-            // Insight: The BOM makes the file unreadable?
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
-            AssertASCIILength(defaultvalue, bytes);
-            AssertSbEqual(defaultvalue, sb);
-
-            // Insight: not fully, though, just the first section seems to be affected
-            bytes = GetIniString_SB_Unicode(sectionname2, keyname2, defaultvalue, sb, (uint)sb.Capacity, FileName);
-            AssertASCIILength(inivalue2, bytes);
-            AssertSbEqual(inivalue2, sb);
-        }
-
-        // TODO: Review
-        [TestMethod]
-        public void Given_AUnicodeStringToWrite_When_TheContentIsAccessed_Then_WeGetReplacementCharacters()
+        public void Given_AUnicodeStringToWrite_When_ItsWrittenToAnAnsiFile_Then_WeGetReplacementCharacters()
         {
             EnsureDeleted();
             var unicode = "Unicode❤︎";
             var result = WritePrivateProfileString(sectionname, keyname, unicode, FileName);
             Assert.IsTrue(result);
 
-            var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
             // Insight: question marks have been written
-            AssertSbEqual("Unicode??", sb);
+            string unicodeContent = File.ReadAllText(FileName);
+            Assert.AreEqual($"[{sectionname}]\r\n{keyname}=Unicode??\r\n", unicodeContent);
         }
 
         // TODO: Review
@@ -53,12 +33,20 @@ namespace IniFileFormatTests
         public void Given_AnIniFileWithUnicodeContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue_ByteArrayAnsi_ConvertManually_NoBOM()
         {
             EnsureDeleted();
-            File.WriteAllText(FileName, $"[{sectionname}]\r\n{keyname}=Unicode❤︎\r\n"); // does not write BOM
+            File.WriteAllText(FileName, $"[{sectionname}]\r\n{keyname}=Unicode❤︎\r\n"); // UTF-8 without BOM
 
+            // Insight: The parser will simply read bytes. So we can decode the char[] using UTF-8
             var chars = new byte[1024];
             var bytes = GetIniString_ByteArr_Ansi(sectionname, keyname, null, chars, (uint)chars.Length, FileName);
             var x = Encoding.UTF8.GetString(chars, 0, (int)bytes);
             Assert.AreEqual("Unicode❤︎", x);
+
+            // Insight: none of the StringBuilders work for UTF-8 content
+            var sb = DefaultStringBuilder();
+            bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            Assert.AreEqual("Unicodeâ¤ï¸Ž", sb.ToString());
+            bytes = GetIniString_SB_Ansi(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            Assert.AreEqual("Unicodeâ¤ï¸Ž", sb.ToString());
         }
     }
 }
