@@ -120,7 +120,7 @@ namespace IniFileFormatTests.Limits
             EnsureDefaultContent_UsingAPI();
             foreach (var smallSize in new[] { 2, 1 })
             {
-                var buffer = new char[0]; // StringBuilder can't be smaller than 16
+                var buffer = new char[smallSize]; // StringBuilder can't be smaller than 16
                 var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
                     FileName);
 

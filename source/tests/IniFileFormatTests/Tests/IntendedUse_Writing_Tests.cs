@@ -9,7 +9,7 @@ using static IniFileFormatTests.WindowsAPI;
 namespace IniFileFormatTests.IntendedUse
 {
     [TestClass]
-    public class IntendedUse_Writing_Tests : IniFileTestBase
+    public class Writing_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]

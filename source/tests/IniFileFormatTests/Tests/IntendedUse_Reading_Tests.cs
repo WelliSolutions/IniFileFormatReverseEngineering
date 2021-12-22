@@ -67,6 +67,21 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
+
+
+        [UsedInDocumentation]
+        [TestsApiParameter("lpAppName", null)]
+        [TestMethod]
+        public void Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()
+        {
+            EnsureDefaultContent_UsingAPI();
+            var buffer = new char[40];
+            var bytes = GetIniString_ChArr_Unicode(null, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+
+            // Insight: The separator character is NUL \0
+            Assert.AreEqual('\0', buffer[sectionname.Length]);
+            Assert.AreEqual('\0', buffer[sectionname.Length + 1 + sectionname2.Length]);
+        }
         [UsedInDocumentation]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
@@ -83,15 +98,15 @@ namespace IniFileFormatTests.IntendedUse
         [UsedInDocumentation]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
-        public void Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()
+        public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()
         {
             EnsureDefaultContent_UsingAPI();
-            var buffer = new char[40];
-            var bytes = GetIniString_ChArr_Unicode(null, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            var buffer = new char[10]; // StringBuilder can't be smaller than 16
+            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
+                FileName);
 
-            // Insight: The separator character is NUL \0
-            Assert.AreEqual('\0', buffer[sectionname.Length]);
-            Assert.AreEqual('\0', buffer[sectionname.Length + 1 + sectionname2.Length]);
+            // Insight: The result is nSize -2
+            Assert.AreEqual((uint)buffer.Length - 2, bytes);
         }
 
         [UsedInDocumentation]
@@ -145,19 +160,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpAppName", null)]
-        [TestMethod]
-        public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()
-        {
-            EnsureDefaultContent_UsingAPI();
-            var buffer = new char[10]; // StringBuilder can't be smaller than 16
-            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
-                FileName);
 
-            // Insight: The result is nSize -2
-            Assert.AreEqual((uint)buffer.Length - 2, bytes);
-        }
 
         [UsedInDocumentation]
         [TestsApiParameter("lpDefault")]

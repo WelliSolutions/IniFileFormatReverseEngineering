@@ -48,7 +48,7 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(defaultvalue, sb);
         }
 
-
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_UTF16BEBOM_When_WritingToTheFile_Then_ContentIsANSI()
