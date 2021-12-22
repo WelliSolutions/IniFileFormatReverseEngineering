@@ -124,7 +124,7 @@ namespace DocumentationChecker
         private IEnumerable<MethodInfo> GetDocumentedMethods(IEnumerable<MethodInfo> testMethods)
         {
             var documentedMethods = testMethods.Where(m => m.GetCustomAttributes(
-                typeof(DoNotRenameAttribute), true).Length > 0);
+                typeof(UsedInDocumentation), true).Length > 0);
             return documentedMethods;
         }
 
