@@ -127,6 +127,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[;section]\r\n{keyname}={inivalue}\r\n", File.ReadAllText(FileName));
         }
 
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnIniFile_When_ACommentIsWrittenViaTheValueAndAnEmptyKey_Then_ItsNotAComment()
         {

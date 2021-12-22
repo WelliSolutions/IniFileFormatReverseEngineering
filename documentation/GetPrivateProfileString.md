@@ -222,9 +222,9 @@ Insights:
 
 Test Coverage:
 
-* `Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
-* `Reading.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
-* `Reading.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `Reading_Tests.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
+* `Reading_Tests.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `Reading_Tests.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
 * `UTF16LE_Tests.Given_AFileWithUTF16BOM_When_ReadingTheContent_Then_WeHaveUnicodeSupport()`
 * `UTF8_Tests.Given_AFileWithUTF8BOM_When_ReadingTheContent_Then_TheFirstLineIsBroken()`
 * `UTF16BE_Tests.Given_UTF16BEBOM_When_ReadingTheContent_Then_WeGetTheDefaultValue()`
@@ -247,7 +247,7 @@ There are not many INI files in the Windows directory any more. There is still `
 
 Test Coverage:
 
-* `Limits_Test.Given_ALongFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()`
+* `Limits_Tests.Given_AFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()`
 
 Insights:
 
@@ -288,7 +288,7 @@ Test Coverage:
 
 * `Reading_Tests.Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()`
 * `Reading_Tests.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()`
-* `Limits_Test.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()` 
+* `Limits_Tests.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()` 
 
 Insights:
 

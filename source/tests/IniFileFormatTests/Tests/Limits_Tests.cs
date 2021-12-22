@@ -101,7 +101,7 @@ namespace IniFileFormatTests.Limits
         [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
-        public void Given_ALongFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()
+        public void Given_AFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()
         {
             var sb = DefaultStringBuilder();
             // 245 + 4 + C:\Windows\ = 260 = MAX_PATH

@@ -96,6 +96,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertFileEqualASCII($"[{sectionNameNonLetter}]\r\n{keyname}={inivalue}\r\n", FileName);
         }
 
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()
