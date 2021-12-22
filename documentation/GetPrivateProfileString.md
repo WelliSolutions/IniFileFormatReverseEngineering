@@ -223,6 +223,10 @@ Test Coverage:
 * `IntendedUse_Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
 * `IntendedUse_Reading.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
 * `IntendedUse_Reading.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `UTF16LE_Tests.Given_AFileWithUTF16BOM_When_ReadingTheContent_Then_WeHaveUnicodeSupport()`
+* `UTF8_Tests.Given_AFileWithUTF8BOM_When_ReadingTheContent_Then_TheFirstLineIsBroken()`
+* `UTF16BE_Tests.Given_UTF16BEBOM_When_ReadingTheContent_Then_WeGetTheDefaultValue()`
+* `UTF16BE_Tests.Given_UTF16BEBOMAndLineBreak_When_ReadingTheContent_Then_WeGetTheDefaultValue()`
 
 Insights:
 
@@ -231,6 +235,9 @@ Insights:
 * Devices such as `PRN`, `COM1` and `LPT` result in a `GetLastError()` of `ERROR_FILE_NOT_FOUND`.
 * Invalid file names such as `*`, `?` and `C:\C:\` result in a `GetLastError()` of `ERROR_INVALID_NAME`.
 * Special names such as an empty file name, `.` and `..` which effectively point to a directory result in a `GetLastError()` of `ERROR_ACCESS_DENIED`.
+* Both versions can read UTF-16 LE (Little Endian) file content if the file has a UTF-16 LE BOM (byte-order mark)
+* A UTF-8 BOM is not understood and will break the first section if the section is on the same line as the BOM. Any sections beginning on line 2 or later will be read in ANSI mode.
+* UTF16 BE (Big Endian) is not understood
 
 > If this parameter does not contain a full path to the file, the system searches for the file in the Windows  directory.
 

@@ -65,6 +65,9 @@
     <Compile Include="Tests\SquareBracket_Tests.cs" />
     <Compile Include="DoNotRenameAttribute.cs" />
     <Compile Include="TestsApiParameterAttribute.cs" />
+    <Compile Include="Tests\UTF16BE_Tests.cs" />
+    <Compile Include="Tests\UTF16LE_Tests.cs" />
+    <Compile Include="Tests\UTF8_Tests.cs" />
     <Compile Include="Tests\WhiteSpace_Tests.cs" />
     <Compile Include="WindowsAPI.cs" />
   </ItemGroup>
