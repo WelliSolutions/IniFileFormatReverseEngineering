@@ -13,7 +13,7 @@ namespace IniFileFormatTests.SpecialCharacters
     public class WhiteSpace_Tests : IniFileTestBase
     {
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()
@@ -32,7 +32,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped()
@@ -50,7 +50,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestsApiParameter("lpKeyName")]
         [TestMethod]

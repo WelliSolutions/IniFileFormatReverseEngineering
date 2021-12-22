@@ -11,7 +11,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class SquareBracket_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()
@@ -32,7 +32,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()
@@ -57,7 +57,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_KeyValueBehindClosingSquareBracket_When_WeTryToAccessTheValue_Then_WeDontGetTheValue()
         {
@@ -71,7 +71,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AValueWithoutAnySection_When_WeTryToAccessIt_Then_WeDontGetTheValue()
         {
@@ -92,7 +92,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()
         {
@@ -105,7 +105,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()
         {

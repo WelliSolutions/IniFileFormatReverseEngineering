@@ -11,7 +11,7 @@ namespace IniFileFormatTests.IntendedUse
     [TestClass]
     public class IntendedUse_Writing_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestsApiParameter("lpKeyName")]
         [TestsApiParameter("lpString")]
@@ -32,7 +32,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.SUCCESS, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_ANonExistingFile_When_AValueIsWritten_Then_TheFileIsCreated()
@@ -46,7 +46,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_ANonExistingFileInWindowsDirectory_When_AValueIsWritten_Then_WeGetAFileNotFoundError()
@@ -66,7 +66,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AFileInANonExistingDirectory_When_AValueIsWritten_Then_WeGetAPathNotFoundError()
@@ -84,7 +84,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_PATH_NOT_FOUND, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
@@ -115,7 +115,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.SUCCESS, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName")]
         [TestMethod]
         public void Given_AKeyNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()

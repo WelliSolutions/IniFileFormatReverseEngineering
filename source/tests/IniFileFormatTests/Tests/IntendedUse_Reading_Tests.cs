@@ -11,7 +11,7 @@ namespace IniFileFormatTests.IntendedUse
     [TestClass]
     public class Reading_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestsApiParameter("lpKeyName")]
         [TestsApiParameter("lpFileName")]
@@ -28,7 +28,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual(inivalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
         public void
@@ -50,7 +50,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length + length2, bytes);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
         public void
@@ -67,7 +67,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()
@@ -80,7 +80,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((uint)buffer.Length - 2, bytes);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
         public void Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()
@@ -94,7 +94,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual('\0', buffer[sectionname.Length + 1 + sectionname2.Length]);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName", null)]
         [TestMethod]
         public void Given_AKnownIniFile_When_NullIsUsedForKeyName_Then_SeparatorCharacterIsNul()
@@ -109,7 +109,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual('\0', buffer[keyname.Length + 1 + keyname2.Length]);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName", null)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()
@@ -130,7 +130,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length + length2, bytes);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName", null)]
         [TestMethod]
         public void Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell()
@@ -145,7 +145,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName", null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()
@@ -159,7 +159,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((uint)buffer.Length - 2, bytes);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()
@@ -174,7 +174,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()
@@ -189,7 +189,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
@@ -206,7 +206,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()
@@ -219,7 +219,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual("", sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpDefault")]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()
@@ -235,7 +235,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual(defaultValue.TrimEnd(), sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("nSize")]
         [TestsApiParameter("Return value")]
         [TestMethod]
@@ -255,7 +255,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_MORE_DATA, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("nSize")]
         [TestsApiParameter("Return value")]
         [TestMethod]
@@ -273,7 +273,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_MORE_DATA, error);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
@@ -287,7 +287,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
@@ -301,7 +301,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpFileName")]
         [TestMethod]
         public void Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()

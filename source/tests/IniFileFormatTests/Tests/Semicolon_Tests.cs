@@ -12,7 +12,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Semicolon_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void
             Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
@@ -34,7 +34,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnIniFileWithSpacesBeforeTheSemicolon_When_TheContentIsAccessed_Then_ItsStillAComment()
         {
@@ -64,7 +64,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName")]
         [TestMethod]
         public void Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()
@@ -79,7 +79,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertASCIILength(keyname + '\0', bytes);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpString")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
@@ -94,7 +94,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(";nocomment", sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
@@ -109,7 +109,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
@@ -193,7 +193,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(expected, File.ReadAllText(FileName));
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpKeyName", null)]
         [TestMethod]
         public void Given_AnIniFileWithExistingComments_When_DeletingASection_Then_TheyAreNotDeleted()

@@ -8,7 +8,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Quotes_Tests : IniFileTestBase
     {
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
@@ -22,7 +22,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
@@ -38,7 +38,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
@@ -54,7 +54,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()
@@ -76,7 +76,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [DoNotRename("Used in documentation")]
+        [UsedInDocumentation]
         [TestsApiParameter("lpReturnedString")]
         [TestMethod]
         public void Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
