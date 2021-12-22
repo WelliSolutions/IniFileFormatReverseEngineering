@@ -4,9 +4,9 @@ using System.Text;
 
 namespace IniFileFormatTests
 {
-    static class WindowsAPI
+    public static class WindowsAPI
     {
-        internal enum GetLastError
+        public enum GetLastError
         {
             /// <summary>
             /// The operation completed successfully.

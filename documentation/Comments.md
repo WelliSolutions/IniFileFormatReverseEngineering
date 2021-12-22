@@ -32,8 +32,6 @@ Test Cases:
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
-* `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
-* `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
 * `Semicolon_Tests.Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()`
 * `SquareBracket_Tests.Given_KeyValueBehindClosingSquareBracket_When_WeTryToAccessTheValue_Then_WeDontGetTheValue()`
 * `SquareBracket_Tests.Given_AValueWithoutAnySection_When_WeTryToAccessIt_Then_WeDontGetTheValue()`
@@ -46,7 +44,6 @@ Insights:
 * A semicolon as part of the section will make it part of the section
 * A semicolon in the middle of the key will make it part of the key.
 * A semicolon in the middle of a value will make it part of the value, i.e. you can't have comments at the end of a line.
-* Hashtags cannot be used for comments
 * The way sections are parsed makes text after the closing square bracket also a comment, even without a semicolon
 * Values without any section are ignored by the parser, effectively making text before the first section a comment
 
@@ -70,6 +67,15 @@ this is=#not a comment
 
 ## Hashtags and other comment specifiers
 
+Test coverage:
+
+* `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
+* `Hashtag_Tests.Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()`
+
+Insights:
+
+* Hashtags cannot be used for comments
+
 While hashtags are not a comment as per Microsoft, you'll still find that they serve as comments pretty well. Why is that?
 
 Most applications will probably access a configuration value using hardcoded values for the file name, section name and key name. In that case, the key will not be found, because the application is looking for a key without the hashtag.
@@ -77,3 +83,19 @@ Most applications will probably access a configuration value using hardcoded val
 This applies for all other characters as well, so you could try C++ comments (`//`), Visual Basic comments (`'`) , Batch comments (`REM`) and in many cases you'll find that the application starts using the default value.
 
 If, however, the application queries all keys by [specifying `null` for `lpKeyName`](documentation/GetPrivateProfileString.md#lpKeyName), your value will be found unless it uses a semicolon (`;`).
+
+## Where do comments belong to?
+
+Another potential issue with comments is, where they belong to. We don't have inline comments, so we have to choose whether to write comments above or below the line the comment belongs to. This might be important to know when keys or sections are deleted.
+
+Example:
+
+```ini
+;Is this a comment for the whole INI file (outside a section) or does it belong to Section1?
+[Section1]
+;Does this comment belong to Section1 or to Key1?
+Key1=Value1
+;Does this comment belong to Section2 or to Key1?
+[Section2]
+```
+
