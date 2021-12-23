@@ -8,7 +8,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Quotes_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpReturnedString, " '\"")]
         [Checks(FileContent.lpString, " '\"")]
@@ -24,7 +24,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpReturnedString, " \"")]
         [Checks(FileContent.lpString, " \"")]
@@ -42,7 +42,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpReturnedString, " '")]
         [Checks(FileContent.lpString, " '")]
@@ -60,7 +60,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpReturnedString, " '\"")]
         [Checks(FileContent.lpString, " '\"")]
@@ -84,7 +84,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpReturnedString, " '\"")]
         [Checks(FileContent.lpString, " '\"")]

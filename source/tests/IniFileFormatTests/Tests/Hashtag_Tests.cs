@@ -12,7 +12,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Hashtag_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpString, "#")]
         [TestMethod]
@@ -28,7 +28,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual("#nocomment", sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpString, "#")]
         [TestMethod]

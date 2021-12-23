@@ -12,7 +12,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Semicolon_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, ";")]
         [Checks(FileContent.lpKeyName, ";")]
@@ -33,7 +33,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
@@ -47,7 +47,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
@@ -79,7 +79,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName)]
         [TestMethod]
@@ -94,7 +94,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertASCIILength(keyname2 + '\0', bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpString, ";")]
         [TestMethod]
@@ -109,7 +109,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(";nocomment", sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpString, ";")]
         [TestMethod]
@@ -120,7 +120,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[{sectionname}]\r\n{keyname}=;nocomment\r\n", File.ReadAllText(FileName));
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
@@ -136,7 +136,8 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName, ";")]
         [TestMethod]
@@ -155,7 +156,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[;section]\r\n{keyname}={inivalue}\r\n", File.ReadAllText(FileName));
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, "")]
         [Checks(Parameter.lpString, ";")]
@@ -175,7 +176,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(";comment", sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
@@ -189,7 +190,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
@@ -207,7 +208,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[{sectionname}]\r\nz=\r\na=\r\n;c=\r\n;b=\r\n;y=\r\n", File.ReadAllText(FileName));
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, ";")]
         [Checks(FileContent.lpKeyName, ";")]
@@ -235,7 +236,8 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(expected, File.ReadAllText(FileName));
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]

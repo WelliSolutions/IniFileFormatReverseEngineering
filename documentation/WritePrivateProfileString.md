@@ -70,12 +70,12 @@ Test Coverage:
 * `Writing_Tests.Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()`
 * `Writing_Tests.Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()`
 * `Writing_Tests.Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()`
-* `Concept_Transfer_Tests.Given_ASectionWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
 * `WhiteSpace_Tests.Given_ASectionParameterWithSpaces_When_TheSectionIsWritten_Then_SpacesAreStripped()`
 * `WhiteSpace_Tests.Given_ASectionParameterWithWhitespaces_When_TheSectionIsWritten_Then_OnlySpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 * `SquareBracket_Tests.Given_ASectionParameterWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()` 
+* `Concept_Transfer_Tests.Given_ASectionParameterWithQuotes_When_TheSectionIsWritten_Then_NoQuotesAreStripped()`
 
 Insights:
 
@@ -105,7 +105,7 @@ Test Coverage:
 * `Semicolon_Tests.Given_AKeyParameterWithSemicolon_When_TheValueIsWritten_Then_TheSemicolonIsPartOfTheFile()`
 * `WhiteSpace_Tests.Given_AKeyParameterWithSpaces_When_TheValueIsWritten_Then_SpacesAreStripped()`
 * `WhiteSpace_Tests.Given_AKeyParameterWithWhitespaces_When_TheValueIsWritten_Then_OnlySpacesAreStripped()`
-* `Concept_Transfer_Tests.Given_AKeyWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
+* `Concept_Transfer_Tests.Given_AKeyParameterWithQuotes_When_TheKeyIsWritten_Then_NoQuotesAreStripped()`
 * `Writing_Tests.Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()`
 * `Writing_Tests.Given_AnIniFileWithExistingKeys_When_WritingKeys_Then_TheyAreKeptInOriginalOrder()`
 
@@ -266,3 +266,4 @@ Test Coverage:
 Insights:
 
 * 
+

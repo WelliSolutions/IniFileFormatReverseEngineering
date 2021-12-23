@@ -1,3 +1,4 @@
+using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static IniFileFormatTests.AssertionHelper;
@@ -16,7 +17,9 @@ namespace IniFileFormatTests
         /// Reasoning: quotes are stripped from values when reading.
         /// This test checks if they are also stripped from keys.
         /// </summary>
-        [Checks(Parameter.lpKeyName)]
+        [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, "'\"")]
         [TestMethod]
         public void Given_AKeyWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()
         {
@@ -40,7 +43,10 @@ namespace IniFileFormatTests
         /// Reasoning: quotes are stripped from values when reading.
         /// This test checks if they are also stripped from sections.
         /// </summary>
-        [Checks(Parameter.lpAppName)]
+        [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpAppName, "'\"")]
+        [Checks(FileContent.lpString, "'\"")]
         [TestMethod]
         public void Given_ASectionWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()
         {
@@ -57,6 +63,42 @@ namespace IniFileFormatTests
                 // Insight: the value can't be accessed without quotes in the section name
                 bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
                 AssertZero(bytes);
+            }
+        }
+
+        /// <summary>
+        /// Reasoning: quotes are stripped from values when reading.
+        /// This test checks if they are also stripped from sections when writing.
+        /// </summary>
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpAppName, "'\"")]
+        [TestMethod]
+        public void Given_ASectionParameterWithQuotes_When_TheSectionIsWritten_Then_NoQuotesAreStripped()
+        {
+            foreach (var quote in new[] { '\'', '\"' })
+            {
+                EnsureEmptyASCII();
+                WritePrivateProfileStringW($"{quote}section{quote}", keyname, inivalue, FileName);
+                Assert.AreEqual($"[{quote}section{quote}]\r\n{keyname}={inivalue}\r\n", File.ReadAllText(FileName));
+            }
+        }
+
+        /// <summary>
+        /// Reasoning: quotes are stripped from values when reading.
+        /// This test checks if they are also stripped from sections when writing.
+        /// </summary>
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, "'\"")]
+        [TestMethod]
+        public void Given_AKeyParameterWithQuotes_When_TheKeyIsWritten_Then_NoQuotesAreStripped()
+        {
+            foreach (var quote in new[] { '\'', '\"' })
+            {
+                EnsureEmptyASCII();
+                WritePrivateProfileStringW(sectionname, $"{quote}key{quote}", inivalue, FileName);
+                Assert.AreEqual($"[{sectionname}]\r\n{quote}key{quote}={inivalue}\r\n", File.ReadAllText(FileName));
             }
         }
     }

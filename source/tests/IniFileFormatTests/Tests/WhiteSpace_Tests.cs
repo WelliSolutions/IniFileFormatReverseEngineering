@@ -94,7 +94,7 @@ namespace IniFileFormatTests.SpecialCharacters
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpString, " \t\v\r\n")]
         [TestMethod]
-        public void Given_AValueWithWhitespaces_When_TheValueIsWritten_Then_NothingIsEscaped()
+        public void Given_AValueParameterWithWhitespaces_When_TheValueIsWritten_Then_NothingIsEscaped()
         {
             foreach (var blank in new[] { " ", "\t", "\v", "\r", "\n" })
             {

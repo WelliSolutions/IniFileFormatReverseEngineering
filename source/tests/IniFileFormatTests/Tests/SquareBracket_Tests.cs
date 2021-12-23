@@ -11,7 +11,7 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class SquareBracket_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, "[")]
         [Checks(FileContent.lpAppName, "[")]
@@ -31,7 +31,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName, "[")]
         [TestMethod]
@@ -45,7 +45,8 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual("[" + square + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, "]")]
@@ -73,7 +74,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpAppName, "\r\n")]
         [TestMethod]
@@ -89,7 +90,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, "")]
         [TestMethod]
@@ -112,7 +113,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpAppName, "]")]
         [TestMethod]
@@ -127,7 +128,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpAppName, "[")]
         [TestMethod]
