@@ -56,7 +56,7 @@ namespace IniFileFormatTests.Encodings
             File.WriteAllText(FileName, "\r\n", Encoding.BigEndianUnicode);
             var unicodeCharacters = "§€°´²³";
             unicodeCharacters = "abcdef";
-            var result = WritePrivateProfileString(unicodeCharacters, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(unicodeCharacters, keyname, inivalue, FileName);
 
             // Insight: That does not work with ...W()
             var bytes = File.ReadAllBytes(FileName); // Note: File.ReadAllText() has BOM detection

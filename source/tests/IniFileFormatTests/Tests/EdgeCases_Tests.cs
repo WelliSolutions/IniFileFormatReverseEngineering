@@ -28,7 +28,7 @@ namespace IniFileFormatTests.Limits
         public void Given_AnEmptySectionName_When_WritingAValue_Then_ASectionWithoutNameIsCreated()
         {
             EnsureEmptyASCII();
-            WritePrivateProfileString("", keyname, inivalue, FileName);
+            WritePrivateProfileStringW("", keyname, inivalue, FileName);
 
             // Insight: a section with no name can be written to
             Assert.AreEqual($"[]\r\n{keyname}={inivalue}\r\n", File.ReadAllText(FileName));

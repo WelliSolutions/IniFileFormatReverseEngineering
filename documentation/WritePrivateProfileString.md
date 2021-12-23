@@ -71,14 +71,15 @@ Test Coverage:
 * `Writing_Tests.Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()`
 * `Writing_Tests.Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()`
 * `Concept_Transfer_Tests.Given_ASectionWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
-* `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
+* `WhiteSpace_Tests.Given_ASectionParameterWithSpaces_When_TheSectionIsWritten_Then_SpacesAreStripped()`
+* `WhiteSpace_Tests.Given_ASectionParameterWithWhitespaces_When_TheSectionIsWritten_Then_OnlySpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 
 Insights:
 
 * If the section is created from scratch, it will use the casing as given.
 * The section name cannot be letters only. It can also contain numbers and many special characters. Allowed characters: at least `1234567890!$%&/()=?*+#-_<>.,:;@~|\` , double quotes, single quotes, space, tab and vertical tab.
-* While the section name can be passed with leading or trailing spaces, these spaces will not be written to the file.
+* While the section name can be passed with leading or trailing spaces, these spaces will not be written to the file. Other whitespace (tab, vertical tab, carriage return, newline) is not stripped.
 * Unlike reading values, quotes are not stripped from section names.
 * Special characters that are not accepted will result in Unicode replacement marks. Affected characters: at least `§€°´²³`  (might depend on the system codepage)
 * Semicolons will be part of the key. They will be written inside the square brackets. Semicolons do not turn the section into a comment.
@@ -99,7 +100,8 @@ Test Coverage:
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
 * `Semicolon_Tests.Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
-* `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
+* `WhiteSpace_Tests.Given_AKeyParameterWithSpaces_When_TheValueIsWritten_Then_SpacesAreStripped()`
+* `WhiteSpace_Tests.Given_AKeyParameterWithWhitespaces_When_TheValueIsWritten_Then_OnlySpacesAreStripped()`
 * `Concept_Transfer_Tests.Given_AKeyWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
 * `Writing_Tests.Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()`
 * `Writing_Tests.Given_AnIniFileWithExistingKeys_When_WritingKeys_Then_TheyAreKeptInOriginalOrder()`
@@ -139,11 +141,15 @@ Insights:
 
 Test Coverage:
 
+* `WhiteSpace_Tests.Given_AValueParameterWithWhitespaces_When_TheValueIsWritten_Then_NothingIsStripped()`
+* `WhiteSpace_Tests.Given_AValueParameterWithWhitespaces_When_TheValueIsWritten_Then_NothingIsEscaped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 * `Semicolon_Tests.Given_AnIniFile_When_ACommentIsWrittenViaTheValueAndAnEmptyKey_Then_ItsNotAComment()`
 
 Insights:
 
+* Whitespace will be written into the file as given (however, it will be ignored when reading).
+* Whitespace is not escaped when being written, i.e. it will get lost when reading.
 * Values starting with a semicolon are not comments. The value starting with the semicolon will be written (and returned when reading). Even when the key is an empty string.
 
 > If this parameter is **NULL**, the key pointed to by the *lpKeyName* parameter is deleted.

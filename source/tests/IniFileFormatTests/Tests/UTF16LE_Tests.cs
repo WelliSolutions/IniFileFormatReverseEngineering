@@ -33,7 +33,7 @@ namespace IniFileFormatTests.Encodings
         {
             EnsureEmptyUTF16();
             var unicodeCharacters = "§€°´²³";
-            var result = WritePrivateProfileString(unicodeCharacters, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(unicodeCharacters, keyname, inivalue, FileName);
 
             // Insight: Unicode characters are written when the file has a UTF16 BOM (...W() method)
             string unicodeContent = File.ReadAllText(FileName);

@@ -54,9 +54,10 @@ Test Coverage:
 * `SquareBracket_Tests.Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
-* `WhiteSpace_Tests.Given_ASectionNameWithTabs_When_TheContentIsAccessed_Then_TheTabsAreNotStripped()`
-* `WhiteSpace_Tests.Given_ASectionNameWithSpacesBeforeTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()`
-* `WhiteSpace_Tests.Given_ASectionNameWithSpacesWithinTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()`
+* `WhiteSpace_Tests.Given_ASectionParameterWithTabs_When_TheValueIsRead_Then_TheTabsAreNotStripped()`
+* `WhiteSpace_Tests.Given_ASectionNameWithWhitespacesBeforeTheBracket_When_TheValueIsRead_Then_TheWhitespaceIsIgnored()`
+* `WhiteSpace_Tests.Given_ASectionNameWithWhitespacesWithinTheBracket_When_TheValueIsRead_Then_TheWhitespaceIsIgnored()`
+* `WhiteSpace_Tests.Given_ASectionParameterWithSpace_When_TheValueIsRead_Then_TheSpacesAreStripped()`
 
 Insights:
 
@@ -66,7 +67,7 @@ Insights:
 * The section name can contain an opening square bracket. It will be part of the section name.
 * The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket.
 * The section in the file needn't have a closing square bracket. Parsing of the section name will also end at the linebreak.
-* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section. Tabs will not be stripped from the parameter.
+* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section. Tabs and vertical tabs will not be stripped from the parameter.
 * If the file has whitespace (space, tab, vertical tab, newline, carriage return) before the opening square bracket, they will be ignored.
 * If the file has whitespace (space, tab, vertical tab) inside the square bracket at the beginning or the end of the section name, these are ignored.
 
@@ -100,6 +101,8 @@ Test Coverage:
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
+* `WhiteSpace_Tests.Given_AKeyWithSpacesBeforeAndAfter_When_TheValueIsRead_Then_TheWhitespacesAreStripped()`
+* `WhiteSpace_Tests.Given_AKeyParameterWithWhitespaces_When_TheValueIsRead_Then_TheKeyCannotBeFound()`
 
 Insights:
 
@@ -108,6 +111,7 @@ Insights:
 * The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the key.
 * The parameter may start with a semicolon, but no value will be found, since it will be considered as a comment. The default value will be returned.
 * Values starting with a semicolon are not comments. The value starting with the semicolon will be returned.
+* Tabs, vertical tabs, carraiage returns and newlines are not stripped from the parameter.
 > If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
 
 Test Coverage:
@@ -156,7 +160,7 @@ This stripping of "blanks" requires us to conduct a set of additional whitespace
 
 Test Coverage:
 
-* `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
+* `WhiteSpace_Tests.Given_ADefaultValueWithSpaces_When_TheDefaultValueIsReturned_Then_TrailingSpacesAreStripped()` 
 * `WhiteSpace_Tests.Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()`
 
 Insights:
@@ -174,7 +178,7 @@ For all the C# programmers out there: `[out]` is not identical to `out` paramete
 
 Test Coverage:
 * `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_TrailingSpacesAreStripped()`
-* `WhiteSpace_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped()`
+* `WhiteSpace_Tests.Given_AValueWithWhitespace_When_TheValueIsRead_Then_WhitespaceIsStripped()`
 
 Insights:
 

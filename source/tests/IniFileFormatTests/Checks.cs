@@ -11,10 +11,10 @@ namespace IniFileFormatTests
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class Checks : Attribute
     {
-        public Checks(Parameter parameter, string parameterValue = "<unknown>")
+        public Checks(Parameter parameter, string contentValue = "<unknown>")
         {
             Parameter = parameter;
-            ParameterValue = parameterValue;
+            Value = contentValue;
         }
 
         public Checks(Paragraph paragraph)
@@ -22,11 +22,33 @@ namespace IniFileFormatTests
             Paragraph = paragraph;
         }
 
-        public string ParameterValue { get; }
+        public Checks(Method method)
+        {
+            Method = method;
+        }
+
+        public Checks(FileContent fileContent, string contentValue)
+        {
+            FileContent = fileContent;
+            Value = contentValue;
+        }
+
+        public string Value { get; }
 
         public Parameter Parameter { get; }
 
         public Paragraph Paragraph { get; }
+
+        public Method Method { get; }
+        public FileContent FileContent { get; }
+    }
+
+    public enum Method
+    {
+        GetPrivateProfileStringA,
+        GetPrivateProfileStringW,
+        WritePrivateProfileStringA,
+        WritePrivateProfileStringW,
     }
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -47,5 +69,13 @@ namespace IniFileFormatTests
         syntax,
         returnValue,
         remarks
+    }
+
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    public enum FileContent
+    {
+        lpAppName,
+        lpKeyName,
+        lpString,
     }
 }

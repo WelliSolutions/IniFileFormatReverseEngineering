@@ -17,7 +17,7 @@ namespace IniFileFormatTests.Encodings
         {
             File.WriteAllText(FileName, "", Encoding.UTF8);
             var unicodeCharacters = "§€°´²³";
-            var result = WritePrivateProfileString(unicodeCharacters, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(unicodeCharacters, keyname, inivalue, FileName);
 
             // Insight: UTF-8 does not help
             string unicodeContent = File.ReadAllText(FileName);

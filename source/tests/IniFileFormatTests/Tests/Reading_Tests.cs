@@ -12,6 +12,7 @@ namespace IniFileFormatTests.IntendedUse
     public class Reading_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName)]
         [Checks(Parameter.lpKeyName)]
         [Checks(Parameter.lpFileName)]
@@ -29,6 +30,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void
@@ -51,6 +53,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void
@@ -70,6 +73,7 @@ namespace IniFileFormatTests.IntendedUse
 
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()
@@ -83,6 +87,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual('\0', buffer[sectionname.Length + 1 + sectionname2.Length]);
         }
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()
@@ -96,6 +101,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()
@@ -110,6 +116,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AKnownIniFile_When_NullIsUsedForKeyName_Then_SeparatorCharacterIsNul()
@@ -125,6 +132,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()
@@ -146,6 +154,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell()
@@ -163,6 +172,7 @@ namespace IniFileFormatTests.IntendedUse
 
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()
@@ -178,6 +188,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()
@@ -193,6 +204,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
@@ -210,6 +222,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()
@@ -223,22 +236,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [Checks(Parameter.lpDefault)]
-        [TestMethod]
-        public void Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()
-        {
-            EnsureDefaultContent_UsingAPI();
-            var sb = DefaultStringBuilder();
-            var defaultValue = "   default    ";
-            var bytes = GetIniString_SB_Unicode(sectionname, "NonExistingKey", defaultValue, sb, (uint)sb.Capacity,
-                FileName);
-            AssertASCIILength(defaultValue.TrimEnd(), bytes);
-            // Insight: According the documentation, trailing blanks are stripped
-            // Insight: Leading blanks are not stripped
-            AssertSbEqual(defaultValue.TrimEnd(), sb);
-        }
-
-        [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.nSize)]
         [Checks(Paragraph.returnValue)]
         [TestMethod]
@@ -259,6 +257,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.nSize)]
         [Checks(Paragraph.returnValue)]
         [TestMethod]
@@ -277,6 +276,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
@@ -291,6 +291,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
@@ -305,6 +306,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()

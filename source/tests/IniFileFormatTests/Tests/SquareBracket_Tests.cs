@@ -18,7 +18,7 @@ namespace IniFileFormatTests.SpecialCharacters
         {
             EnsureDeleted();
             var square = "[sec";
-            WritePrivateProfileString(square, keyname, inivalue, FileName);
+            WritePrivateProfileStringW(square, keyname, inivalue, FileName);
 
             // Insight: the section name is written as given, no special handling for opening square bracket
             Assert.AreEqual("[" + square + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());
@@ -39,7 +39,7 @@ namespace IniFileFormatTests.SpecialCharacters
         {
             EnsureDeleted();
             var whoops = "sec]whoops";
-            WritePrivateProfileString(whoops, keyname, inivalue, FileName);
+            WritePrivateProfileStringW(whoops, keyname, inivalue, FileName);
 
             // Insight: the section name is written as given, no special handling for the ] closing square bracket
             Assert.AreEqual("[" + whoops + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());

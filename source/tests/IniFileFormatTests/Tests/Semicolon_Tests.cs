@@ -18,7 +18,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, ";key", inivalue, FileName);
+            WritePrivateProfileStringW(sectionname, ";key", inivalue, FileName);
 
             // Insight: the comment is written to the file
             Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
@@ -70,8 +70,8 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, ";key", inivalue, FileName);
-            WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
+            WritePrivateProfileStringW(sectionname, ";key", inivalue, FileName);
+            WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
 
             var buffer = new char[1000];
             var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
@@ -85,7 +85,7 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, keyname, ";nocomment", FileName);
+            WritePrivateProfileStringW(sectionname, keyname, ";nocomment", FileName);
 
             // Insight: Semicolon in value is not a comment
             var sb = DefaultStringBuilder();
@@ -100,7 +100,7 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, "key ;nocomment", inivalue, FileName);
+            WritePrivateProfileStringW(sectionname, "key ;nocomment", inivalue, FileName);
 
             // Insight: Semicolon in key is not a comment
             var sb = DefaultStringBuilder();
@@ -115,7 +115,7 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
             EnsureDeleted();
-            WritePrivateProfileString(";section", keyname, inivalue, FileName);
+            WritePrivateProfileStringW(";section", keyname, inivalue, FileName);
 
             // Insight: Semicolon in key is not a comment
             var sb = DefaultStringBuilder();
@@ -132,7 +132,7 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFile_When_ACommentIsWrittenViaTheValueAndAnEmptyKey_Then_ItsNotAComment()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, "", ";comment", FileName);
+            WritePrivateProfileStringW(sectionname, "", ";comment", FileName);
 
             // Insight: it's not a comment
             Assert.AreEqual($"[{sectionname}]\r\n=;comment\r\n", File.ReadAllText(FileName));
@@ -149,8 +149,8 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFile_When_ACommentIsWrittenTwice_Then_TheFileContainsBoth()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, ";key", inivalue, FileName);
-            WritePrivateProfileString(sectionname, ";key", inivalue, FileName);
+            WritePrivateProfileStringW(sectionname, ";key", inivalue, FileName);
+            WritePrivateProfileStringW(sectionname, ";key", inivalue, FileName);
 
             // Insight: the comment is written twice. There's no magic to detect identical comments
             Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
@@ -161,11 +161,11 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFile_When_ATwoCommentsAreWritten_Then_TheLatterOneIsFirst()
         {
             EnsureEmptyASCII();
-            WritePrivateProfileString(sectionname, "z", "", FileName);
-            WritePrivateProfileString(sectionname, ";y", "", FileName);
-            WritePrivateProfileString(sectionname, "a", "", FileName);
-            WritePrivateProfileString(sectionname, ";b", "", FileName);
-            WritePrivateProfileString(sectionname, ";c", "", FileName);
+            WritePrivateProfileStringW(sectionname, "z", "", FileName);
+            WritePrivateProfileStringW(sectionname, ";y", "", FileName);
+            WritePrivateProfileStringW(sectionname, "a", "", FileName);
+            WritePrivateProfileStringW(sectionname, ";b", "", FileName);
+            WritePrivateProfileStringW(sectionname, ";c", "", FileName);
 
             // Insight: comments are moved to the end of the section
             // Insight: the comments are in reverse order
@@ -177,11 +177,11 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFileWithExistingComments_When_Writing_Then_TheyAreKeptInOrder()
         {
             EnsureASCII($";comment0\r\n[{sectionname}]\r\n;comment1\r\nb=value\r\n;comment2\r\na=value\r\n");
-            WritePrivateProfileString(sectionname, "z", "", FileName);
-            WritePrivateProfileString(sectionname, ";x", "", FileName);
-            WritePrivateProfileString(sectionname, "y", "", FileName);
-            WritePrivateProfileString(sectionname, "a", "", FileName);
-            WritePrivateProfileString(sectionname, "b", "", FileName);
+            WritePrivateProfileStringW(sectionname, "z", "", FileName);
+            WritePrivateProfileStringW(sectionname, ";x", "", FileName);
+            WritePrivateProfileStringW(sectionname, "y", "", FileName);
+            WritePrivateProfileStringW(sectionname, "a", "", FileName);
+            WritePrivateProfileStringW(sectionname, "b", "", FileName);
 
             // Insight: like values, comment that already exist are kept in their order
             // Insight: New values are written in chronological order after the existing values (not alphabetically)
@@ -203,8 +203,8 @@ namespace IniFileFormatTests.SpecialCharacters
         public void Given_AnIniFileWithExistingComments_When_DeletingASection_Then_TheyAreNotDeleted()
         {
             EnsureASCII($";comment0\r\n[{sectionname}]\r\n;comment1\r\n[{sectionname2}]\r\n;comment2\r\n");
-            WritePrivateProfileString(sectionname, null, "", FileName); // Delete section
-            WritePrivateProfileString(sectionname2, null, "", FileName); // Delete section
+            WritePrivateProfileStringW(sectionname, null, "", FileName); // Delete section
+            WritePrivateProfileStringW(sectionname2, null, "", FileName); // Delete section
 
             // Insight: comments are not deleted at all
             // Insight: the comments will still be in order
