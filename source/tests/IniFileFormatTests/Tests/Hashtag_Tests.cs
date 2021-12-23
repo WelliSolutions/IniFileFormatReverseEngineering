@@ -13,6 +13,8 @@ namespace IniFileFormatTests.SpecialCharacters
     public class Hashtag_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpString, "#")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
@@ -21,12 +23,14 @@ namespace IniFileFormatTests.SpecialCharacters
 
             // Insight: Hashtag in value is not a comment
             var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength("#nocomment", bytes);
             AssertSbEqual("#nocomment", sb);
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpString, "#")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
