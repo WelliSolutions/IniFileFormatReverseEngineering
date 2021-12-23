@@ -16,7 +16,7 @@ namespace IniFileFormatTests
         /// Reasoning: quotes are stripped from values when reading.
         /// This test checks if they are also stripped from keys.
         /// </summary>
-        [TestsApiParameter("lpKeyName")]
+        [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AKeyWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()
         {
@@ -40,7 +40,7 @@ namespace IniFileFormatTests
         /// Reasoning: quotes are stripped from values when reading.
         /// This test checks if they are also stripped from sections.
         /// </summary>
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()
         {

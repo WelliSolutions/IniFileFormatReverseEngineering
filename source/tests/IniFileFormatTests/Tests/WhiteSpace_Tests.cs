@@ -14,7 +14,7 @@ namespace IniFileFormatTests.SpecialCharacters
     {
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpDefault")]
+        [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()
         {
@@ -33,7 +33,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [Checks(Parameter.lpReturnedString)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped()
         {
@@ -51,8 +51,8 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
-        [TestsApiParameter("lpKeyName")]
+        [Checks(Parameter.lpAppName)]
+        [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()
         {
@@ -84,7 +84,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameWithSpacesBeforeTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()
         {
@@ -102,7 +102,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameWithSpacesWithinTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()
         {

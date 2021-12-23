@@ -9,7 +9,7 @@ namespace IniFileFormatTests.SpecialCharacters
     public class Quotes_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [Checks(Parameter.lpReturnedString)]
         [TestMethod]
         public void Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
         {
@@ -23,7 +23,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [Checks(Parameter.lpReturnedString)]
         [TestMethod]
         public void Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
         {
@@ -39,7 +39,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [Checks(Parameter.lpReturnedString)]
         [TestMethod]
         public void Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
         {
@@ -55,7 +55,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [Checks(Parameter.lpReturnedString)]
         [TestMethod]
         public void Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()
         {
@@ -77,7 +77,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [Checks(Parameter.lpReturnedString)]
         [TestMethod]
         public void Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
         {

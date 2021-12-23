@@ -65,7 +65,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName")]
+        [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()
         {
@@ -80,7 +80,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpString")]
+        [Checks(Parameter.lpString)]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
@@ -95,7 +95,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName")]
+        [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
@@ -110,7 +110,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
@@ -198,7 +198,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName", null)]
+        [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AnIniFileWithExistingComments_When_DeletingASection_Then_TheyAreNotDeleted()
         {

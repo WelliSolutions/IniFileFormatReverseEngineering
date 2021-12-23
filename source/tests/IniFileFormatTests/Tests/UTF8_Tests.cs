@@ -11,7 +11,7 @@ namespace IniFileFormatTests.Encodings
     public class UTF8_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileWithUTF8BOM_When_WritingToTheFile_Then_WeGetReplacementCharacters()
         {

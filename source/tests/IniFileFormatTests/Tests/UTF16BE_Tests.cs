@@ -49,7 +49,7 @@ namespace IniFileFormatTests.Encodings
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_UTF16BEBOM_When_WritingToTheFile_Then_ContentIsANSI()
         {

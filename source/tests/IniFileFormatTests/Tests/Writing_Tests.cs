@@ -11,10 +11,10 @@ namespace IniFileFormatTests.IntendedUse
     public class Writing_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
-        [TestsApiParameter("lpKeyName")]
-        [TestsApiParameter("lpString")]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpAppName)]
+        [Checks(Parameter.lpKeyName)]
+        [Checks(Parameter.lpString)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()
         {
@@ -32,7 +32,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_ANonExistingFile_When_AValueIsWritten_Then_TheFileIsCreated()
         {
@@ -46,7 +46,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_ANonExistingFileInWindowsDirectory_When_AValueIsWritten_Then_WeGetAFileNotFoundError()
         {
@@ -66,7 +66,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileInANonExistingDirectory_When_AValueIsWritten_Then_WeGetAPathNotFoundError()
         {
@@ -84,7 +84,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
         {
@@ -97,7 +97,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()
         {
@@ -116,7 +116,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName")]
+        [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AKeyNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
         {

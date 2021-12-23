@@ -12,7 +12,7 @@ namespace IniFileFormatTests.IntendedUse
     public class Casing_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()
         {
@@ -31,7 +31,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName")]
+        [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()
         {

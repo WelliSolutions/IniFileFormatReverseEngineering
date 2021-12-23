@@ -12,7 +12,7 @@ namespace IniFileFormatTests.SpecialCharacters
     public class SquareBracket_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()
         {
@@ -33,7 +33,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()
         {

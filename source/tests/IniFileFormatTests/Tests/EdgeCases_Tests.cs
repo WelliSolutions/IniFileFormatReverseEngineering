@@ -9,7 +9,7 @@ namespace IniFileFormatTests.Limits
     public class EdgeCases_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionWithNoName_When_UsingEmptyString_Then_WeGetTheValue()
         {
@@ -23,7 +23,7 @@ namespace IniFileFormatTests.Limits
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_AnEmptySectionName_When_WritingAValue_Then_ASectionWithoutNameIsCreated()
         {

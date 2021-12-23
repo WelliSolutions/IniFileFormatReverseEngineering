@@ -12,10 +12,10 @@ namespace IniFileFormatTests.IntendedUse
     public class Reading_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
-        [TestsApiParameter("lpKeyName")]
-        [TestsApiParameter("lpFileName")]
-        [TestsApiParameter("lpReturnedString")]
+        [Checks(Parameter.lpAppName)]
+        [Checks(Parameter.lpKeyName)]
+        [Checks(Parameter.lpFileName)]
+        [Checks(Parameter.lpReturnedString)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()
         {
@@ -29,7 +29,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName", null)]
+        [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void
             Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()
@@ -51,7 +51,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName", null)]
+        [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void
             Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()
@@ -70,7 +70,7 @@ namespace IniFileFormatTests.IntendedUse
 
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName", null)]
+        [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_AKnownIniFile_When_NullIsUsedForSectionName_Then_SeparatorCharacterIsNul()
         {
@@ -83,7 +83,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual('\0', buffer[sectionname.Length + 1 + sectionname2.Length]);
         }
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName", null)]
+        [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()
         {
@@ -96,7 +96,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName", null)]
+        [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()
         {
@@ -110,7 +110,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName", null)]
+        [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AKnownIniFile_When_NullIsUsedForKeyName_Then_SeparatorCharacterIsNul()
         {
@@ -125,7 +125,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName", null)]
+        [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsUsedAsTheKey_Then_WeGetAListOfKeysInTheSection()
         {
@@ -146,7 +146,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName", null)]
+        [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AnIniFileWithDuplicateKeys_When_NullIsUsedAsTheKey_Then_WeGetDuplicateKeysAsWell()
         {
@@ -163,7 +163,7 @@ namespace IniFileFormatTests.IntendedUse
 
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpDefault")]
+        [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingKeyIsAccessed_Then_WeGetTheDefaultValue()
         {
@@ -178,7 +178,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpDefault")]
+        [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_ANonExistingSectionIsAccessed_Then_WeGetTheDefaultValue()
         {
@@ -193,7 +193,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpDefault")]
+        [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_NoIniFile_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
         {
@@ -210,7 +210,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpDefault")]
+        [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_NullIsTheDefaultValue_Then_WeGetAnEmptyString()
         {
@@ -223,7 +223,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpDefault")]
+        [Checks(Parameter.lpDefault)]
         [TestMethod]
         public void Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()
         {
@@ -239,8 +239,8 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("nSize")]
-        [TestsApiParameter("Return value")]
+        [Checks(Parameter.nSize)]
+        [Checks(Paragraph.returnValue)]
         [TestMethod]
         public void Given_ASmallBuffer_When_WeTryToGetTheValue_Then_TheValueIsTruncated()
         {
@@ -259,8 +259,8 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("nSize")]
-        [TestsApiParameter("Return value")]
+        [Checks(Parameter.nSize)]
+        [Checks(Paragraph.returnValue)]
         [TestMethod]
         public void Given_AZeroBuffer_When_WeTryToGetTheValue_Then_NothingCanBeReturned()
         {
@@ -277,7 +277,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
         {
@@ -291,7 +291,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()
         {
@@ -305,7 +305,7 @@ namespace IniFileFormatTests.IntendedUse
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()
         {

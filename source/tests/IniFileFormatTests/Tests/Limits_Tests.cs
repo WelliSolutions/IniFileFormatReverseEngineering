@@ -48,7 +48,7 @@ namespace IniFileFormatTests.Limits
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("nSize")]
+        [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()
         {
@@ -60,7 +60,7 @@ namespace IniFileFormatTests.Limits
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("nSize")]
+        [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()
         {
@@ -72,7 +72,7 @@ namespace IniFileFormatTests.Limits
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("nSize")]
+        [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()
         {
@@ -84,7 +84,7 @@ namespace IniFileFormatTests.Limits
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("nSize")]
+        [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65537_When_AccessingIt_Then_WeGetModuloBehavior()
         {
@@ -99,7 +99,7 @@ namespace IniFileFormatTests.Limits
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()
         {
@@ -113,7 +113,7 @@ namespace IniFileFormatTests.Limits
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpAppName", null)]
+        [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()
         {

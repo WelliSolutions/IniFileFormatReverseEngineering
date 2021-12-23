@@ -27,7 +27,7 @@ namespace IniFileFormatTests.Encodings
         }
 
         [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileWithUTF16Header_When_WritingToTheFile_Then_WeHaveUnicodeSupport()
         {
