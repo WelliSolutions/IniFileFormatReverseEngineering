@@ -83,55 +83,57 @@ namespace IniFileFormatTests.SpecialCharacters
 
         }
 
-        // TODO: Review
+        [UsedInDocumentation]
+        [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_ASectionNameWithSpacesBeforeTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()
         {
-            EnsureASCII($"   [{sectionname}]\r\n{keyname}={defaultvalue}\r\n");
+            foreach (var blank in new[] { " ", "\t", "\v", "\r", "\n" })
+            {
+                EnsureASCII($"{blank}[{sectionname}]\r\n{keyname}={inivalue}\r\n");
 
-            var sb = DefaultStringBuilder();
+                var sb = DefaultStringBuilder();
 
-            // Insight: Spaces before a section are ignored when reading the file
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertASCIILength(defaultvalue, bytes);
-            AssertSbEqual(defaultvalue, sb);
+                // Insight: Spaces before a section are ignored when reading the file
+                var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+                AssertASCIILength(inivalue, bytes);
+                AssertSbEqual(inivalue, sb);
+            }
         }
 
-        // TODO: Review
+        [UsedInDocumentation]
+        [TestsApiParameter("lpAppName")]
         [TestMethod]
         public void Given_ASectionNameWithSpacesWithinTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()
         {
-            EnsureASCII($"[   {sectionname}]\r\n{keyname}={defaultvalue}\r\n");
+            foreach (var blank in new[] { " ", "\t", "\v" })
+            {
+                EnsureASCII($"[{blank}x{blank}]\r\n{keyname}={inivalue}\r\n");
 
-            var sb = DefaultStringBuilder();
+                var sb = DefaultStringBuilder();
 
-            // Insight: Spaces within a section are ignored
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertASCIILength(defaultvalue, bytes);
-            AssertSbEqual(defaultvalue, sb);
+                // Insight: Spaces within a section are ignored
+                var bytes = GetIniString_SB_Unicode("x", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+                AssertASCIILength(inivalue, bytes);
+                AssertSbEqual(inivalue, sb);
 
-            bytes = GetIniString_SB_Unicode("   " + sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertASCIILength(defaultvalue, bytes);
-            AssertSbEqual(defaultvalue, sb);
+                // Insight: Spaces in the parameter are ignored
+                bytes = GetIniString_SB_Unicode($"   x   ", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+                AssertASCIILength(inivalue, bytes);
+                AssertSbEqual(inivalue, sb);
+            }
         }
 
-        // TODO: Review
+        [UsedInDocumentation]
         [TestMethod]
-        public void Given_ASectionNameWithTabsWithinTheBracket_When_TheContentIsAccessed_Then_TheTabsAreIgnored()
+        public void Given_ASectionNameWithTabs_When_TheContentIsAccessed_Then_TheTabsAreNotStripped()
         {
-            EnsureASCII($"[\t{sectionname}]\r\n{keyname}={defaultvalue}\r\n");
-
+            EnsureDefaultContent_UsingFile();
             var sb = DefaultStringBuilder();
-
-            // Insight: Tabs within a section are ignored when being read
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            // Insight: you can't access with a tab in the request
+            var bytes = GetIniString_SB_Unicode("\t" + sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength(defaultvalue, bytes);
             AssertSbEqual(defaultvalue, sb);
-
-            // Insight: you can't access with a tab in the request
-            bytes = GetIniString_SB_Unicode("\t" + sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
-            AssertZero(bytes);
-            AssertSbEqual("", sb);
         }
 
         // TODO: Review

@@ -56,10 +56,10 @@ Test Coverage:
 
 Insights:
 
-* The section name is enclosed in square brackets
-* Windows line endings are used
-* Key and value are separated by an equal sign
-* If the file was created from scratch, it has an empty line at the end
+* The section name is enclosed in square brackets.
+* Windows line endings are used.
+* Key and value are separated by an equal sign.
+* If the file was created from scratch, it has an empty line at the end.
 
 > The name of the section is case-independent; the string can be any combination of uppercase and lowercase letters.
 
@@ -70,6 +70,7 @@ Test Coverage:
 * `Writing_Tests.Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()`
 * `Writing_Tests.Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()`
 * `Writing_Tests.Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()`
+* `Concept_Transfer_Tests.Given_ASectionWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 
@@ -78,7 +79,8 @@ Insights:
 * If the section is created from scratch, it will use the casing as given.
 * The section name cannot be letters only. It can also contain numbers and many special characters. Allowed characters: at least `1234567890!$%&/()=?*+#-_<>.,:;@~|\` , double quotes, single quotes, space, tab and vertical tab.
 * While the section name can be passed with leading or trailing spaces, these spaces will not be written to the file.
-* Special characters that are not accepted will result in Unicode replacement marks. Affected characters: at least `§€°´²³` 
+* Unlike reading values, quotes are not stripped from section names.
+* Special characters that are not accepted will result in Unicode replacement marks. Affected characters: at least `§€°´²³`  (might depend on the system codepage)
 * Semicolons will be part of the key. They will be written inside the square brackets. Semicolons do not turn the section into a comment.
 
 <a name="lpKeyName"></a>
@@ -98,15 +100,22 @@ Test Coverage:
 * `Semicolon_Tests.Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
+* `Concept_Transfer_Tests.Given_AKeyWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
+* `Writing_Tests.Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()`
+* `Writing_Tests.Given_AnIniFileWithExistingKeys_When_WritingKeys_Then_TheyAreKeptInOriginalOrder()`
 
 Insights:
 
-* Basically works as expected
+* Basically works as expected.
 * The section name can also be an empty string.
-* Like section name, the key can also consist of special characters
+* Like section name, the key can also consist of special characters.
 * The key must not start with a semicolon, otherwise it will turn into a comment. There will be an equal sign in the comment.
 * A semicolon in the middle of the key becomes part of the key.
 * While the key may be passed with leading or trailing spaces, these spaces will not be written to the file.
+* Unlike reading values, quotes are not stripped from keys.
+* When writing new keys into a section they will be appended at the end of existing keys.
+* When writing multiple new keys into the section, they are written in chronological order.
+* Existing keys are kept in their original position, even when changing them or adding new keys.
 
 > If this parameter is **NULL**, the entire section, including all entries within the section, is deleted.
 

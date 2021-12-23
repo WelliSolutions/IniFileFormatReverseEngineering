@@ -128,6 +128,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertFileEqualASCII($"[{sectionname}]\r\n{keyNameNonLetter}={inivalue}\r\n", FileName);
         }
 
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()
         {
@@ -142,8 +143,9 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual($"[{sectionname}]\r\nz=\r\na=\r\ny=\r\nb=\r\n", File.ReadAllText(FileName));
         }
 
+        [UsedInDocumentation]
         [TestMethod]
-        public void Given_AnIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()
+        public void Given_AnIniFileWithExistingKeys_When_WritingKeys_Then_TheyAreKeptInOriginalOrder()
         {
             EnsureASCII($"[{sectionname}]\r\nb=value\r\na=value\r\n");
             WritePrivateProfileString(sectionname, "z", "", FileName);

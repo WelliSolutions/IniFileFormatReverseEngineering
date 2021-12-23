@@ -144,6 +144,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(";comment", sb);
         }
 
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnIniFile_When_ACommentIsWrittenTwice_Then_TheFileContainsBoth()
         {
@@ -155,6 +156,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
         }
 
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnIniFile_When_ATwoCommentsAreWritten_Then_TheLatterOneIsFirst()
         {
@@ -170,6 +172,7 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual($"[{sectionname}]\r\nz=\r\na=\r\n;c=\r\n;b=\r\n;y=\r\n", File.ReadAllText(FileName));
         }
 
+        [UsedInDocumentation]
         [TestMethod]
         public void Given_AnIniFileWithExistingComments_When_Writing_Then_TheyAreKeptInOrder()
         {

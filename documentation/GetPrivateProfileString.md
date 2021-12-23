@@ -54,16 +54,21 @@ Test Coverage:
 * `SquareBracket_Tests.Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
+* `WhiteSpace_Tests.Given_ASectionNameWithTabs_When_TheContentIsAccessed_Then_TheTabsAreNotStripped()`
+* `WhiteSpace_Tests.Given_ASectionNameWithSpacesBeforeTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()`
+* `WhiteSpace_Tests.Given_ASectionNameWithSpacesWithinTheBracket_When_TheContentIsAccessed_Then_TheSpacesAreIgnored()`
 
 Insights:
 
-* Basically, this functionality works as expected
-* The section can be accessed case-insensitive
-* The section name can be an empty string
+* Basically, this functionality works as expected.
+* The section can be accessed case-insensitive.
+* The section name can be an empty string.
 * The section name can contain an opening square bracket. It will be part of the section name.
 * The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket.
 * The section in the file needn't have a closing square bracket. Parsing of the section name will also end at the linebreak.
-* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section.
+* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section. Tabs will not be stripped from the parameter.
+* If the file has whitespace (space, tab, vertical tab, newline, carriage return) before the opening square bracket, they will be ignored.
+* If the file has whitespace (space, tab, vertical tab) inside the square bracket at the beginning or the end of the section name, these are ignored.
 
 > If this parameter is **NULL**, the **GetPrivateProfileString** function copies all section names in the file to the supplied buffer.
 
