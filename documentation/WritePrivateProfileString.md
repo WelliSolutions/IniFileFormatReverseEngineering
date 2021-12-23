@@ -74,11 +74,15 @@ Test Coverage:
 * `WhiteSpace_Tests.Given_ASectionParameterWithSpaces_When_TheSectionIsWritten_Then_SpacesAreStripped()`
 * `WhiteSpace_Tests.Given_ASectionParameterWithWhitespaces_When_TheSectionIsWritten_Then_OnlySpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
+* `SquareBracket_Tests.Given_ASectionParameterWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()`
+* `SquareBracket_Tests.Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()` 
 
 Insights:
 
 * If the section is created from scratch, it will use the casing as given.
 * The section name cannot be letters only. It can also contain numbers and many special characters. Allowed characters: at least `1234567890!$%&/()=?*+#-_<>.,:;@~|\` , double quotes, single quotes, space, tab and vertical tab.
+* The section name can contain a `[`.
+* The section name can contain a `]` but that will cause problems when reading the value.
 * While the section name can be passed with leading or trailing spaces, these spaces will not be written to the file. Other whitespace (tab, vertical tab, carriage return, newline) is not stripped.
 * Unlike reading values, quotes are not stripped from section names.
 * Special characters that are not accepted will result in Unicode replacement marks. Affected characters: at least `§€°´²³`  (might depend on the system codepage)
