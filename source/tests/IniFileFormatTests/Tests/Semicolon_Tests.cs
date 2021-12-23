@@ -13,15 +13,14 @@ namespace IniFileFormatTests.SpecialCharacters
     public class Semicolon_Tests : IniFileTestBase
     {
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, ";")]
+        [Checks(FileContent.lpKeyName, ";")]
         [TestMethod]
         public void
-            Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()
+            Given_AnIniFileWithSemicolonAtBeginOfKey_When_TheValueIsRead_Then_WeGetTheDefaultValue()
         {
-            EnsureDeleted();
-            WritePrivateProfileStringW(sectionname, ";key", inivalue, FileName);
-
-            // Insight: the comment is written to the file
-            Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
+            EnsureASCII($"[{sectionname}]\r\n;key={inivalue}\r\n");
 
             // Insight: Semicolon at the beginning of the key is a comment
             var sb = DefaultStringBuilder();
@@ -35,6 +34,22 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, ";")]
+        [TestMethod]
+        public void
+            Given_AKeyParameterWithSemicolonAtBeginning_When_TheValueIsWritten_Then_TheFileContainsTheSemicolon()
+        {
+            EnsureDeleted();
+            WritePrivateProfileStringW(sectionname, ";key", inivalue, FileName);
+
+            // Insight: the comment is written to the file
+            Assert.AreEqual($"[{sectionname}]\r\n;key={inivalue}\r\n", File.ReadAllText(FileName));
+        }
+
+        [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
         public void Given_AnIniFileWithSpacesBeforeTheSemicolon_When_TheContentIsAccessed_Then_ItsStillAComment()
         {
@@ -65,27 +80,27 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
+        [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AnIniFileWithASemicolonAtBeginOfKey_When_AllKeysAreRetrieved_Then_WeDontGetTheComment()
         {
-            EnsureDeleted();
-            WritePrivateProfileStringW(sectionname, ";key", inivalue, FileName);
-            WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
+            // keyname is a comment, keyname2 isn't
+            EnsureASCII($"[{sectionname}]\r\n;{keyname}={inivalue}\r\n{keyname2}={inivalue2}\r\n");
 
             var buffer = new char[1000];
             var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
                 FileName);
-            AssertASCIILength(keyname + '\0', bytes);
+            AssertASCIILength(keyname2 + '\0', bytes);
         }
 
         [UsedInDocumentation]
-        [Checks(Parameter.lpString)]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpString, ";")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
+        public void Given_AnIniFileWrittenWithSemicolonInValue_When_TheValueIsRead_Then_WeGetTheSemicolon()
         {
-            EnsureDeleted();
-            WritePrivateProfileStringW(sectionname, keyname, ";nocomment", FileName);
+            EnsureASCII($"[{sectionname}]\r\n{keyname}=;nocomment\r\n");
 
             // Insight: Semicolon in value is not a comment
             var sb = DefaultStringBuilder();
@@ -95,9 +110,21 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [Checks(Parameter.lpKeyName)]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpString, ";")]
         [TestMethod]
-        public void Given_AnIniFileWrittenWithSemicolonInKey_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
+        public void Given_AValueParameterWithSemicolon_When_TheValueIsWritten_Then_TheSemicolonIsPartOfTheFile()
+        {
+            EnsureDeleted();
+            WritePrivateProfileStringW(sectionname, keyname, ";nocomment", FileName);
+            Assert.AreEqual($"[{sectionname}]\r\n{keyname}=;nocomment\r\n", File.ReadAllText(FileName));
+        }
+
+        [UsedInDocumentation]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, ";")]
+        [TestMethod]
+        public void Given_AKeyParameterWithSemicolon_When_TheValueIsWritten_Then_TheSemicolonIsPartOfTheFile()
         {
             EnsureDeleted();
             WritePrivateProfileStringW(sectionname, "key ;nocomment", inivalue, FileName);
@@ -110,7 +137,8 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
-        [Checks(Parameter.lpAppName)]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpAppName, ";")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()
         {
@@ -119,7 +147,7 @@ namespace IniFileFormatTests.SpecialCharacters
 
             // Insight: Semicolon in key is not a comment
             var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(";section", keyname, null, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(";section", keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength(inivalue, bytes);
             AssertSbEqual(inivalue, sb);
 
@@ -128,13 +156,16 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, "")]
+        [Checks(Parameter.lpString, ";")]
         [TestMethod]
         public void Given_AnIniFile_When_ACommentIsWrittenViaTheValueAndAnEmptyKey_Then_ItsNotAComment()
         {
             EnsureDeleted();
             WritePrivateProfileStringW(sectionname, "", ";comment", FileName);
 
-            // Insight: it's not a comment
+            // Insight: it's written to the file
             Assert.AreEqual($"[{sectionname}]\r\n=;comment\r\n", File.ReadAllText(FileName));
 
             // Insight: it can still be accessed
@@ -145,6 +176,8 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
         public void Given_AnIniFile_When_ACommentIsWrittenTwice_Then_TheFileContainsBoth()
         {
@@ -157,6 +190,8 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, ";")]
         [TestMethod]
         public void Given_AnIniFile_When_ATwoCommentsAreWritten_Then_TheLatterOneIsFirst()
         {
@@ -173,6 +208,9 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, ";")]
+        [Checks(FileContent.lpKeyName, ";")]
         [TestMethod]
         public void Given_AnIniFileWithExistingComments_When_Writing_Then_TheyAreKeptInOrder()
         {
@@ -198,6 +236,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
         [UsedInDocumentation]
+        [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
         public void Given_AnIniFileWithExistingComments_When_DeletingASection_Then_TheyAreNotDeleted()

@@ -89,6 +89,11 @@ namespace DocumentationChecker
             {
                 Console.WriteLine($"{method.Name} is documented using a wrong class name.");
             }
+
+            foreach (var undocumentedMethod in undocumentedMethods)
+            {
+                Console.WriteLine($"{GetFullMethodName(undocumentedMethod)} is not documented yet.");
+            }
         }
 
         private IEnumerable<MethodInfo> IteratableClone(List<MethodInfo> documentedMethods)
