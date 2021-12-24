@@ -58,6 +58,7 @@ Test Coverage:
 * `WhiteSpace_Tests.Given_ASectionNameWithWhitespacesBeforeTheBracket_When_TheValueIsRead_Then_TheWhitespaceIsIgnored()`
 * `WhiteSpace_Tests.Given_ASectionNameWithWhitespacesWithinTheBracket_When_TheValueIsRead_Then_TheWhitespaceIsIgnored()`
 * `WhiteSpace_Tests.Given_ASectionParameterWithSpace_When_TheValueIsRead_Then_TheSpacesAreStripped()`
+* `Concept_Transfer_Tests.Given_ASectionWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
 
 Insights:
 
@@ -70,6 +71,7 @@ Insights:
 * The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section. Tabs and vertical tabs will not be stripped from the parameter.
 * If the file has whitespace (space, tab, vertical tab, newline, carriage return) before the opening square bracket, they will be ignored.
 * If the file has whitespace (space, tab, vertical tab) inside the square bracket at the beginning or the end of the section name, these are ignored.
+* If the file has single or double quotes in the section name, these are part of the section. They cannot be used to escape spaces.
 
 > If this parameter is **NULL**, the **GetPrivateProfileString** function copies all section names in the file to the supplied buffer.
 
@@ -103,6 +105,7 @@ Test Coverage:
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInValue_When_TheValueIsRead_Then_WeGetTheSemicolon()`
 * `WhiteSpace_Tests.Given_AKeyWithSpacesBeforeAndAfter_When_TheValueIsRead_Then_TheWhitespacesAreStripped()`
 * `WhiteSpace_Tests.Given_AKeyParameterWithWhitespaces_When_TheValueIsRead_Then_TheKeyCannotBeFound()`
+* `Concept_Transfer_Tests.Given_AKeyWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
 
 Insights:
 
@@ -110,8 +113,8 @@ Insights:
 * The key can be accessed case-insensitive
 * The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the key.
 * The parameter may start with a semicolon, but no value will be found, since it will be considered as a comment. The default value will be returned.
-* Values starting with a semicolon are not comments. The value starting with the semicolon will be returned.
 * Tabs, vertical tabs, carraiage returns and newlines are not stripped from the parameter.
+* The key parameter may contain single or double quotes. They will not be stripped.
 > If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
 
 Test Coverage:
@@ -186,6 +189,7 @@ Insights:
 * It does not *retrieve the received string*. Depending on the the special parameters, the buffer contains many *string**s***, which may be keys or sections. And there's no explanation what the string delimiter is.
 * Leading blanks (space, tab and vertical tab) that exist in the file are stripped
 * Trailing blanks (space, tab and vertical tab) that exist in the file are stripped
+* Values starting with a semicolon are not comments. The value starting with the semicolon will be returned.
 
 Why could whitespace stripping be done? Probably because some people formatted their INI files in columns for "readability" like so:
 * ```ini

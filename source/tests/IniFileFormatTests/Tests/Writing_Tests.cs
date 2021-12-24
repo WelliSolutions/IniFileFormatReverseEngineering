@@ -10,7 +10,7 @@ namespace IniFileFormatTests.IntendedUse
     [TestClass]
     public class Writing_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName)]
         [Checks(Parameter.lpKeyName)]
@@ -32,7 +32,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.SUCCESS, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
@@ -47,7 +47,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
@@ -68,7 +68,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, error);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
@@ -87,7 +87,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_PATH_NOT_FOUND, error);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName)]
         [TestMethod]
@@ -101,7 +101,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertFileEqualASCII($"[{sectionNameNonLetter}]\r\n{keyname}={inivalue}\r\n", FileName);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName)]
         [TestMethod]
@@ -121,7 +121,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.SUCCESS, error);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName)]
         [TestMethod]
@@ -135,7 +135,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertFileEqualASCII($"[{sectionname}]\r\n{keyNameNonLetter}={inivalue}\r\n", FileName);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [TestMethod]
         public void Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()
@@ -151,7 +151,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual($"[{sectionname}]\r\nz=\r\na=\r\ny=\r\nb=\r\n", File.ReadAllText(FileName));
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [TestMethod]
         public void Given_AnIniFileWithExistingKeys_When_WritingKeys_Then_TheyAreKeptInOriginalOrder()

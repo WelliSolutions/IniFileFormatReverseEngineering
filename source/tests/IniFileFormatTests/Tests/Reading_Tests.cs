@@ -11,7 +11,7 @@ namespace IniFileFormatTests.IntendedUse
     [TestClass]
     public class Reading_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName)]
         [Checks(Parameter.lpKeyName)]
@@ -29,7 +29,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
@@ -52,7 +52,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length + length2, bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
@@ -72,7 +72,7 @@ namespace IniFileFormatTests.IntendedUse
 
 
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
@@ -86,7 +86,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual('\0', buffer[sectionname.Length]);
             Assert.AreEqual('\0', buffer[sectionname.Length + 1 + sectionname2.Length]);
         }
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
@@ -100,7 +100,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((uint)buffer.Length - 2, bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
@@ -115,7 +115,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((uint)buffer.Length - 2, bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
@@ -131,7 +131,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual('\0', buffer[keyname.Length + 1 + keyname2.Length]);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
@@ -153,7 +153,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length + length2, bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, null)]
         [TestMethod]
@@ -171,7 +171,7 @@ namespace IniFileFormatTests.IntendedUse
 
 
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
@@ -187,7 +187,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
@@ -203,7 +203,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
@@ -221,7 +221,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault)]
         [TestMethod]
@@ -235,7 +235,7 @@ namespace IniFileFormatTests.IntendedUse
             AssertSbEqual("", sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.nSize)]
         [Checks(Paragraph.returnValue)]
@@ -256,7 +256,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_MORE_DATA, error);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.nSize)]
         [Checks(Paragraph.returnValue)]
@@ -275,7 +275,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_MORE_DATA, error);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
@@ -290,7 +290,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
@@ -305,7 +305,7 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
