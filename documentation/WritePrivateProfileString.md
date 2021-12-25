@@ -67,6 +67,7 @@ The case independency is probably more a matter of reading than writing.
 
 Test Coverage:
 
+* `Casing_Tests.Given_AnExistingSection_When_WritingTheSectionWithUpperCase_Then_TheExistingCasingIsKept()`
 * `Writing_Tests.Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()`
 * `Writing_Tests.Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()`
 * `Writing_Tests.Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()`
@@ -80,6 +81,7 @@ Test Coverage:
 Insights:
 
 * If the section is created from scratch, it will use the casing as given.
+* If the section already exists, the casing of the existing section will be kept.
 * The section name cannot be letters only. It can also contain numbers and many special characters. Allowed characters: at least `1234567890!$%&/()=?*+#-_<>.,:;@~|\` , double quotes, single quotes, space, tab and vertical tab.
 * The section name can contain a `[`.
 * The section name can contain a `]` but that will cause problems when reading the value.
@@ -108,6 +110,7 @@ Test Coverage:
 * `Concept_Transfer_Tests.Given_AKeyParameterWithQuotes_When_TheKeyIsWritten_Then_NoQuotesAreStripped()`
 * `Writing_Tests.Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()`
 * `Writing_Tests.Given_AnIniFileWithExistingKeys_When_WritingKeys_Then_TheyAreKeptInOriginalOrder()`
+* `Casing_Tests.Given_AnExistingKey_When_WritingTheKeyWithUpperCase_Then_TheExistingCasingIsKept()` 
 
 Insights:
 
@@ -121,6 +124,7 @@ Insights:
 * When writing new keys into a section they will be appended at the end of existing keys.
 * When writing multiple new keys into the section, they are written in chronological order.
 * Existing keys are kept in their original position, even when changing them or adding new keys.
+* The casing of existing keys will be preferred.
 
 > If this parameter is **NULL**, the entire section, including all entries within the section, is deleted.
 
@@ -148,12 +152,14 @@ Test Coverage:
 * `WhiteSpace_Tests.Given_AValueParameterWithWhitespaces_When_TheValueIsWritten_Then_NothingIsEscaped()`
 * `Semicolon_Tests.Given_AValueParameterWithSemicolon_When_TheValueIsWritten_Then_TheSemicolonIsPartOfTheFile()`
 * `Semicolon_Tests.Given_AnIniFile_When_ACommentIsWrittenViaTheValueAndAnEmptyKey_Then_ItsNotAComment()`
+* `Casing_Tests.Given_AnExistingValue_When_WritingTheValueWithUpperCase_Then_ThenewValueIsUsed()` 
 
 Insights:
 
 * Whitespace will be written into the file as given (however, it will be ignored when reading).
 * Whitespace is not escaped when being written, i.e. it will get lost when reading.
 * Values starting with a semicolon are not comments. The value starting with the semicolon will be written (and returned when reading). Even when the key is an empty string.
+* The casing is updated when the same value is written with a different casing.
 
 > If this parameter is **NULL**, the key pointed to by the *lpKeyName* parameter is deleted.
 
