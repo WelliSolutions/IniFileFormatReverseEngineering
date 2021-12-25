@@ -165,11 +165,14 @@ Insights:
 
 Test Coverage:
 
-* `Writing_Tests.Given_NullAsTheStringParameter_When_UsingNullAsTheValue_Then_TheKeyIsDeleted()`
+* `Writing_Tests.Given_NullAsTheStringParameter_When_WritingTheValue_Then_TheKeyIsDeleted()`
+* `Writing_Tests.Given_NullAsTheStringParameter_When_UsingACommentAsTheKey_Then_TheCommentIsNotDeleted()`
 
 Insights:
 
 * Works as described.
+* When a section becomes empty, it is not deleted
+* You can't delete comments this way
 
 <a name="lpFileName"></a>
 

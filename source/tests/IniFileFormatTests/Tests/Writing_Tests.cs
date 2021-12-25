@@ -171,14 +171,30 @@ namespace IniFileFormatTests.IntendedUse
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpString, null)]
         [TestMethod]
-        public void Given_NullAsTheStringParameter_When_UsingNullAsTheValue_Then_TheKeyIsDeleted()
+        public void Given_NullAsTheStringParameter_When_WritingTheValue_Then_TheKeyIsDeleted()
         {
             EnsureASCII($"[{sectionname}]\r\n{keyname}={inivalue}\r\n");
 
             WritePrivateProfileStringW(sectionname, keyname, null, FileName);
 
-            // The key and the value are deleted
+            // Insight: the key and the value are deleted
+            // Insight: an empty section is not deleted
             Assert.AreEqual($"[{sectionname}]\r\n", File.ReadAllText(FileName));
+        }
+
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpString, null)]
+        [TestMethod]
+        public void Given_NullAsTheStringParameter_When_UsingACommentAsTheKey_Then_TheCommentIsNotDeleted()
+        {
+            var contents = $"[{sectionname}]\r\n;key={inivalue}\r\n";
+            EnsureASCII(contents);
+
+            WritePrivateProfileStringW(sectionname, ";key", null, FileName);
+
+            // Insight: the comment is not deleted
+            Assert.AreEqual(contents, File.ReadAllText(FileName));
         }
     }
 }
