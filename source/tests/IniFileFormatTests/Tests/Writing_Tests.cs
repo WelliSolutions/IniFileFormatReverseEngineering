@@ -166,5 +166,19 @@ namespace IniFileFormatTests.IntendedUse
             // Insight: New values are written in chronological order after the existing values
             Assert.AreEqual($"[{sectionname}]\r\nb=\r\na=\r\nz=\r\ny=\r\n", File.ReadAllText(FileName));
         }
+
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpString, null)]
+        [TestMethod]
+        public void Given_NullAsTheStringParameter_When_UsingNullAsTheValue_Then_TheKeyIsDeleted()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}={inivalue}\r\n");
+
+            WritePrivateProfileStringW(sectionname, keyname, null, FileName);
+
+            // The key and the value are deleted
+            Assert.AreEqual($"[{sectionname}]\r\n", File.ReadAllText(FileName));
+        }
     }
 }
