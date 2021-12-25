@@ -206,8 +206,8 @@ Test Coverage:
 
 Insights:
 
-* A UTF-8 BOM will break the first line of the file. If it e.g. contains a section, that section cannot be accessed. Other than that, the content will be treated as ANSI.
 * A UTF-16 Little Endian BOM will bring Unicode support to both writing methods, `WritePrivateProfileStringA()` and `WritePrivateProfileStringW()` as well as both reading methods `GetPrivateProfileStringA()` and `GetPrivateProfileStringW()`.
+* A UTF-8 BOM will break the first line of the file. If it e.g. contains a section, that section cannot be accessed. Other than that, the content will be treated as ANSI.
 * A UTF-16 Big Endian BOM will result in ANSI characters being written.
 
 <a name="returnValue"></a>
@@ -215,6 +215,8 @@ Insights:
 ## Return Value
 
 >  If the function successfully copies the string to the initialization file, the return value is nonzero.
+
+The return type is `BOOL` and 0 = false.
 
 Test Coverage:
 
