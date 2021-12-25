@@ -10,7 +10,7 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF16LE_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
@@ -28,7 +28,7 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Method.WritePrivateProfileStringA)]
         [Checks(Parameter.lpFileName)]

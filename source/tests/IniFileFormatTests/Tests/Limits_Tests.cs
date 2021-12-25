@@ -47,7 +47,7 @@ namespace IniFileFormatTests.Limits
             return new Result(bytes, error, buffer2.ToString().Length);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65534_When_AccessingIt_Then_WeGetTheFullValue()
@@ -59,7 +59,7 @@ namespace IniFileFormatTests.Limits
             Assert.AreEqual((uint)65534, result.Bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()
@@ -71,7 +71,7 @@ namespace IniFileFormatTests.Limits
             Assert.AreEqual((uint)65535, result.Bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65536_When_AccessingIt_Then_WeGetNothingAndNoError()
@@ -83,7 +83,7 @@ namespace IniFileFormatTests.Limits
             Assert.AreEqual((uint)0, result.Bytes);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.nSize)]
         [TestMethod]
         public void Given_AValueOfLength65537_When_AccessingIt_Then_WeGetModuloBehavior()
@@ -98,7 +98,7 @@ namespace IniFileFormatTests.Limits
             Assert.AreEqual(1, result.Length);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()
@@ -112,7 +112,7 @@ namespace IniFileFormatTests.Limits
             Assert.AreEqual((int)GetLastError.ERROR_PATH_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.lpAppName, null)]
         [TestMethod]
         public void Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()

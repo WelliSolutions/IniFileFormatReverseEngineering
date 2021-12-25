@@ -8,7 +8,7 @@ namespace IniFileFormatTests.Limits
     [TestClass]
     public class EdgeCases_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionWithNoName_When_UsingEmptyString_Then_WeGetTheValue()
@@ -22,7 +22,7 @@ namespace IniFileFormatTests.Limits
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_AnEmptySectionName_When_WritingAValue_Then_ASectionWithoutNameIsCreated()

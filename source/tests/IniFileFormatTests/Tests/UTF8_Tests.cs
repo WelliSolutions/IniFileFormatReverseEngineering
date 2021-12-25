@@ -10,7 +10,7 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF8_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Method.WritePrivateProfileStringA)]
         [Checks(Parameter.lpFileName)]
@@ -38,7 +38,7 @@ namespace IniFileFormatTests.Encodings
             Assert.AreEqual((int)WindowsAPI.GetLastError.SUCCESS, error);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [TestMethod]
         public void Given_AFileWithUTF8BOM_When_ReadingTheContent_Then_TheFirstLineIsBroken()
