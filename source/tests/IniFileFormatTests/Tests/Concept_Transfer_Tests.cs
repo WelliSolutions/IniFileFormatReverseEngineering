@@ -17,7 +17,7 @@ namespace IniFileFormatTests
         /// Reasoning: quotes are stripped from values when reading.
         /// This test checks if they are also stripped from keys.
         /// </summary>
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, "'\"")]
         [TestMethod]
@@ -43,7 +43,7 @@ namespace IniFileFormatTests
         /// Reasoning: quotes are stripped from values when reading.
         /// This test checks if they are also stripped from sections.
         /// </summary>
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, "'\"")]
         [Checks(FileContent.lpString, "'\"")]

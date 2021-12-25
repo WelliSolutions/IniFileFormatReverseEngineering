@@ -12,7 +12,7 @@ namespace IniFileFormatTests.SpecialCharacters
     public class WhiteSpace_Tests : IniFileTestBase
     {
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault, " ")]
         [TestMethod]
@@ -30,7 +30,7 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(defaultValue.TrimEnd(), sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpDefault, "\t\v\r\n")]
         [TestMethod]
@@ -50,7 +50,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpString, " \t\v")]
         [TestMethod]
@@ -69,7 +69,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpString, " \t\v\r\n")]
         [TestMethod]
@@ -90,7 +90,7 @@ namespace IniFileFormatTests.SpecialCharacters
         /// Whitespaces can be escaped using quotation marks. This does not happen when writing a value.
         /// <see cref="Quotes_Tests"/>
         /// </summary>
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpString, " \t\v\r\n")]
         [TestMethod]
@@ -107,7 +107,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName, " ")]
         [TestMethod]
@@ -134,7 +134,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName, "\t\r\n\v")]
         [TestMethod]
@@ -153,7 +153,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, " ")]
         [TestMethod]
@@ -181,7 +181,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, "\t\v\r\n")]
         [TestMethod]
@@ -201,7 +201,7 @@ namespace IniFileFormatTests.SpecialCharacters
         }
 
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpAppName, " \t\v\r\n")]
         [TestMethod]
@@ -220,7 +220,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpAppName, " \t\v")]
         [TestMethod]
@@ -239,7 +239,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, " ")]
         [TestMethod]
@@ -257,7 +257,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpAppName, "\t\v")]
         [TestMethod]
@@ -275,7 +275,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(FileContent.lpKeyName, " \t\v")]
         [TestMethod]
@@ -295,7 +295,7 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Method.GetPrivateProfileStringW)]
         [Checks(Parameter.lpKeyName, "\t\v\r\n")]
         [TestMethod]
