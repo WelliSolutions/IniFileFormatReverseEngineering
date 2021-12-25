@@ -60,6 +60,8 @@ Analysis of [WritePrivateProfileString()](documentation/WritePrivateProfileStrin
 
 Analysis of [Comments](documentation/Comments.md)
 
+Analysis of [Registry Redirection](documentation/RegistryRedirection.md)
+
 ## References
 
 * [English Wikipedia about the INI-file](https://en.wikipedia.org/wiki/INI_file)
