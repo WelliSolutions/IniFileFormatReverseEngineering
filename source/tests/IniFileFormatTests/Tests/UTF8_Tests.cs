@@ -10,14 +10,16 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF8_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Method.WritePrivateProfileStringA)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileWithUTF8BOM_When_WritingToTheFile_Then_WeGetReplacementCharacters()
         {
             File.WriteAllText(FileName, "", Encoding.UTF8);
             var unicodeCharacters = "§€°´²³";
-            var result = WritePrivateProfileString(unicodeCharacters, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(unicodeCharacters, keyname, inivalue, FileName);
 
             // Insight: UTF-8 does not help
             string unicodeContent = File.ReadAllText(FileName);
@@ -36,7 +38,8 @@ namespace IniFileFormatTests.Encodings
             Assert.AreEqual((int)WindowsAPI.GetLastError.SUCCESS, error);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
         [TestMethod]
         public void Given_AFileWithUTF8BOM_When_ReadingTheContent_Then_TheFirstLineIsBroken()
         {

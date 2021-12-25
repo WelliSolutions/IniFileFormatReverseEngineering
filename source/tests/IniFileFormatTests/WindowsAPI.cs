@@ -119,7 +119,7 @@ namespace IniFileFormatTests
         /// If the function fails, or if it flushes the cached version of the most recently accessed initialization file, the return value is zero.To get extended error information, call GetLastError.</returns>
         [DllImport("kernel32.dll", EntryPoint = "WritePrivateProfileStringW", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool WritePrivateProfileString(
+        public static extern bool WritePrivateProfileStringW(
             string lpAppName,
             string lpKeyName,
             string lpString,

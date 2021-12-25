@@ -11,35 +11,52 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class SquareBracket_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpAppName, "[")]
+        [Checks(FileContent.lpAppName, "[")]
         [TestMethod]
-        public void Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()
+        public void Given_ASectionParameterWithOpeningBracket_When_TheValueIsRead_Then_WeGetTheExpectedValue()
         {
             EnsureDeleted();
             var square = "[sec";
-            WritePrivateProfileString(square, keyname, inivalue, FileName);
-
-            // Insight: the section name is written as given, no special handling for opening square bracket
-            Assert.AreEqual("[" + square + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());
+            EnsureASCII($"[{square}]\r\n{keyname}={inivalue}\r\n");
 
             var sb = DefaultStringBuilder();
 
-            // Insight: the section name can be accessed again.
+            // Insight: the section name can be accessed
             // Parsing of the section name does not seem to restart at the [ opening square bracket.
-            var bytes = GetIniString_SB_Unicode(square, keyname, null, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(square, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength(inivalue, bytes);
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpAppName, "[")]
+        [TestMethod]
+        public void Given_ASectionParameterWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()
+        {
+            EnsureDeleted();
+            var square = "[sec";
+            WritePrivateProfileStringW(square, keyname, inivalue, FileName);
+
+            // Insight: the section name is written as given, no special handling for opening square bracket
+            Assert.AreEqual("[" + square + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());
+        }
+
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpAppName, "]")]
+        [Checks(FileContent.lpAppName, "]")]
         [TestMethod]
         public void Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()
         {
             EnsureDeleted();
             var whoops = "sec]whoops";
-            WritePrivateProfileString(whoops, keyname, inivalue, FileName);
+            WritePrivateProfileStringW(whoops, keyname, inivalue, FileName);
 
             // Insight: the section name is written as given, no special handling for the ] closing square bracket
             Assert.AreEqual("[" + whoops + "]\r\n" + keyname + "=" + inivalue + "\r\n", ReadIniFile());
@@ -57,7 +74,9 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpAppName, "\r\n")]
         [TestMethod]
         public void Given_KeyValueBehindClosingSquareBracket_When_WeTryToAccessTheValue_Then_WeDontGetTheValue()
         {
@@ -71,7 +90,9 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpAppName, "")]
         [TestMethod]
         public void Given_AValueWithoutAnySection_When_WeTryToAccessIt_Then_WeDontGetTheValue()
         {
@@ -92,7 +113,9 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpAppName, "]")]
         [TestMethod]
         public void Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()
         {
@@ -105,7 +128,9 @@ namespace IniFileFormatTests.SpecialCharacters
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpAppName, "[")]
         [TestMethod]
         public void Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()
         {

@@ -1,10 +1,15 @@
 # Comments
 
+Jump to [Hashtag comments](#hashtag), [Where do comments belong to?](#belong), [What else do we know about comments?](#else)
+
+## Microsoft-compliant comments
+
 I have read the following Microsoft documentation carefully and I did not come across a definition of comments in INI files:
 
 * [GetPrivateProfileString() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestring) 
 * [GetPrivateProfileStringA() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestringa)
 * [GetPrivateProfileStringW() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestringw)
+* [WritePrivateProfileStringA() [MSDN]](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-writeprivateprofilestringa)
 
 Still, [Wikipedia claims](https://en.wikipedia.org/wiki/INI_file#Comments):
 
@@ -65,6 +70,8 @@ this is=#not a comment
 [section]this is=a comment
 ```
 
+<a name="hashtag"></a>
+
 ## Hashtags and other comment specifiers
 
 Test coverage:
@@ -84,6 +91,7 @@ This applies for all other characters as well, so you could try C++ comments (`/
 
 If, however, the application queries all keys by [specifying `null` for `lpKeyName`](documentation/GetPrivateProfileString.md#lpKeyName), your value will be found unless it uses a semicolon (`;`).
 
+<a name="belong"></a>
 ## Where do comments belong to?
 
 Another potential issue with comments is, where they belong to. We don't have inline comments, so we have to choose whether to write comments above or below the line the comment belongs to. This might be important to know when keys or sections are deleted.
@@ -99,3 +107,28 @@ Key1=Value1
 [Section2]
 ```
 
+Test Coverage:
+
+* `Semicolon_Tests.Given_AnIniFileWithExistingComments_When_DeletingASection_Then_TheyAreNotDeleted()`
+* `Semicolon_Tests.Given_AnIniFile_When_ATwoCommentsAreWritten_Then_TheLatterOneIsFirst()`
+
+Insights:
+
+* Since comments are not deleted, we could say: all comments belong to the file, not to a section
+* But, when writing a comment, it is placed below the section it's written to
+
+<a name="else"></a>
+## What else do we know about comments?
+
+Test Coverage:
+
+* `Semicolon_Tests.Given_AnIniFile_When_ACommentIsWrittenTwice_Then_TheFileContainsBoth()()`
+* `Semicolon_Tests.Given_AnIniFile_When_ATwoCommentsAreWritten_Then_TheLatterOneIsFirst()`
+* `Semicolon_Tests.Given_AnIniFileWithExistingComments_When_Writing_Then_TheyAreKeptInOrder()`
+
+Insights:
+
+* Identical comments will be written twice when using the API
+* When writing new comments into a section, they appear after the last value of the section
+* When writing multiple comments, the later ones appear in front of the earlier ones
+* If comments already exist, they are kept in their original position

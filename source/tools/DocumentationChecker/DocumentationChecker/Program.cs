@@ -8,6 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DocumentationChecker
 {
+    class Documentation
+    {
+        public MethodInfo Method;
+        public List<FileInfo> Files = new List<FileInfo>();
+    }
+
     class Program
     {
         static void Main()
@@ -20,6 +26,7 @@ namespace DocumentationChecker
             LoadTestAssemblyForReflection();
             var testMethods = GetTestMethods().ToList();
             var documentedMethods = GetDocumentedMethods(testMethods).ToList();
+            var documentedInFile = documentedMethods.Select(m => new Documentation() { Method = m }).ToList();
             var undocumentedMethods = testMethods.Except(documentedMethods).ToList();
             var notUndocumentedMethods = new List<MethodInfo>();
             var missingParens = new List<MethodInfo>();
@@ -31,43 +38,15 @@ namespace DocumentationChecker
             foreach (var markdownFile in markdownFiles)
             {
                 var markdown = File.ReadAllText(markdownFile.FullName);
-                foreach (var documentedMethod in IteratableClone(documentedMethods))
-                {
-                    if (markdown.Contains(GetFullMethodName(documentedMethod) + "()"))
-                    {
-                        documentedMethods.Remove(documentedMethod);
-                    }
-                    else if (markdown.Contains(GetFullMethodName(documentedMethod)))
-                    {
-                        documentedMethods.Remove(documentedMethod);
-                        missingParens.Add(documentedMethod);
-                    }
-                    else if (markdown.Contains(documentedMethod.Name))
-                    {
-                        documentedMethods.Remove(documentedMethod);
-                        wrongClassName.Add(documentedMethod);
-                    }
-                }
+                RemoveIfDocumented(documentedMethods, markdown);
+                RemoveIfMissingParentheses(documentedMethods, markdown, missingParens);
+                RemoveIfWrongClassName(documentedMethods, markdown, wrongClassName);
 
-                foreach (var undocumentedMethod in IteratableClone(undocumentedMethods))
-                {
-                    if (markdown.Contains(GetFullMethodName(undocumentedMethod) + "()"))
-                    {
-                        notUndocumentedMethods.Add(undocumentedMethod);
-                        undocumentedMethods.Remove(undocumentedMethod);
-                    }
-                    else if (markdown.Contains(GetFullMethodName(undocumentedMethod)))
-                    {
-                        notUndocumentedMethods.Add(undocumentedMethod);
-                        undocumentedMethods.Remove(undocumentedMethod);
-                        missingParens.Add(undocumentedMethod);
-                    }
-                    else if (markdown.Contains(undocumentedMethod.Name))
-                    {
-                        notUndocumentedMethods.Add(undocumentedMethod);
-                        wrongClassName.Add(undocumentedMethod);
-                    }
-                }
+                CheckDocumentationFile(documentedInFile, markdown, markdownFile);
+
+                RemoveIfUndocumented(undocumentedMethods, markdown, notUndocumentedMethods);
+                RemoveIfUndocumentedMissingParentheses(undocumentedMethods, markdown, notUndocumentedMethods, missingParens);
+                RemoveIfUndocumentedWrongClassName(undocumentedMethods, markdown, notUndocumentedMethods, wrongClassName);
             }
 
             foreach (var documentedMethod in documentedMethods)
@@ -88,6 +67,118 @@ namespace DocumentationChecker
             foreach (var method in wrongClassName)
             {
                 Console.WriteLine($"{method.Name} is documented using a wrong class name.");
+            }
+
+            foreach (var undocumentedMethod in undocumentedMethods)
+            {
+                Console.WriteLine($"{GetFullMethodName(undocumentedMethod)} is not documented yet.");
+            }
+
+            foreach (var documentation in documentedInFile)
+            {
+                if (documentation.Files.Count > 0)
+                    Console.WriteLine($"{GetFullMethodName(documentation.Method)} is missing filename ...");
+                foreach (var file in documentation.Files)
+                {
+                    Console.WriteLine($"     [UsedInDocumentation(\"{file.Name}\")]");
+                }
+            }
+        }
+
+        private void RemoveIfUndocumentedWrongClassName(List<MethodInfo> undocumentedMethods, string markdown, List<MethodInfo> notUndocumentedMethods,
+            List<MethodInfo> wrongClassName)
+        {
+            foreach (var undocumentedMethod in IteratableClone(undocumentedMethods))
+            {
+                if (markdown.Contains(undocumentedMethod.Name))
+                {
+                    notUndocumentedMethods.Add(undocumentedMethod);
+                    wrongClassName.Add(undocumentedMethod);
+                }
+            }
+        }
+
+        private void RemoveIfUndocumentedMissingParentheses(List<MethodInfo> undocumentedMethods, string markdown,
+            List<MethodInfo> notUndocumentedMethods, List<MethodInfo> missingParens)
+        {
+            foreach (var undocumentedMethod in IteratableClone(undocumentedMethods))
+            {
+                if (markdown.Contains(GetFullMethodName(undocumentedMethod)))
+                {
+                    notUndocumentedMethods.Add(undocumentedMethod);
+                    undocumentedMethods.Remove(undocumentedMethod);
+                    missingParens.Add(undocumentedMethod);
+                }
+            }
+        }
+
+        private void RemoveIfUndocumented(List<MethodInfo> undocumentedMethods, string markdown, List<MethodInfo> notUndocumentedMethods)
+        {
+            foreach (var undocumentedMethod in IteratableClone(undocumentedMethods))
+            {
+                if (markdown.Contains(GetFullMethodName(undocumentedMethod) + "()"))
+                {
+                    notUndocumentedMethods.Add(undocumentedMethod);
+                    undocumentedMethods.Remove(undocumentedMethod);
+                }
+            }
+        }
+
+        private static void CheckDocumentationFile(List<Documentation> documentedInFile, string markdown, FileInfo markdownFile)
+        {
+            foreach (var doc in documentedInFile)
+            {
+                if (markdown.Contains(GetFullMethodName(doc.Method)))
+                {
+                    // Check if method is already marked
+                    bool hasFileName = false;
+                    var attrs = doc.Method.GetCustomAttributes(typeof(UsedInDocumentation), true);
+                    foreach (var a in attrs)
+                    {
+                        var u = (UsedInDocumentation)a;
+                        hasFileName |= u.File == markdownFile.Name;
+                    }
+
+                    if (!hasFileName)
+                    {
+                        doc.Files.Add(markdownFile);
+                    }
+                }
+            }
+        }
+
+        private void RemoveIfWrongClassName(List<MethodInfo> documentedMethods, string markdown, List<MethodInfo> wrongClassName)
+        {
+            foreach (var documentedMethod in IteratableClone(documentedMethods))
+            {
+                if (markdown.Contains(documentedMethod.Name))
+                {
+                    documentedMethods.Remove(documentedMethod);
+                    wrongClassName.Add(documentedMethod);
+                }
+            }
+        }
+
+        private void RemoveIfMissingParentheses(List<MethodInfo> documentedMethods, string markdown, List<MethodInfo> missingParens)
+        {
+            foreach (var documentedMethod in IteratableClone(documentedMethods))
+            {
+                if (markdown.Contains(GetFullMethodName(documentedMethod)))
+                {
+                    documentedMethods.Remove(documentedMethod);
+                    missingParens.Add(documentedMethod);
+                }
+            }
+        }
+
+        private void RemoveIfDocumented(List<MethodInfo> documentedMethods, string markdown)
+        {
+            foreach (var documentedMethod in IteratableClone(documentedMethods))
+            {
+                if (markdown.Contains(GetFullMethodName(documentedMethod) + "()"))
+                {
+                    documentedMethods.Remove(documentedMethod);
+                }
             }
         }
 

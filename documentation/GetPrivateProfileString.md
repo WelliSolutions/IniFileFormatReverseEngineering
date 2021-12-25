@@ -48,22 +48,30 @@ Test Coverage:
 
 * `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
 * `Casing_Tests.Given_AnSectionWithUpperCaseLetters_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
-* `SquareBracket_Tests.Given_ASectionNameWithOpeningBracket_When_TheValueIsAccessed_Then_WeGetTheExpectedValue()`
+* `SquareBracket_Tests.Given_ASectionParameterWithOpeningBracket_When_TheValueIsRead_Then_WeGetTheExpectedValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithClosingBracket_When_TheContentIsAccessed_Then_WeDontGetTheValue()`
 * `EdgeCases_Tests.Given_ASectionWithNoName_When_UsingEmptyString_Then_WeGetTheValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithMissingClosingBracket_When_WeAccessAKey_Then_WeGetTheValue()`
 * `SquareBracket_Tests.Given_ASectionNameWithMissingOpeningBracket_When_WeAccessAKey_Then_WeDontGetTheValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
+* `WhiteSpace_Tests.Given_ASectionParameterWithTabs_When_TheValueIsRead_Then_TheTabsAreNotStripped()`
+* `WhiteSpace_Tests.Given_ASectionNameWithWhitespacesBeforeTheBracket_When_TheValueIsRead_Then_TheWhitespaceIsIgnored()`
+* `WhiteSpace_Tests.Given_ASectionNameWithWhitespacesWithinTheBracket_When_TheValueIsRead_Then_TheWhitespaceIsIgnored()`
+* `WhiteSpace_Tests.Given_ASectionParameterWithSpace_When_TheValueIsRead_Then_TheSpacesAreStripped()`
+* `Concept_Transfer_Tests.Given_ASectionWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
 
 Insights:
 
-* Basically, this functionality works as expected
-* The section can be accessed case-insensitive
-* The section name can be an empty string
+* Basically, this functionality works as expected.
+* The section can be accessed case-insensitive.
+* The section name can be an empty string.
 * The section name can contain an opening square bracket. It will be part of the section name.
 * The section name must not contain a closing square bracket. Parsing of the section name stops at the first closing square bracket.
 * The section in the file needn't have a closing square bracket. Parsing of the section name will also end at the linebreak.
-* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section.
+* The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the section. Tabs and vertical tabs will not be stripped from the parameter.
+* If the file has whitespace (space, tab, vertical tab, newline, carriage return) before the opening square bracket, they will be ignored.
+* If the file has whitespace (space, tab, vertical tab) inside the square bracket at the beginning or the end of the section name, these are ignored.
+* If the file has single or double quotes in the section name, these are part of the section. They cannot be used to escape spaces.
 
 > If this parameter is **NULL**, the **GetPrivateProfileString** function copies all section names in the file to the supplied buffer.
 
@@ -93,8 +101,11 @@ Test Coverage:
 * `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
 * `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
-* `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonAtBeginOfKey_When_TheContentIsAccessed_Then_WeGetTheDefaultValue()`
-* `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInValue_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
+* `Semicolon_Tests.Given_AnIniFileWithSemicolonAtBeginOfKey_When_TheValueIsRead_Then_WeGetTheDefaultValue()`
+* `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInValue_When_TheValueIsRead_Then_WeGetTheSemicolon()`
+* `WhiteSpace_Tests.Given_AKeyWithSpacesBeforeAndAfter_When_TheValueIsRead_Then_TheWhitespacesAreStripped()`
+* `WhiteSpace_Tests.Given_AKeyParameterWithWhitespaces_When_TheValueIsRead_Then_TheKeyCannotBeFound()`
+* `Concept_Transfer_Tests.Given_AKeyWithQuotes_When_TheKeyIsUsed_Then_NoQuotesAreStripped()`
 
 Insights:
 
@@ -102,7 +113,8 @@ Insights:
 * The key can be accessed case-insensitive
 * The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the key.
 * The parameter may start with a semicolon, but no value will be found, since it will be considered as a comment. The default value will be returned.
-* Values starting with a semicolon are not comments. The value starting with the semicolon will be returned.
+* Tabs, vertical tabs, carraiage returns and newlines are not stripped from the parameter.
+* The key parameter may contain single or double quotes. They will not be stripped.
 > If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
 
 Test Coverage:
@@ -151,7 +163,7 @@ This stripping of "blanks" requires us to conduct a set of additional whitespace
 
 Test Coverage:
 
-* `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheDefaultValueHasTrailingBlanks_Then_TheseBlanksAreStripped()` 
+* `WhiteSpace_Tests.Given_ADefaultValueWithSpaces_When_TheDefaultValueIsReturned_Then_TrailingSpacesAreStripped()` 
 * `WhiteSpace_Tests.Given_ADefaultValueWithTrailingWhitespace_When_TheDefaultValueIsReturned_Then_OnlySpacesAreStripped()`
 
 Insights:
@@ -169,7 +181,7 @@ For all the C# programmers out there: `[out]` is not identical to `out` paramete
 
 Test Coverage:
 * `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_TrailingSpacesAreStripped()`
-* `WhiteSpace_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_BlanksAreStripped()`
+* `WhiteSpace_Tests.Given_AValueWithWhitespace_When_TheValueIsRead_Then_WhitespaceIsStripped()`
 
 Insights:
 
@@ -177,6 +189,7 @@ Insights:
 * It does not *retrieve the received string*. Depending on the the special parameters, the buffer contains many *string**s***, which may be keys or sections. And there's no explanation what the string delimiter is.
 * Leading blanks (space, tab and vertical tab) that exist in the file are stripped
 * Trailing blanks (space, tab and vertical tab) that exist in the file are stripped
+* Values starting with a semicolon are not comments. The value starting with the semicolon will be returned.
 
 Why could whitespace stripping be done? Probably because some people formatted their INI files in columns for "readability" like so:
 * ```ini
@@ -222,9 +235,9 @@ Insights:
 
 Test Coverage:
 
-* `Reading.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
-* `Reading.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
-* `Reading.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `Reading_Tests.Given_AnInvalidFileName_When_ReadingFromTheFile_Then_WeGetAnError()`
+* `Reading_Tests.Given_AFileNameWithoutExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
+* `Reading_Tests.Given_AFileNameWithArbitraryExtension_When_ReadingFromTheFile_Then_WeGetTheValue()`
 * `UTF16LE_Tests.Given_AFileWithUTF16BOM_When_ReadingTheContent_Then_WeHaveUnicodeSupport()`
 * `UTF8_Tests.Given_AFileWithUTF8BOM_When_ReadingTheContent_Then_TheFirstLineIsBroken()`
 * `UTF16BE_Tests.Given_UTF16BEBOM_When_ReadingTheContent_Then_WeGetTheDefaultValue()`
@@ -247,7 +260,7 @@ There are not many INI files in the Windows directory any more. There is still `
 
 Test Coverage:
 
-* `Limits_Test.Given_ALongFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()`
+* `Limits_Tests.Given_AFileNameTooLong_When_ReadingFromTheFile_Then_ThePathIsNotFound()`
 
 Insights:
 
@@ -288,7 +301,7 @@ Test Coverage:
 
 * `Reading_Tests.Given_ATooSmallBuffer_When_NullIsUsedForSectionName_Then_SizeIsBytesMinusTwo()`
 * `Reading_Tests.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsBytesMinusTwo()`
-* `Limits_Test.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()` 
+* `Limits_Tests.Given_ATooSmallBuffer_When_NullIsUsedForKeyName_Then_SizeIsNotNegative()` 
 
 Insights:
 

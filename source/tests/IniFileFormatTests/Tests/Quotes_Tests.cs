@@ -8,22 +8,26 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Quotes_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpReturnedString, " '\"")]
+        [Checks(FileContent.lpString, " '\"")]
         [TestMethod]
         public void Given_AValueWithDifferentQuotes_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
         {
             EnsureASCII($"[{sectionname}]\r\n{keyname}=  \"   {inivalue}   \'  \r\n");
             var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
 
             // Insight: no quotes are stripped
             AssertASCIILength("\"   " + inivalue + "   \'", bytes);
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpReturnedString, " \"")]
+        [Checks(FileContent.lpString, " \"")]
         [TestMethod]
         public void Given_AValueWithDoubleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
         {
@@ -38,8 +42,10 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpReturnedString, " '")]
+        [Checks(FileContent.lpString, " '")]
         [TestMethod]
         public void Given_AValueWithSingleQuotationMarks_When_TheValueIsRetrieved_Then_TheQuotesAreStripped()
         {
@@ -54,8 +60,10 @@ namespace IniFileFormatTests.SpecialCharacters
             Assert.AreEqual(0, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpReturnedString, " '\"")]
+        [Checks(FileContent.lpString, " '\"")]
         [TestMethod]
         public void Given_AValueWithQuotesInQuotes_When_TheValueIsRetrieved_Then_TheOutermostQuotesAreStripped()
         {
@@ -76,8 +84,10 @@ namespace IniFileFormatTests.SpecialCharacters
             }
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpReturnedString")]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpReturnedString, " '\"")]
+        [Checks(FileContent.lpString, " '\"")]
         [TestMethod]
         public void Given_AValueWithQuotesInWrongOrder_When_TheValueIsRetrieved_Then_NoQuotesAreStripped()
         {

@@ -12,26 +12,30 @@ namespace IniFileFormatTests.SpecialCharacters
     [TestClass]
     public class Hashtag_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpString, "#")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithHashtagInValue_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, keyname, "#nocomment", FileName);
+            WritePrivateProfileStringW(sectionname, keyname, "#nocomment", FileName);
 
             // Insight: Hashtag in value is not a comment
             var sb = DefaultStringBuilder();
-            var bytes = GetIniString_SB_Unicode(sectionname, keyname, null, sb, (uint)sb.Capacity, FileName);
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength("#nocomment", bytes);
             AssertSbEqual("#nocomment", sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("Comments.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(FileContent.lpString, "#")]
         [TestMethod]
         public void Given_AnIniFileWrittenWithHashtagInKey_When_TheContentIsAccessed_Then_WeGetTheHashtag()
         {
             EnsureDeleted();
-            WritePrivateProfileString(sectionname, "#comment", defaultvalue, FileName);
+            WritePrivateProfileStringW(sectionname, "#comment", defaultvalue, FileName);
 
             // Insight: Hashtag in key is not a comment
             var sb = DefaultStringBuilder();

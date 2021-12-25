@@ -16,7 +16,7 @@ namespace IniFileFormatTests
         {
             EnsureDeleted();
             var twosections = "sec][sec2]";
-            WritePrivateProfileString(twosections, keyname, defaultvalue, FileName);
+            WritePrivateProfileStringW(twosections, keyname, defaultvalue, FileName);
             Assert.AreEqual("[" + twosections + "]\r\n" + keyname + "=" + defaultvalue + "\r\n", ReadIniFile());
 
             var sb = DefaultStringBuilder();
@@ -47,7 +47,7 @@ namespace IniFileFormatTests
         {
             EnsureDeleted();
             var twosections = "sec]\r\n[sec2]";
-            WritePrivateProfileString(twosections, keyname, defaultvalue, FileName);
+            WritePrivateProfileStringW(twosections, keyname, defaultvalue, FileName);
             // Insight: newlines will not be stripped when writing
             Assert.AreEqual("[" + twosections + "]\r\n" + keyname + "=" + defaultvalue + "\r\n", ReadIniFile());
 
@@ -69,7 +69,7 @@ namespace IniFileFormatTests
         public void Given_ASectionNameMakingUpANewKeyValuePair_When_TheFakeKeyIsAccessed_Then_WeGetTheFakeValue()
         {
             EnsureDeleted();
-            WritePrivateProfileString("sec]\r\nkey=value", keyname, defaultvalue, FileName);
+            WritePrivateProfileStringW("sec]\r\nkey=value", keyname, defaultvalue, FileName);
 
             var sb = DefaultStringBuilder();
 
@@ -80,7 +80,7 @@ namespace IniFileFormatTests
 
             // Sure enough we're able to work around that ..., but then we have a dangling ] on the next line
             EnsureDeleted();
-            WritePrivateProfileString("sec]\r\nkey=value\r\n", keyname, defaultvalue, FileName);
+            WritePrivateProfileStringW("sec]\r\nkey=value\r\n", keyname, defaultvalue, FileName);
             bytes = GetIniString_SB_Unicode("sec", "key", null, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength("value", bytes);
             AssertSbEqual("value", sb);

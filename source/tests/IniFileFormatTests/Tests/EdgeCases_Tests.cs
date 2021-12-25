@@ -8,8 +8,8 @@ namespace IniFileFormatTests.Limits
     [TestClass]
     public class EdgeCases_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionWithNoName_When_UsingEmptyString_Then_WeGetTheValue()
         {
@@ -22,13 +22,13 @@ namespace IniFileFormatTests.Limits
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_AnEmptySectionName_When_WritingAValue_Then_ASectionWithoutNameIsCreated()
         {
             EnsureEmptyASCII();
-            WritePrivateProfileString("", keyname, inivalue, FileName);
+            WritePrivateProfileStringW("", keyname, inivalue, FileName);
 
             // Insight: a section with no name can be written to
             Assert.AreEqual($"[]\r\n{keyname}={inivalue}\r\n", File.ReadAllText(FileName));

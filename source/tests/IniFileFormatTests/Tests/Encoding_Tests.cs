@@ -20,7 +20,7 @@ namespace IniFileFormatTests.Encodings
         {
             EnsureDeleted();
             var unicode = "Unicode❤︎";
-            var result = WritePrivateProfileString(sectionname, keyname, unicode, FileName);
+            var result = WritePrivateProfileStringW(sectionname, keyname, unicode, FileName);
             Assert.IsTrue(result);
 
             // Insight: question marks have been written

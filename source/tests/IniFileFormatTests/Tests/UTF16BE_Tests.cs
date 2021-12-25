@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,7 +17,8 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF16BE_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
         [TestMethod]
         public void Given_UTF16BEBOM_When_ReadingTheContent_Then_WeGetTheDefaultValue()
         {
@@ -32,7 +34,8 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
         [TestMethod]
         public void Given_UTF16BEBOMAndLineBreak_When_ReadingTheContent_Then_WeGetTheDefaultValue()
         {
@@ -48,29 +51,28 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(defaultvalue, sb);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_UTF16BEBOM_When_WritingToTheFile_Then_ContentIsANSI()
         {
             File.WriteAllText(FileName, "\r\n", Encoding.BigEndianUnicode);
-            var unicodeCharacters = "§€°´²³";
-            unicodeCharacters = "abcdef";
-            var result = WritePrivateProfileString(unicodeCharacters, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
 
             // Insight: That does not work with ...W()
             var bytes = File.ReadAllBytes(FileName); // Note: File.ReadAllText() has BOM detection
             var ascii = Encoding.ASCII.GetString(bytes);
-            Assert.AreEqual($"??\0\r\0\n[{unicodeCharacters}]\r\n{keyname}={inivalue}\r\n", ascii);
+            Assert.AreEqual($"??\0\r\0\n[{sectionname}]\r\n{keyname}={inivalue}\r\n", ascii);
             Assert.IsTrue(result);
             var error = Marshal.GetLastWin32Error();
             Assert.AreEqual((int)GetLastError.SUCCESS, error);
 
             // Insight: the same applies to the ...A() method
-            result = WritePrivateProfileStringA(unicodeCharacters, keyname, inivalue, FileName);
+            result = WritePrivateProfileStringA(sectionname, keyname, inivalue, FileName);
             bytes = File.ReadAllBytes(FileName);
             ascii = Encoding.ASCII.GetString(bytes);
-            Assert.AreEqual($"??\0\r\0\n[{unicodeCharacters}]\r\n{keyname}={inivalue}\r\n", ascii);
+            Assert.AreEqual($"??\0\r\0\n[{sectionname}]\r\n{keyname}={inivalue}\r\n", ascii);
             Assert.IsTrue(result);
             error = Marshal.GetLastWin32Error();
             Assert.AreEqual((int)GetLastError.SUCCESS, error);

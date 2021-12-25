@@ -10,16 +10,17 @@ namespace IniFileFormatTests.IntendedUse
     [TestClass]
     public class Writing_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
-        [TestsApiParameter("lpKeyName")]
-        [TestsApiParameter("lpString")]
-        [TestsApiParameter("lpFileName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpAppName)]
+        [Checks(Parameter.lpKeyName)]
+        [Checks(Parameter.lpString)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()
         {
             EnsureEmptyASCII();
-            var result = WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
 
             // Insight: the section is enclosed in square brackets
             // Insight: Windows line endings are used
@@ -31,13 +32,14 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.SUCCESS, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_ANonExistingFile_When_AValueIsWritten_Then_TheFileIsCreated()
         {
             EnsureDeleted();
-            var result = WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
 
             // Insight: The file is created
             Assert.IsTrue(File.Exists(FileName));
@@ -45,13 +47,14 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, Marshal.GetLastWin32Error());
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_ANonExistingFileInWindowsDirectory_When_AValueIsWritten_Then_WeGetAFileNotFoundError()
         {
             FileName = "createme.ini";
-            var result = WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
 
             // Insight: The file is not created
             var windir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
@@ -65,13 +68,14 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, error);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileInANonExistingDirectory_When_AValueIsWritten_Then_WeGetAPathNotFoundError()
         {
             FileName = Path.Combine(Path.GetTempPath(), @"subdir\file.ini");
-            var result = WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
 
             // Insight: the subdirectory (and the file) is not created
             Assert.IsFalse(File.Exists(FileName));
@@ -83,25 +87,28 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.ERROR_PATH_NOT_FOUND, error);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpAppName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
         {
             EnsureEmptyASCII();
             var sectionNameNonLetter = "1234567890!$%&/()=?*+#-_<>.,:;@~\"\'|`\\ \t\v";
-            WritePrivateProfileString(sectionNameNonLetter, keyname, inivalue, FileName);
+            WritePrivateProfileStringW(sectionNameNonLetter, keyname, inivalue, FileName);
 
             // Insight: a lot of non-letters can be used for the section name as well
             AssertFileEqualASCII($"[{sectionNameNonLetter}]\r\n{keyname}={inivalue}\r\n", FileName);
         }
 
-        [TestsApiParameter("lpAppName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpAppName)]
         [TestMethod]
         public void Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()
         {
             EnsureEmptyASCII();
-            var result = WritePrivateProfileString("§€°´²³", keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW("§€°´²³", keyname, inivalue, FileName);
 
             // Insight: a few characters are not accepted in the section name
             // Insight: they are replaced by the Unicode replacement character
@@ -114,41 +121,46 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual((int)GetLastError.SUCCESS, error);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpKeyName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName)]
         [TestMethod]
         public void Given_AKeyNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()
         {
             EnsureEmptyASCII();
             var keyNameNonLetter = "1234567890!$%&/()=?*+#-_<>.,:;@~\"\'|`\\ \t\v";
-            WritePrivateProfileString(sectionname, keyNameNonLetter, inivalue, FileName);
+            WritePrivateProfileStringW(sectionname, keyNameNonLetter, inivalue, FileName);
 
             // Insight: a lot of non-letters can be used for the section name as well
             AssertFileEqualASCII($"[{sectionname}]\r\n{keyNameNonLetter}={inivalue}\r\n", FileName);
         }
 
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
         [TestMethod]
         public void Given_AnEmptyIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()
         {
             EnsureEmptyASCII();
-            WritePrivateProfileString(sectionname, "z", "", FileName);
-            WritePrivateProfileString(sectionname, "a", "", FileName);
-            WritePrivateProfileString(sectionname, "y", "", FileName);
-            WritePrivateProfileString(sectionname, "b", "", FileName);
+            WritePrivateProfileStringW(sectionname, "z", "", FileName);
+            WritePrivateProfileStringW(sectionname, "a", "", FileName);
+            WritePrivateProfileStringW(sectionname, "y", "", FileName);
+            WritePrivateProfileStringW(sectionname, "b", "", FileName);
 
             // Insight: values are written in chronological order
             // This might depend on whether or not keys already exist, so we need more tests...
             Assert.AreEqual($"[{sectionname}]\r\nz=\r\na=\r\ny=\r\nb=\r\n", File.ReadAllText(FileName));
         }
 
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
         [TestMethod]
-        public void Given_AnIniFile_When_WritingKeys_Then_TheyAreWrittenInChronologicalOrder()
+        public void Given_AnIniFileWithExistingKeys_When_WritingKeys_Then_TheyAreKeptInOriginalOrder()
         {
             EnsureASCII($"[{sectionname}]\r\nb=value\r\na=value\r\n");
-            WritePrivateProfileString(sectionname, "z", "", FileName);
-            WritePrivateProfileString(sectionname, "b", "", FileName);
-            WritePrivateProfileString(sectionname, "y", "", FileName);
-            WritePrivateProfileString(sectionname, "a", "", FileName);
+            WritePrivateProfileStringW(sectionname, "z", "", FileName);
+            WritePrivateProfileStringW(sectionname, "b", "", FileName);
+            WritePrivateProfileStringW(sectionname, "y", "", FileName);
+            WritePrivateProfileStringW(sectionname, "a", "", FileName);
 
             // Insight: values that already exist are kept in their order
             // Insight: New values are written in chronological order after the existing values

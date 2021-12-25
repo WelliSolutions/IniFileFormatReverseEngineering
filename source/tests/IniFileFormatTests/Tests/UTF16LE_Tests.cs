@@ -10,7 +10,9 @@ namespace IniFileFormatTests.Encodings
     [TestClass]
     public class UTF16LE_Tests : IniFileTestBase
     {
-        [UsedInDocumentation]
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileWithUTF16BOM_When_ReadingTheContent_Then_WeHaveUnicodeSupport()
         {
@@ -26,14 +28,16 @@ namespace IniFileFormatTests.Encodings
             AssertSbEqual(inivalue, sb);
         }
 
-        [UsedInDocumentation]
-        [TestsApiParameter("lpFileName")]
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Method.WritePrivateProfileStringA)]
+        [Checks(Parameter.lpFileName)]
         [TestMethod]
         public void Given_AFileWithUTF16Header_When_WritingToTheFile_Then_WeHaveUnicodeSupport()
         {
             EnsureEmptyUTF16();
             var unicodeCharacters = "§€°´²³";
-            var result = WritePrivateProfileString(unicodeCharacters, keyname, inivalue, FileName);
+            var result = WritePrivateProfileStringW(unicodeCharacters, keyname, inivalue, FileName);
 
             // Insight: Unicode characters are written when the file has a UTF16 BOM (...W() method)
             string unicodeContent = File.ReadAllText(FileName);

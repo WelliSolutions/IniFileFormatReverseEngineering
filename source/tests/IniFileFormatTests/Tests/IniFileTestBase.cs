@@ -37,8 +37,8 @@ namespace IniFileFormatTests
         protected void EnsureDefaultContent_UsingAPI()
         {
             EnsureDeleted();
-            WindowsAPI.WritePrivateProfileString(sectionname, keyname, inivalue, FileName);
-            WindowsAPI.WritePrivateProfileString(sectionname2, keyname2, inivalue2, FileName);
+            WindowsAPI.WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
+            WindowsAPI.WritePrivateProfileStringW(sectionname2, keyname2, inivalue2, FileName);
         }
 
         protected void EnsureDefaultContent_UsingFile()
