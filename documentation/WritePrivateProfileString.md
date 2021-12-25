@@ -229,7 +229,7 @@ Insights:
 
 > If the function fails, or if it flushes the cached version of the most  recently accessed initialization file, the return value is zero. To get  extended error information, call [GetLastError](https://docs.microsoft.com/en-us/windows/desktop/api/errhandlingapi/nf-errhandlingapi-getlasterror).
 
-What is that "flushing"? When will it happen? If it happens randomly, will we get random errors?
+Flushing is explained in the remarks: all parameters are **null**.
 
 Test Coverage:
 
