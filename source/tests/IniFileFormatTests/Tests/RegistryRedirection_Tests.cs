@@ -151,7 +151,6 @@ namespace IniFileFormatTests
             {
                 SetupRedirection(policy);
                 WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
-                Assert.IsFalse(File.Exists(FileName));
                 using (var key = Registry.CurrentUser.OpenSubKey(@"Software\WelliSolutions\Test"))
                 {
                     Assert.IsTrue(key.GetSubKeyNames().Contains(sectionname));
