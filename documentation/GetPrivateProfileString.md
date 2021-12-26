@@ -440,3 +440,10 @@ Insights:
 
 * This statement is a bit misleading. The section name and the key name are not case sensitive. But the value is returned with the same casing as in the INI file.
 
+> To retrieve a string from the Win.ini file, use the [GetProfileString [MSDN]](https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-getprofilestringa) function.
+
+This documentation is only about the "Private" versions of this method.
+
+> The system maps most .ini file references to the registry [...]
+
+The remaining  remarks are about [Registry Redirection](RegistryRedirection.md) and have been merged for both the read and write methods.

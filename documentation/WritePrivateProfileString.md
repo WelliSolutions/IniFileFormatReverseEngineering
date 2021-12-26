@@ -278,3 +278,6 @@ Insights:
 
 * 
 
+> The system keeps a cached version of the most recent registry file mapping to improve performance. [...]
+
+The remaining  remarks are about [Registry Redirection](RegistryRedirection.md) and have been merged for both the read and write methods.

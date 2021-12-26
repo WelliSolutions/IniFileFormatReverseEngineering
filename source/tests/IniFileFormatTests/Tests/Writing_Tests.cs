@@ -53,19 +53,32 @@ namespace IniFileFormatTests.IntendedUse
         [TestMethod]
         public void Given_ANonExistingFileInWindowsDirectory_When_AValueIsWritten_Then_WeGetAFileNotFoundError()
         {
-            FileName = "createme.ini";
-            var result = WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
+            using (var limitedPrivileges = ImpersonationUtils.ImpersonateCurrentUser())
+            {
+                FileName = "createme.ini";
+                var result = WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
 
-            // Insight: The file is not created
-            var windir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-            var destination = Path.Combine(windir, FileName);
-            Assert.IsFalse(File.Exists(destination));
+                // Insight: The file is not created
+                var windir = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+                var destination = Path.Combine(windir, FileName);
+                if (File.Exists(destination))
+                {
+                    try
+                    {
+                        Assert.Fail("The file was created");
+                    }
+                    finally
+                    {
+                        File.Delete(destination);
+                    }
+                }
 
-            Assert.IsFalse(result);
+                Assert.IsFalse(result);
 
-            // Insight: the error code is FILE_NOT_FOUND and not e.g. ACCESS_DENIED
-            var error = Marshal.GetLastWin32Error();
-            Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, error);
+                // Insight: the error code is FILE_NOT_FOUND and not e.g. ACCESS_DENIED
+                var error = Marshal.GetLastWin32Error();
+                Assert.AreEqual((int)GetLastError.ERROR_FILE_NOT_FOUND, error);
+            }
         }
 
         [UsedInDocumentation("WritePrivateProfileString.md")]
