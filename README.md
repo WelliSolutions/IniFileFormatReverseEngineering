@@ -129,4 +129,5 @@ As a result of my research I came across a few things and I can hopefully give b
 * Stack Overflow: [Do Standard INI files allow comments?](https://stackoverflow.com/a/70432963/480982)
 * Stack Overflow: [How do WritePrivateProfileStringA() and Unicode go together?](https://stackoverflow.com/questions/70438143/how-do-writeprivateprofilestringa-and-unicode-go-together)
 * Stack Overflow: [Why does File.ReadAllText() also recognize UTF-16 encodings?](https://stackoverflow.com/questions/70445598/why-does-file-readalltext-also-recognize-utf-16-encodings)
+* Stack Overflow: [What are the differences in functionality when INI files are mapped to the Registry?](https://stackoverflow.com/questions/70500724/what-are-the-differences-in-functionality-when-ini-files-are-mapped-to-the-regis)
 * Super User: [What's the largest REG_SZ value that Regedit can edit?](https://superuser.com/questions/1696002/whats-the-largest-reg-sz-value-that-regedit-can-edit)
