@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -57,6 +58,7 @@ namespace DocumentationChecker
             foreach (var documentedMethod in notUndocumentedMethods)
             {
                 Console.WriteLine($"{GetFullMethodName(documentedMethod)} is documented but not marked with an attribute.");
+                Console.WriteLine($"     [UsedInDocumentation()]");
             }
 
             foreach (var method in missingParens)
@@ -83,6 +85,8 @@ namespace DocumentationChecker
                     Console.WriteLine($"     [UsedInDocumentation(\"{file.Name}\")]");
                 }
             }
+
+            Console.ReadLine();
         }
 
         private void RemoveIfUndocumentedWrongClassName(List<MethodInfo> undocumentedMethods, string markdown, List<MethodInfo> notUndocumentedMethods,
@@ -154,6 +158,7 @@ namespace DocumentationChecker
                 if (markdown.Contains(documentedMethod.Name))
                 {
                     documentedMethods.Remove(documentedMethod);
+                    Console.WriteLine(GetFullMethodName(documentedMethod) + "()");
                     wrongClassName.Add(documentedMethod);
                 }
             }
@@ -163,6 +168,9 @@ namespace DocumentationChecker
         {
             foreach (var documentedMethod in IteratableClone(documentedMethods))
             {
+                if (documentedMethod.Name == "Given_AValueOfLength65537_When_AccessingIt_Then_WeGetModuloBehavior"
+                    && markdown.Contains(documentedMethod.Name))
+                    Debugger.Break();
                 if (markdown.Contains(GetFullMethodName(documentedMethod)))
                 {
                     documentedMethods.Remove(documentedMethod);
