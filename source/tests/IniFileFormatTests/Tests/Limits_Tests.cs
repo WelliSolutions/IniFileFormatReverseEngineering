@@ -144,5 +144,28 @@ namespace IniFileFormatTests.Limits
             Assert.AreEqual($"[SectionName]\r\nTestKey={largeString}\r\n", ReadIniFile());
         }
 
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Parameter.lpAppName, null)]
+        [Checks(Parameter.lpReturnedString)]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [TestMethod]
+        public void Given_ManySections_When_GettingTheSectionNames_Then_ItCanReadMoreThan65536Characters()
+        {
+            // Generate 1 MB of section names
+            var nBytes = 1000000;
+            var length = 10;
+            var sb = new StringBuilder();
+            for (int i = 1; i <= nBytes / length; i++)
+            {
+                sb.Append($"[{i:D10}]\r\n");
+            }
+            EnsureASCII(sb.ToString());
+
+            // Read the sections
+            var buffer = new char[nBytes / length * (length + 1)];
+            var bytesRead = GetIniString_ChArr_Unicode(null, null, "", buffer, (uint)buffer.Length, FileName);
+            // Insight: the function can read a lot more sections than the 65536 characters value limit
+            Assert.AreEqual((uint)(nBytes / length * (length + 1) - 2), bytesRead);
+        }
     }
 }

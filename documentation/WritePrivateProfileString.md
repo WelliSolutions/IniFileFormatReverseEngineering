@@ -153,7 +153,7 @@ Test Coverage:
 * `Semicolon_Tests.Given_AValueParameterWithSemicolon_When_TheValueIsWritten_Then_TheSemicolonIsPartOfTheFile()`
 * `Semicolon_Tests.Given_AnIniFile_When_ACommentIsWrittenViaTheValueAndAnEmptyKey_Then_ItsNotAComment()`
 * `Casing_Tests.Given_AnExistingValue_When_WritingTheValueWithUpperCase_Then_ThenewValueIsUsed()` 
-* `LimitTests.Given_ALargeString_When_TheValueIsWritten_Then_ItCanWriteMoreThan65536Characters()`
+* `Limits_Tests.Given_ALargeString_When_TheValueIsWritten_Then_ItCanWriteMoreThan65536Characters()`
 
 Insights:
 
