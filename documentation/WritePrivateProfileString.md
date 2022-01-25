@@ -153,6 +153,7 @@ Test Coverage:
 * `Semicolon_Tests.Given_AValueParameterWithSemicolon_When_TheValueIsWritten_Then_TheSemicolonIsPartOfTheFile()`
 * `Semicolon_Tests.Given_AnIniFile_When_ACommentIsWrittenViaTheValueAndAnEmptyKey_Then_ItsNotAComment()`
 * `Casing_Tests.Given_AnExistingValue_When_WritingTheValueWithUpperCase_Then_ThenewValueIsUsed()` 
+* `LimitTests.Given_ALargeString_When_TheValueIsWritten_Then_ItCanWriteMoreThan65536Characters()`
 
 Insights:
 
@@ -160,6 +161,7 @@ Insights:
 * Whitespace is not escaped when being written, i.e. it will get lost when reading.
 * Values starting with a semicolon are not comments. The value starting with the semicolon will be written (and returned when reading). Even when the key is an empty string.
 * The casing is updated when the same value is written with a different casing.
+* While the read function can only read up to 65535 characters, the write function can write a lot more (at least 1 MiB).
 
 > If this parameter is **NULL**, the key pointed to by the *lpKeyName* parameter is deleted.
 

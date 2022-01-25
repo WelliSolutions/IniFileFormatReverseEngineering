@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -127,6 +128,20 @@ namespace IniFileFormatTests.Limits
                 // Insight: The result will  not be negative (nSize-2)
                 AssertZero(bytes);
             }
+        }
+
+        [UsedInDocumentation("WritePrivateProfileString.md")]
+        [Checks(Method.WritePrivateProfileStringW)]
+        [Checks(Parameter.lpString)]
+        [TestMethod]
+        public void Given_ALargeString_When_TheValueIsWritten_Then_ItCanWriteMoreThan65536Characters()
+        {
+            EnsureEmptyASCII();
+            var largeString = LargeString;
+            var result = WritePrivateProfileStringW(sectionname, keyname, largeString, FileName);
+            Assert.IsTrue(result);
+            // Insight: the write function can write more than 65536 characters (as opposed to the read function)
+            Assert.AreEqual($"[SectionName]\r\nTestKey={largeString}\r\n", ReadIniFile());
         }
 
     }

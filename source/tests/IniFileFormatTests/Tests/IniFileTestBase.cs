@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static IniFileFormatTests.WindowsAPI;
 
 namespace IniFileFormatTests
 {
@@ -37,8 +38,8 @@ namespace IniFileFormatTests
         protected void EnsureDefaultContent_UsingAPI()
         {
             EnsureDeleted();
-            WindowsAPI.WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
-            WindowsAPI.WritePrivateProfileStringW(sectionname2, keyname2, inivalue2, FileName);
+            WritePrivateProfileStringW(sectionname, keyname, inivalue, FileName);
+            WritePrivateProfileStringW(sectionname2, keyname2, inivalue2, FileName);
         }
 
         protected void EnsureDefaultContent_UsingFile()
