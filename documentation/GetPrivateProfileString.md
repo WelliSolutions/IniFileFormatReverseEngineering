@@ -82,6 +82,7 @@ Test Coverage:
 * `Reading_Tests.Given_AnIniFileWithKnownContent_When_NullIsUsedForSectionName_Then_WeGetAListOfZeroTerminatedSections()`
 * `Reading_Tests.Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()`
 * `Limits_Tests.Given_ManySections_When_GettingTheSectionNames_Then_ItCanReadMoreThan65536Characters()`
+* `Limits_Tests.Given_ManyKeys_When_GettingTheKeyNames_Then_ItCanReadMoreThan65536Characters()`
 
 Insights:
 
@@ -90,6 +91,7 @@ Insights:
 * The section names are copied as zero-terminated strings. As such, you can't simply use the buffer as a string, but you need to consider the number of returned bytes and interpret the result.
 * Duplicate sections are reported multiple times
 * In contrast to the 65536 character limit when reading values, the function can return a lot of sections (more than 1MB)
+* In contrast to the 65536 character limit when reading values, the function can return a lot of keys (more than 1MB)
 
 <a name="lpKeyName"></a>
 
