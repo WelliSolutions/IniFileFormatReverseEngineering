@@ -83,6 +83,7 @@ Test Coverage:
 * `Reading_Tests.Given_AnIniFileWithDuplicateSections_When_NullIsUsedForSectionName_Then_WeGetDuplicateSectionsAsWell()`
 * `Limits_Tests.Given_ManySections_When_GettingTheSectionNames_Then_ItCanReadMoreThan65536Characters()`
 * `Limits_Tests.Given_ManyKeys_When_GettingTheKeyNames_Then_ItCanReadMoreThan65536Characters()`
+* `Limits_Tests.Given_ALargeKey_When_ReadingTheKey_Then_TheresNo65536CharacterLimit()`
 
 Insights:
 
@@ -92,6 +93,7 @@ Insights:
 * Duplicate sections are reported multiple times
 * In contrast to the 65536 character limit when reading values, the function can return a lot of sections (more than 1MB)
 * In contrast to the 65536 character limit when reading values, the function can return a lot of keys (more than 1MB)
+* In contrast to the 65536 character limit when reading values, a single key can be much longer (more than 1MB)
 
 <a name="lpKeyName"></a>
 

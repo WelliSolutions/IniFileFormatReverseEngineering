@@ -163,7 +163,7 @@ namespace IniFileFormatTests.Limits
 
             // Read the sections
             var buffer = new char[nBytes / length * (length + 1)];
-            var bytesRead = GetIniString_ChArr_Unicode(null, null, "", buffer, (uint)buffer.Length, FileName);
+            var bytesRead = GetIniString_ChArr_Unicode(null, null, defaultvalue, buffer, (uint)buffer.Length, FileName);
             // Insight: the function can read a lot more sections than the 65536 characters value limit
             Assert.AreEqual((uint)(nBytes / length * (length + 1) - 2), bytesRead);
             var s = new string(buffer);
@@ -190,11 +190,35 @@ namespace IniFileFormatTests.Limits
 
             // Read the keys
             var buffer = new char[nBytes / length * (length + 1)];
-            var bytesRead = GetIniString_ChArr_Unicode(sectionname, null, "", buffer, (uint)buffer.Length, FileName);
+            var bytesRead = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length, FileName);
             // Insight: the function can read a lot more keys than the 65536 characters value limit
             Assert.AreEqual((uint)(nBytes / length * (length + 1) - 2), bytesRead);
             var s = new string(buffer);
             Assert.IsTrue(s.EndsWith("10000\0\0"));
+        }
+
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Parameter.lpKeyName, "1 MiB length")]
+        [Checks(Parameter.lpReturnedString)]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [TestMethod]
+        public void Given_ALargeKey_When_ReadingTheKey_Then_TheresNo65536CharacterLimit()
+        {
+            // write value with a large key
+            var iniBuilder = new StringBuilder();
+            var largeKey = LargeString;
+            iniBuilder.AppendLine($"[{sectionname}]");
+            iniBuilder.Append(largeKey);
+            iniBuilder.Append($"={inivalue}\r\n");
+            EnsureASCII(iniBuilder.ToString());
+
+            var sb = DefaultStringBuilder();
+            var bytesRead = GetIniString_SB_Unicode(sectionname, largeKey, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            // Insight: the key can be read
+            Assert.AreEqual((uint)inivalue.Length, bytesRead);
+            // Insight: it returns the value
+            Assert.AreEqual(inivalue, sb.ToString());
+
         }
     }
 }
