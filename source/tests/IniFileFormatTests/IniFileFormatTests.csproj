@@ -64,7 +64,6 @@
     <Compile Include="Tests\EdgeCases_Tests.cs" />
     <Compile Include="ImpersonationUtils.cs" />
     <Compile Include="Tests\RegistryRedirection_Tests.cs" />
-    <Compile Include="Tests\UnitTest1.cs" />
     <Compile Include="Tests\Writing_Tests.cs" />
     <Compile Include="Tests\Concept_Transfer_Tests.cs" />
     <Compile Include="Tests\Encoding_Tests.cs" />
