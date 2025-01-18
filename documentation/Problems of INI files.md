@@ -35,3 +35,9 @@ Problems mentioned by [Raymond Chen](https://devblogs.microsoft.com/oldnewthing/
 * Default directory being the Windows directory
 * No nesting. Only two levels of structure.
 * No central administration
+
+## Denial of service attack
+
+If an INI file is opened by an external program exclusively, the Windows API returns the default value for `GetPrivateProfileString()` and `GetLastError()` is ERROR_SHARING_VIOLATION (32). Only ERROR_FILE_NOT_FOUND (2) is mentioned in the documentation at the time of writing. This means: getting the default value does not necessarily mean that this is a good value to use (it only is in case the file was not found and you actually want the default).
+
+You can find the C++ code for this experiment in [source/implementation/DenialOfService](../source/implementation/DenialOfService).
