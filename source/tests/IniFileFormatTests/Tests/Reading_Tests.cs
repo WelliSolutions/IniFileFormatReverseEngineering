@@ -43,7 +43,7 @@ namespace IniFileFormatTests.IntendedUse
             // Insight: when using the StringBuilder, we get only 1 section name,
             // although there are 2 section names inside.
             // This is probably more a problem of the C# method signature,
-            // but it tells us what can go wrong with with implementations that do not have unit tests :-)
+            // but it tells us what can go wrong with implementations that do not have unit tests :-)
             AssertSbEqual(sectionname, sb);
 
             // Insight: the section names are (probably) delimited by \0. At least the length matches.
@@ -80,7 +80,7 @@ namespace IniFileFormatTests.IntendedUse
         {
             EnsureDefaultContent_UsingAPI();
             var buffer = new char[40];
-            var bytes = GetIniString_ChArr_Unicode(null, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
+            GetIniString_ChArr_Unicode(null, keyname, defaultvalue, buffer, (uint)buffer.Length, FileName);
 
             // Insight: The separator character is NUL \0
             Assert.AreEqual('\0', buffer[sectionname.Length]);
@@ -123,7 +123,7 @@ namespace IniFileFormatTests.IntendedUse
         {
             EnsureDefaultContent_UsingAPI();
             var buffer = new char[40];
-            var bytes = GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
+            GetIniString_ChArr_Unicode(sectionname, null, defaultvalue, buffer, (uint)buffer.Length,
                 FileName);
 
             // Insight: The separator character is NUL \0
@@ -169,6 +169,36 @@ namespace IniFileFormatTests.IntendedUse
             Assert.AreEqual(length * 2 + length2, bytes);
         }
 
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, null)]
+        [TestMethod]
+        public void Given_AnIniFileWithDuplicateKeys_When_TheKeyIsRead_Then_WeGetTheFirstOccurrence()
+        {
+            EnsureASCII($"[{sectionname}]\r\n{keyname}={inivalue}\r\n{keyname}={inivalue2}");
+            var sb = DefaultStringBuilder();
+
+            // Insight: we get the first occurrence
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(inivalue, bytes);
+            AssertSbEqual(inivalue, sb);
+        }
+
+
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, null)]
+        [TestMethod]
+        public void Given_AnIniFileWithDuplicateSections_When_TheKeyIsRead_Then_OnlyTheFirstSectionIsConsidered()
+        {
+            EnsureASCII($"[{sectionname}]\r\n[{sectionname}]\r\n{keyname}={inivalue}");
+            var sb = DefaultStringBuilder();
+
+            // Insight: we get the default value
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
+        }
 
 
         [UsedInDocumentation("GetPrivateProfileString.md")]

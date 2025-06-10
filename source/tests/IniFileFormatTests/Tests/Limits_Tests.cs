@@ -63,11 +63,11 @@ namespace IniFileFormatTests.Limits
         [UsedInDocumentation("GetPrivateProfileString.md")]
         [Checks(Parameter.nSize)]
         [TestMethod]
-        public void Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValueAndAnError()
+        public void Given_AValueOfLength65535_When_AccessingIt_Then_WeGetTheFullValue()
         {
             var result = GetHugeValue(65535, 65535 + 2);
 
-            // Insight: 65535 bytes are returned with an error, although there is no more data
+            // Insight: 65535 bytes are returned without an error
             Assert.AreEqual(0, result.Error);
             Assert.AreEqual((uint)65535, result.Bytes);
         }
