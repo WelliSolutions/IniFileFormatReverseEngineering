@@ -46,7 +46,7 @@ BOOL WritePrivateProfileStringW(
 
 <a name="lpAppName"></a>
 
-    [in] lpAppName
+### `[in] lpAppName`
 
 > The name of the section to which the string will be copied. If the section does not exist, it is created
 
@@ -70,7 +70,7 @@ Test Coverage:
 * `Casing_Tests.Given_AnExistingSection_When_WritingTheSectionWithUpperCase_Then_TheExistingCasingIsKept()`
 * `Writing_Tests.Given_AnExistingEmptyFile_When_AValueIsWritten_Then_TheFileContainsSectionKeyAndValue()`
 * `Writing_Tests.Given_ASectionNameNotOnlyLetters_When_WritingTheSection_Then_ItsAccepted()`
-* `Writing_Tests.Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()`
+* `Writing_Tests.Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAReplacementCharacter()`
 * `WhiteSpace_Tests.Given_ASectionParameterWithSpaces_When_TheSectionIsWritten_Then_SpacesAreStripped()`
 * `WhiteSpace_Tests.Given_ASectionParameterWithWhitespaces_When_TheSectionIsWritten_Then_OnlySpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWrittenWithSemicolonInSection_When_TheContentIsAccessed_Then_WeGetTheSemicolon()`
@@ -92,9 +92,7 @@ Insights:
 
 <a name="lpKeyName"></a>
 
-```
-[in] lpKeyName
-```
+### `[in] lpKeyName`
 
 > The name of the key to be associated with a string. If the key does not exist in the specified section, it is created.
 
@@ -140,9 +138,7 @@ Insights:
 
 <a name="lpString"></a>
 
-```
-[in] lpString
-```
+### `[in] lpString`
 
 > A **null**-terminated string to be written to the file. 
 
@@ -178,9 +174,7 @@ Insights:
 
 <a name="lpFileName"></a>
 
-```
-[in] lpFileName
-```
+### `[in] lpFileName`
 
 > The name of the initialization file.
 
@@ -249,6 +243,8 @@ Insights:
 >
 >  [section]
 >  key=string
+
+One question is: why is that written here? WritePrivateProfileString should create the section in a compliant way, not require the section to be in a compliant format.
 
 Test Coverage:
 

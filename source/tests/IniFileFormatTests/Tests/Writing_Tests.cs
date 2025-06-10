@@ -118,7 +118,7 @@ namespace IniFileFormatTests.IntendedUse
         [Checks(Method.WritePrivateProfileStringW)]
         [Checks(Parameter.lpAppName)]
         [TestMethod]
-        public void Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAQuestionmark()
+        public void Given_ASectionNameContainingAParagraph_When_WritingTheSection_Then_ItBecomesAReplacementCharacter()
         {
             EnsureEmptyASCII();
             var result = WritePrivateProfileStringW("§€°´²³", keyname, inivalue, FileName);
