@@ -106,6 +106,7 @@ Insights:
 Test Coverage: 
 
 * `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
+* `Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_TheKeyIsRead_Then_WeGetTheFirstOccurrence()`
 * `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWithSemicolonAtBeginOfKey_When_TheValueIsRead_Then_WeGetTheDefaultValue()`
@@ -117,10 +118,11 @@ Test Coverage:
 Insights:
 
 * Basically, this functionality works as expected.
-* The key can be accessed case-insensitive
+* The key can be accessed case-insensitive.
+* If the key occurs twice within a section, the first occurrence is returned.
 * The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the key.
 * The parameter may start with a semicolon, but no value will be found, since it will be considered as a comment. The default value will be returned.
-* Tabs, vertical tabs, carraiage returns and newlines are not stripped from the parameter.
+* Tabs, vertical tabs, carriage returns and newlines are not stripped from the parameter.
 * The key parameter may contain single or double quotes. They will not be stripped.
 > If this parameter is **NULL**, all key names in the section specified by the *lpAppName* parameter are copied to the buffer specified by the *lpReturnedString* parameter.
 
