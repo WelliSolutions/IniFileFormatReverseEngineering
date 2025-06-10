@@ -38,7 +38,7 @@ DWORD GetPrivateProfileString(
 
 <a name="lpAppName"></a>
 
-    [in] lpAppName
+###  `[in] lpAppName`
 
 > The name of the section containing the key name.
 
@@ -97,9 +97,7 @@ Insights:
 
 <a name="lpKeyName"></a>
 
-```
-[in] lpKeyName
-```
+### `[in] lpKeyName`
 
 > The name of the key whose associated string is to be retrieved.
 
@@ -107,6 +105,7 @@ Test Coverage:
 
 * `Reading_Tests.Given_AnIniFileWithKnownContent_When_TheContentIsAccessed_Then_WeGetTheExpectedValue()`
 * `Reading_Tests.Given_AnIniFileWithDuplicateKeys_When_TheKeyIsRead_Then_WeGetTheFirstOccurrence()`
+* `Reading_Tests.Given_AnIniFileWithDuplicateSections_When_TheKeyIsRead_Then_OnlyTheFirstSectionIsConsidered()`
 * `Casing_Tests.Given_AnEntryWithUpperCaseLetter_When_TheContentIsAccessedWithLowerCase_Then_WeGetTheExpectedValue()`
 * `WhiteSpace_Tests.Given_AnIniFileWrittenWithSpaces_When_TheContentIsWritten_Then_SpacesAreStripped()`
 * `Semicolon_Tests.Given_AnIniFileWithSemicolonAtBeginOfKey_When_TheValueIsRead_Then_WeGetTheDefaultValue()`
@@ -120,6 +119,7 @@ Insights:
 * Basically, this functionality works as expected.
 * The key can be accessed case-insensitive.
 * If the key occurs twice within a section, the first occurrence is returned.
+* If the section occurs twice within an INI file, values in the second occurrence are ignored.
 * The parameter may contain leading and trailing spaces. However, these will be stripped when searching for the key.
 * The parameter may start with a semicolon, but no value will be found, since it will be considered as a comment. The default value will be returned.
 * Tabs, vertical tabs, carriage returns and newlines are not stripped from the parameter.
@@ -138,9 +138,8 @@ Insights:
 * Duplicate keys are reported multiple times
 <a name="lpDefault"></a>
 
-```
-[in] lpDefault
-```
+
+### `[in] lpDefault`
 
 > A default string. If the *lpKeyName* key cannot be found in the initialization file, **GetPrivateProfileString** copies the default string to the *lpReturnedString* buffer.
 
@@ -181,9 +180,9 @@ Insights:
 * Leading spaces are not stripped for the default value.
 * "Blank" refers to the space character only, not tab, vertical tab, carriage return and newline.
 <a name="lpReturnedString"></a>
-```
-[out] lpReturnedString
-```
+
+### `[out] lpReturnedString`
+
 For all the C# programmers out there: `[out]` is not identical to `out` parameters as in C#. Obviously this pointer must be valid and point to a buffer where the function writes the data to. I'm not sure whether these API calls are defined in MIDL, but at least the [MIDL definition of [out] [MSDN]](https://docs.microsoft.com/en-us/windows/win32/midl/out-idl#remarks) would match.
 
 > A pointer to the buffer that receives the retrieved string.
@@ -208,9 +207,9 @@ Why could whitespace stripping be done? Probably because some people formatted t
   longerkey= differentvalue
   ```
   <a name="nSize"></a>
-```
-[in] nSize
-```
+
+### `[in] nSize`
+
 > The size of the buffer pointed to by the *lpReturnedString* parameter, in characters.
 
 This is a very interesting parameter, because it's potentially security relevant. If you manage to pass in a value larger than the buffer size, you'll get a buffer overflow with the typical consequences of undefined behavior.
@@ -237,9 +236,9 @@ Insights:
 * The maximum length of a value that can be read is 65535 bytes in which case `GetLastError()` returns `ERROR_MORE_DATA` (234)  (although there is no more data)
 * Values of *nSize*>=65535 will overflow modulo 65536 and there's no error from `GetLastError()`.
 <a name="lpFileName"></a>
-```
-[in] lpFileName
-```
+
+### `[in] lpFileName`
+
 > The name of the initialization file.
 
 Test Coverage:

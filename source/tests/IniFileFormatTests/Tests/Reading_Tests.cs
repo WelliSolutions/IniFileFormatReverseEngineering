@@ -175,13 +175,29 @@ namespace IniFileFormatTests.IntendedUse
         [TestMethod]
         public void Given_AnIniFileWithDuplicateKeys_When_TheKeyIsRead_Then_WeGetTheFirstOccurrence()
         {
-            EnsureASCII($"[{sectionname}]\r\n{keyname}={inivalue}]\r\n{keyname}={inivalue2}");
+            EnsureASCII($"[{sectionname}]\r\n{keyname}={inivalue}\r\n{keyname}={inivalue2}");
             var sb = DefaultStringBuilder();
 
             // Insight: we get the first occurrence
             var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
             AssertASCIILength(inivalue, bytes);
             AssertSbEqual(inivalue, sb);
+        }
+
+
+        [UsedInDocumentation("GetPrivateProfileString.md")]
+        [Checks(Method.GetPrivateProfileStringW)]
+        [Checks(Parameter.lpKeyName, null)]
+        [TestMethod]
+        public void Given_AnIniFileWithDuplicateSections_When_TheKeyIsRead_Then_OnlyTheFirstSectionIsConsidered()
+        {
+            EnsureASCII($"[{sectionname}]\r\n[{sectionname}]\r\n{keyname}={inivalue}");
+            var sb = DefaultStringBuilder();
+
+            // Insight: we get the default value
+            var bytes = GetIniString_SB_Unicode(sectionname, keyname, defaultvalue, sb, (uint)sb.Capacity, FileName);
+            AssertASCIILength(defaultvalue, bytes);
+            AssertSbEqual(defaultvalue, sb);
         }
 
 
